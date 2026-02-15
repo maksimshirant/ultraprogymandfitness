@@ -1,4 +1,4 @@
-import{j as t}from"./index-B3Lil_oU.js";import{c as e}from"./utils-fNskMoFt.js";const i="Договор офферты",o=`ДОГОВОР ПУБЛИЧНОЙ ОФЕРТЫ
+import{j as t}from"./index-C0vm9SKB.js";import{c as e}from"./utils-fNskMoFt.js";const i="Договор офферты",o=`ДОГОВОР ПУБЛИЧНОЙ ОФЕРТЫ
 
 на оказание услуг фитнес-клуба «УЛЬТРА ПРО»
 
