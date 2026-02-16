@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { Loader2, X } from 'lucide-react';
 import { sendForm } from '@/api/forms';
+import { BalancedHeading } from '@/components/typography/BalancedHeading';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const PrivacyPolicyContent = lazy(async () => {
@@ -30,7 +31,7 @@ const MODAL_TEXT = {
   namePlaceholder: 'Имя',
   topicPlaceholder: 'Какой у вас вопрос?',
   topicAriaLabel: 'Какой у вас вопрос?',
-  otherQuestionPlaceholder: 'Возможно, у вас другой вопрос?',
+  messagePlaceholder: 'Дополнительная информация',
   privacyPrefix: 'Я соглашаюсь с',
   privacyLink: 'Политикой конфиденциальности',
   offerLink: 'Договором офферты',
@@ -55,7 +56,7 @@ const MODAL_TEXT = {
 } as const;
 const TOPIC_OPTIONS = [
   { value: 'sub_1m', label: 'Хочу приобрести абонемент: 1 месяц' },
-  { value: 'sub_3m', label: 'Хочу приобрести абонемент: 3 месяц' },
+  { value: 'sub_3m', label: 'Хочу приобрести абонемент: 3 месяца' },
   { value: 'sub_6m', label: 'Хочу приобрести абонемент: 6 месяцев' },
   { value: 'sub_12m', label: 'Хочу приобрести абонемент: 12 месяцев' },
   { value: 'sub_12m_day', label: 'Хочу приобрести абонемент: 12 месяцев (дневной)' },
@@ -178,13 +179,7 @@ export default function Modal({ isOpen, onClose, prefilledTopic = '' }: ModalPro
         `${MODAL_TEXT.mailLabelName}: ${formData.name.trim()}`,
         `${MODAL_TEXT.mailLabelPhone}: ${formData.phone.trim()}`,
         `${MODAL_TEXT.mailLabelTopic}: ${selectedTopic}`,
-        ...(formData.topic === 'other'
-          ? [
-              `${MODAL_TEXT.mailLabelMessage}: ${
-                formData.question.trim() || MODAL_TEXT.messageFallback
-              }`,
-            ]
-          : []),
+        `${MODAL_TEXT.mailLabelMessage}: ${formData.question.trim() || MODAL_TEXT.messageFallback}`,
       ].join('\n');
 
       payload.append('name', formData.name.trim());
@@ -278,7 +273,7 @@ export default function Modal({ isOpen, onClose, prefilledTopic = '' }: ModalPro
           <div className="glass-card modal-surface p-8 relative">
             <button
               onClick={handleModalClose}
-              className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white transition-colors"
+              className="absolute top-4 right-4 p-2 text-gray-400 lg:hover:text-white transition-colors"
               aria-label={MODAL_TEXT.closeModalAria}
             >
               <X className="w-5 h-5" />
@@ -290,13 +285,13 @@ export default function Modal({ isOpen, onClose, prefilledTopic = '' }: ModalPro
                 alt="Logo"
                 loading="lazy"
                 decoding="async"
-                className="h-10 w-auto object-contain brightness-0 invert"
+                className="h-8 sm:h-9 w-auto object-contain brightness-0 invert"
               />
             </div>
 
-            <h2 className="text-1xl font-bold text-white text-center mb-8">
+            <BalancedHeading as="h2" className="text-1xl font-bold text-white text-center mb-8">
               {MODAL_TEXT.title}
-            </h2>
+            </BalancedHeading>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -340,7 +335,6 @@ export default function Modal({ isOpen, onClose, prefilledTopic = '' }: ModalPro
                     setFormData({
                       ...formData,
                       topic: nextTopic,
-                      question: nextTopic === 'other' ? formData.question : '',
                     });
                     if (submitNotice) setSubmitNotice(null);
                   }}
@@ -368,20 +362,18 @@ export default function Modal({ isOpen, onClose, prefilledTopic = '' }: ModalPro
                 </Select>
               </div>
 
-              {formData.topic === 'other' && (
-                <div>
-                  <textarea
-                    placeholder={MODAL_TEXT.otherQuestionPlaceholder}
-                    value={formData.question}
-                    onChange={(e) => {
-                      setFormData({ ...formData, question: e.target.value });
-                      if (submitNotice) setSubmitNotice(null);
-                    }}
-                    rows={4}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#F5B800] transition-colors resize-none"
-                  />
-                </div>
-              )}
+              <div>
+                <textarea
+                  placeholder={MODAL_TEXT.messagePlaceholder}
+                  value={formData.question}
+                  onChange={(e) => {
+                    setFormData({ ...formData, question: e.target.value });
+                    if (submitNotice) setSubmitNotice(null);
+                  }}
+                  rows={4}
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#F5B800] transition-colors resize-none"
+                />
+              </div>
 
               <label className="flex items-start gap-3 text-sm text-gray-300">
                 <input
@@ -398,7 +390,7 @@ export default function Modal({ isOpen, onClose, prefilledTopic = '' }: ModalPro
                   <button
                     type="button"
                     onClick={() => setIsPrivacyOpen(true)}
-                    className="text-[#F5B800] underline hover:text-[#FFD247] transition-colors"
+                    className="text-[#F5B800] underline lg:hover:text-[#FFD247] transition-colors"
                   >
                     {MODAL_TEXT.privacyLink}
                   </button>
@@ -406,7 +398,7 @@ export default function Modal({ isOpen, onClose, prefilledTopic = '' }: ModalPro
                   <button
                     type="button"
                     onClick={() => setIsOfferOpen(true)}
-                    className="text-[#F5B800] underline hover:text-[#FFD247] transition-colors"
+                    className="text-[#F5B800] underline lg:hover:text-[#FFD247] transition-colors"
                   >
                     {MODAL_TEXT.offerLink}
                   </button>
@@ -419,10 +411,10 @@ export default function Modal({ isOpen, onClose, prefilledTopic = '' }: ModalPro
                 aria-live="polite"
                 className={`w-full py-3 font-semibold rounded-full border transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
                   submitNotice?.type === 'success'
-                    ? 'border-emerald-300/40 bg-emerald-500/15 text-emerald-100 hover:bg-emerald-500/15'
+                    ? 'border-emerald-300/40 bg-emerald-500/15 text-emerald-100 lg:hover:bg-emerald-500/15'
                     : submitNotice?.type === 'error'
-                      ? 'border-red-300/40 bg-red-500/15 text-red-100 hover:bg-red-500/20'
-                      : 'border-transparent bg-white text-black hover:bg-[#F5B800]'
+                      ? 'border-red-300/40 bg-red-500/15 text-red-100 lg:hover:bg-red-500/20'
+                      : 'border-transparent bg-white text-black lg:hover:bg-[#F5B800]'
                 }`}
               >
                 {isSubmitting ? (
@@ -449,7 +441,7 @@ export default function Modal({ isOpen, onClose, prefilledTopic = '' }: ModalPro
           <div className="relative w-full max-w-2xl mx-4 glass-card modal-surface p-6">
             <button
               onClick={() => setIsPrivacyOpen(false)}
-              className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white transition-colors"
+              className="absolute top-4 right-4 p-2 text-gray-400 lg:hover:text-white transition-colors"
               aria-label={MODAL_TEXT.closePolicyAria}
             >
               <X className="w-5 h-5" />
@@ -477,7 +469,7 @@ export default function Modal({ isOpen, onClose, prefilledTopic = '' }: ModalPro
           <div className="relative w-full max-w-2xl mx-4 glass-card modal-surface p-6">
             <button
               onClick={() => setIsOfferOpen(false)}
-              className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white transition-colors"
+              className="absolute top-4 right-4 p-2 text-gray-400 lg:hover:text-white transition-colors"
               aria-label={MODAL_TEXT.closeOfferAria}
             >
               <X className="w-5 h-5" />

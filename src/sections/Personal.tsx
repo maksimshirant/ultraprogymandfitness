@@ -1,4 +1,5 @@
 import { Check } from 'lucide-react';
+import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 
 interface Trainer {
   id: number;
@@ -20,6 +21,15 @@ const PERSONAL_TEXT = {
   cta: 'Записаться на тренировку',
 } as const;
 
+const PERSONAL_ASSETS = {
+  sergey: `${import.meta.env.BASE_URL}trainers/sergey.jpg`,
+  yulia: `${import.meta.env.BASE_URL}trainers/yulia.jpg`,
+  alexander: `${import.meta.env.BASE_URL}trainers/alexander.jpg`,
+  pavel: `${import.meta.env.BASE_URL}trainers/pavel.webp`,
+  evgeniy: `${import.meta.env.BASE_URL}trainers/evgeniy.jpg`,
+  yaroslav: `${import.meta.env.BASE_URL}trainers/yaroslav.jpg`,
+} as const;
+
 const trainers: Trainer[] = [
   {
     id: 1,
@@ -31,7 +41,7 @@ const trainers: Trainer[] = [
       'Пройдены курсы оздоровительного массажа',
       'Пройдены курсы инструктора тренажерного зала',
     ],
-    image: '',
+    image: PERSONAL_ASSETS.sergey,
   },
   {
     id: 2,
@@ -45,7 +55,7 @@ const trainers: Trainer[] = [
       'Специализация: растяжка',
       'Серебряный призер чемпионата Европы 3×3, бронзовый призер чемпионата Суперлиги-1 по баскетболу',
     ],
-    image: '',
+    image: PERSONAL_ASSETS.yulia,
   },
   {
     id: 3,
@@ -57,7 +67,7 @@ const trainers: Trainer[] = [
       'Высшее физкультурное образование',
       'Выпускник «FIT-STANDARD» (школа подготовки персональных тренеров)',
     ],
-    image: '',
+    image: PERSONAL_ASSETS.alexander,
   },
   {
     id: 4,
@@ -72,7 +82,7 @@ const trainers: Trainer[] = [
       'Мастер спорта, чемпион России и чемпион Европы по пауэрлифтингу',
       'Кандидат в мастера спорта по гиревому спорту',
     ],
-    image: '',
+    image: PERSONAL_ASSETS.pavel,
   },
   {
     id: 5,
@@ -83,7 +93,7 @@ const trainers: Trainer[] = [
       'Сертификат: инструктор фитнеса и бодибилдинга',
       'Сертификаты: спортивная медицина, диетология, физиология, биохимия, анатомия',
     ],
-    image: '',
+    image: PERSONAL_ASSETS.evgeniy,
   },
   {
     id: 6,
@@ -97,7 +107,7 @@ const trainers: Trainer[] = [
       'Специализация: рекомендации по питанию',
       'Специализация: общая физическая подготовка',
     ],
-    image: '',
+    image: PERSONAL_ASSETS.yaroslav,
   },
 ];
 
@@ -112,13 +122,10 @@ export default function Personal({ onOpenModal }: PersonalProps) {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-12">
-          <h2 className="section-title text-white">
-            {PERSONAL_TEXT.sectionTitle}
-            <span className="relative inline-block">
-              <span className="relative z-10">{PERSONAL_TEXT.sectionTitleAccent}</span>
-              <span className="absolute bottom-0 left-0 right-0 h-1.5 sm:h-2 md:h-2.5 lg:h-3 bg-gradient-to-r from-[#F5B800] to-[#D89B00] -z-0" />
-            </span>
-          </h2>
+          <BalancedHeading as="h2" className="section-title text-white">
+            {PERSONAL_TEXT.sectionTitle}{' '}
+            <HeadingAccent>{PERSONAL_TEXT.sectionTitleAccent}</HeadingAccent>
+          </BalancedHeading>
           <p className="section-subtitle mx-auto">{PERSONAL_TEXT.sectionSubtitle}</p>
         </div>
 
@@ -126,7 +133,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
           {trainers.map((trainer) => (
             <article
               key={trainer.id}
-              className="glass-card border border-white/10 hover:bg-white/5 transition-colors p-0 min-h-[520px] flex flex-col overflow-hidden"
+              className="glass-card border border-white/10 lg:hover:bg-white/5 transition-colors p-0 min-h-[520px] flex flex-col overflow-hidden"
             >
               <div className="rounded-lg overflow-hidden m-4 mb-0 aspect-[4/5] border border-white/10 bg-black/40 flex items-center justify-center">
                 {trainer.image ? (
@@ -150,7 +157,9 @@ export default function Personal({ onOpenModal }: PersonalProps) {
               </div>
 
               <div className="p-5 pt-4 flex-1 flex flex-col text-left">
-                <h3 className="text-2xl font-bold text-white mb-2">{trainer.name}</h3>
+                <BalancedHeading as="h3" className="text-2xl font-bold text-white mb-2">
+                  {trainer.name}
+                </BalancedHeading>
                 <p className="text-sm text-gray-300 mb-4">{trainer.experience}</p>
 
                 <ul className="space-y-2 flex-1">

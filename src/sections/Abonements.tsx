@@ -11,9 +11,10 @@ import {
   Ticket,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 
 const ABONEMENTS_TEXT = {
-  sectionTitle: 'Абонементы',
+  sectionTitleAccent: 'Абонементы',
   sectionSubtitle: 'Выберите формат посещения под ваш график и цель.',
   cta: 'Приобрести абонемент',
   prevAria: 'Предыдущий абонемент',
@@ -121,7 +122,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
   };
 
   return (
-    <section id="subscriptions" className="py-14 relative overflow-hidden scroll-mt-24">
+    <section id="subscriptions" className="py-10 md:py-14 relative overflow-hidden scroll-mt-24">
       <div className="hero-glow-layer">
         <div className="hero-glow-top-right" />
         <div className="hero-glow-bottom-left" />
@@ -129,17 +130,17 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="text-center mb-16">
-          <h2 className="section-title text-white">
-            {ABONEMENTS_TEXT.sectionTitle}
-          </h2>
+        <div className="text-center">
+          <BalancedHeading as="h2" className="section-title text-white">
+            <HeadingAccent>{ABONEMENTS_TEXT.sectionTitleAccent}</HeadingAccent>
+          </BalancedHeading>
           <p className="section-subtitle mx-auto">
             {ABONEMENTS_TEXT.sectionSubtitle}
           </p>
         </div>
 
         <div className="relative w-full">
-          <div className="relative h-[620px] sm:h-[600px] md:h-[560px] overflow-hidden">
+          <div className="relative h-[700px] sm:h-[690px] md:h-[660px] overflow-hidden">
             {abonements.map((abonement, index) => {
               const offset = getSlideOffset(index);
               const Icon = abonement.icon as LucideIcon;
@@ -159,7 +160,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
                   }`}
                 >
                   <div
-                    className={`glass-card p-5 md:p-6 min-h-[420px] ${
+                    className={`glass-card p-5 md:p-6 h-[540px] md:h-[560px] flex flex-col ${
                       isActive
                         ? 'abonement-card-active border border-[#F5B800]/30'
                         : 'border border-white/5'
@@ -170,21 +171,24 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
                         <Icon className="w-4 h-4 text-[#F5B800]" />
                         <span className="text-xs font-medium tracking-wide text-gray-200">{abonement.label}</span>
                       </div>
-                      <span className="text-xs tracking-[0.2em] uppercase text-gray-500">
-                        {String(index + 1).padStart(2, '0')}
-                      </span>
                     </div>
 
-                    <h3 className="text-3xl md:text-4xl font-extrabold text-white leading-tight">{abonement.title}</h3>
+                    <BalancedHeading as="h3" className="text-3xl md:text-4xl font-extrabold text-white leading-tight">
+                      {abonement.title}
+                    </BalancedHeading>
 
-                    <div className="relative inline-block mt-3">
-                      <span className="relative z-10 text-4xl md:text-5xl font-black text-white">{abonement.price}</span>
-                      <span className="absolute bottom-1 left-0 right-0 h-2.5 bg-gradient-to-r from-[#F5B800] to-[#D89B00] z-0" />
+                    <div className="mt-3">
+                      <span className="relative inline-flex items-end gap-2">
+                        <span className="relative z-10 text-4xl md:text-5xl font-black text-white">
+                          {abonement.price}
+                        </span>
+                        <span className="absolute bottom-1 left-0 right-0 h-2.5 bg-gradient-to-r from-[#F5B800] to-[#D89B00] z-0" />
+                      </span>
                     </div>
 
                     <p className="text-sm text-gray-300 mt-4 mb-4">{abonement.note}</p>
 
-                    <ul className="space-y-2">
+                    <ul className="space-y-2 flex-1">
                       {abonement.modes.map((mode, modeIndex) => (
                         <li key={modeIndex} className="flex items-start gap-3">
                           <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#F5B800] to-[#D89B00] flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -197,7 +201,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
 
                     <button
                       onClick={() => onOpenModal(abonement.topicValue)}
-                      className="btn-primary text-white w-full mt-6"
+                      className="btn-primary text-white w-full mt-4"
                     >
                       {ABONEMENTS_TEXT.cta}
                     </button>

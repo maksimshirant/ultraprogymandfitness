@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
+import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 
 const TIMETABLE_ASSETS = {
   image: `${import.meta.env.BASE_URL}timetable.jpg`,
@@ -46,13 +47,10 @@ export default function Timetable() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-12">
-          <h2 className="section-title text-white">
+          <BalancedHeading as="h2" className="section-title text-white">
             {TIMETABLE_TEXT.title}{' '}
-            <span className="relative inline-block">
-              <span className="relative z-10">{TIMETABLE_TEXT.titleAccent}</span>
-              <span className="absolute bottom-0 left-0 right-0 h-1.5 sm:h-2 md:h-2.5 lg:h-3 bg-gradient-to-r from-[#F5B800] to-[#D89B00] -z-0" />
-            </span>
-          </h2>
+            <HeadingAccent>{TIMETABLE_TEXT.titleAccent}</HeadingAccent>
+          </BalancedHeading>
         </div>
 
         <div className="max-w-4xl mx-auto">
@@ -83,7 +81,7 @@ export default function Timetable() {
           <button
             type="button"
             onClick={() => setIsPreviewOpen(false)}
-            className="absolute top-4 right-4 sm:top-6 sm:right-6 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center"
+            className="absolute top-4 right-4 sm:top-6 sm:right-6 w-11 h-11 rounded-full bg-white/10 lg:hover:bg-white/20 transition-colors flex items-center justify-center"
             aria-label={TIMETABLE_TEXT.closePreviewAria}
           >
             <X className="w-6 h-6 text-white" />

@@ -31,6 +31,12 @@
   * {
     @apply border-border;
   }
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-transform: uppercase;
+  }
   html {
     scroll-behavior: smooth;
   }
@@ -85,7 +91,41 @@
   }
   
   .section-title {
-    @apply text-4xl md:text-5xl lg:text-6xl font-bold leading-tight;
+    @apply font-bold leading-tight;
+    font-size: clamp(1.65rem, 7.8vw, 2.6rem);
+  }
+
+  @media (min-width: 768px) {
+    .section-title {
+      font-size: clamp(2.2rem, 5.2vw, 3.5rem);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .section-title {
+      font-size: clamp(2.9rem, 4.4vw, 4.5rem);
+    }
+  }
+
+  .heading-balanced {
+    text-wrap: pretty;
+    text-wrap: balance;
+    word-break: normal;
+    overflow-wrap: normal;
+    hyphens: manual;
+  }
+
+  .heading-accent {
+    display: inline;
+    white-space: normal;
+    padding-inline: 0.03em;
+    padding-bottom: 0.02em;
+    background-image: linear-gradient(90deg, #F5B800 0%, #FFD247 52%, #D89B00 100%);
+    background-repeat: no-repeat;
+    background-size: 100% 0.3em;
+    background-position: 0 88%;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
   
   .section-subtitle {
@@ -280,7 +320,7 @@
 }
 
 /* Mobile performance mode: disable costly motion/effects */
-@media (max-width: 1024px), (prefers-reduced-motion: reduce) {
+@media (max-width: 1023px), (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
@@ -339,6 +379,23 @@
     transition-property: all !important;
     transition-duration: 300ms !important;
     transition-timing-function: ease !important;
+  }
+
+  /* Disable hover states on tablet/mobile outside subscriptions slider */
+  .btn-primary:hover {
+    transform: none !important;
+    box-shadow: 0 4px 20px rgba(245, 184, 0, 0.4) !important;
+  }
+
+  .btn-white:hover {
+    background: #fff !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  #subscriptions .btn-primary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 30px rgba(245, 184, 0, 0.5) !important;
   }
 }
 

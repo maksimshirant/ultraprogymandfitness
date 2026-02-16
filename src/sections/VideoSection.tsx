@@ -1,4 +1,5 @@
 import { Play } from 'lucide-react';
+import { BalancedHeading } from '@/components/typography/BalancedHeading';
 
 interface VideoSectionProps {
   onOpenVideo: () => void;
@@ -21,9 +22,9 @@ export default function VideoSection({ onOpenVideo }: VideoSectionProps) {
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Title */}
-        <h2 className="section-title text-white text-center mb-12">
+        <BalancedHeading as="h2" className="section-title text-white text-center mb-12">
           {VIDEO_SECTION_TEXT.title}
-        </h2>
+        </BalancedHeading>
 
         {/* Video Container */}
         <div className="relative rounded-2xl overflow-hidden">
@@ -129,7 +130,7 @@ export default function VideoSection({ onOpenVideo }: VideoSectionProps) {
             {/* Play button */}
             <button
               onClick={onOpenVideo}
-              className="group flex items-center gap-3 px-6 py-3 bg-white rounded-full hover:bg-[#F5B800] hover:scale-105 transition-all"
+              className="group flex items-center gap-3 px-6 py-3 bg-white rounded-full lg:hover:bg-[#F5B800] lg:hover:scale-105 transition-all"
             >
               <Play className="w-5 h-5 text-black fill-black" />
               <span className="text-black font-semibold">{VIDEO_SECTION_TEXT.cta}</span>

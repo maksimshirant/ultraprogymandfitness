@@ -1,4 +1,5 @@
 import { OFFER_AGREEMENT_TEXT, OFFER_AGREEMENT_TITLE } from '@/content/offerAgreement';
+import { BalancedHeading } from '@/components/typography/BalancedHeading';
 import { cn } from '@/lib/utils';
 
 interface OfferAgreementContentProps {
@@ -14,7 +15,9 @@ export function OfferAgreementContent({
 }: OfferAgreementContentProps) {
   return (
     <div className={className}>
-      <h3 className={cn('text-2xl font-bold text-white mb-5', titleClassName)}>{OFFER_AGREEMENT_TITLE}</h3>
+      <BalancedHeading as="h3" className={cn('text-2xl font-bold text-white mb-5', titleClassName)}>
+        {OFFER_AGREEMENT_TITLE}
+      </BalancedHeading>
       <p className={cn('whitespace-pre-line text-sm leading-relaxed text-gray-300', textClassName)}>
         {OFFER_AGREEMENT_TEXT}
       </p>

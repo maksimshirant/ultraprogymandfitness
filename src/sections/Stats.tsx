@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Activity, HeartPulse, ShieldCheck, Smile } from 'lucide-react';
+import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 
 const STATS_TEXT = {
   title: 'Регулярные занятия спортом',
@@ -49,23 +50,20 @@ const sportEffects = [
 export default function Stats() {
   const [isVisible, setIsVisible] = useState(() => {
     if (typeof window === 'undefined') return true;
-    return window.innerWidth < 1024 || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.innerWidth < 1024;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const supportsIntersectionObserver = 'IntersectionObserver' in window;
+    return isMobile || prefersReducedMotion || !supportsIntersectionObserver;
   });
   const [isSourcesOpen, setIsSourcesOpen] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
-      setIsVisible(true);
-      return;
-    }
-
     const isMobile = window.innerWidth < 1024;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const canAnimateOnScroll = !isMobile && !prefersReducedMotion && 'IntersectionObserver' in window;
 
     if (!canAnimateOnScroll) {
-      setIsVisible(true);
       return;
     }
 
@@ -97,19 +95,16 @@ export default function Stats() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-14">
-          <h2 className="section-title text-white">
-            {STATS_TEXT.title}
-            <span className="relative inline-block">
-              <span className="relative z-10">{STATS_TEXT.titleAccent}</span>
-              <span className="absolute bottom-0 left-0 right-0 h-1.5 sm:h-2 md:h-2.5 lg:h-3 bg-gradient-to-r from-[#F5B800] to-[#D89B00] -z-0" />
-            </span>
-          </h2>
+          <BalancedHeading as="h2" className="section-title text-white">
+            {STATS_TEXT.title}{' '}
+            <HeadingAccent>{STATS_TEXT.titleAccent}</HeadingAccent>
+          </BalancedHeading>
           <div className="section-subtitle mx-auto">
             <p className="inline">{STATS_TEXT.subtitle}</p>
             <button
               type="button"
               onClick={() => setIsSourcesOpen((prev) => !prev)}
-              className="ml-2 inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/20 text-[11px] font-bold text-white/80 hover:border-[#F5B800] hover:text-[#F5B800] transition-colors align-middle"
+              className="ml-2 inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/20 text-[11px] font-bold text-white/80 lg:hover:border-[#F5B800] lg:hover:text-[#F5B800] transition-colors align-middle"
               aria-label={STATS_TEXT.sourcesButtonAria}
               aria-expanded={isSourcesOpen}
             >

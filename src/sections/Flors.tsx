@@ -11,6 +11,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 
 type FloorId = 'floor1' | 'floor2';
 
@@ -34,6 +35,20 @@ const FLORS_TEXT = {
   subtitle: 'от силовых тренировок до функционального тренинга и восстановления.',
   slideWord: 'Слайд',
 } as const;
+
+const FLOOR_PHOTO_SLIDES: Record<string, string[]> = {
+  'cardio-zone': [
+    `${import.meta.env.BASE_URL}floors/floor2/cardio/1.jpg`,
+    `${import.meta.env.BASE_URL}floors/floor2/cardio/2.jpg`,
+  ],
+  'group-workouts': [
+    `${import.meta.env.BASE_URL}floors/floor2/group-workouts/1.jpg`,
+  ],
+  'martial-zone': [
+    `${import.meta.env.BASE_URL}floors/floor2/martial-zone/1.jpg`,
+    `${import.meta.env.BASE_URL}floors/floor2/martial-zone/2.jpg`,
+  ],
+};
 
 const mockPalette = [
   { bg: '#1E293B', accent: '#F5B800' },
@@ -76,6 +91,11 @@ function createMockSlides(label: string, paletteIndex: number) {
 const categorySlidesCache = new Map<string, string[]>();
 
 function getCategorySlides(category: Category) {
+  const uploadedSlides = FLOOR_PHOTO_SLIDES[category.id];
+  if (uploadedSlides && uploadedSlides.length > 0) {
+    return uploadedSlides;
+  }
+
   const cacheKey = `${category.id}-${category.paletteIndex}-${category.label}`;
   const fromCache = categorySlidesCache.get(cacheKey);
   if (fromCache) {
@@ -160,6 +180,15 @@ const floorConfigs: FloorConfig[] = [
 
 const defaultFloor = floorConfigs[0];
 
+function getFloorDefaultCategoryId(floor: FloorConfig) {
+  const withUploadedPhotos = floor.categories.find((category) => {
+    const slides = FLOOR_PHOTO_SLIDES[category.id];
+    return Boolean(slides && slides.length > 0);
+  });
+
+  return withUploadedPhotos?.id ?? floor.categories[0].id;
+}
+
 export default function Flors() {
   const [activeFloorId, setActiveFloorId] = useState<FloorId>(defaultFloor.id);
   const [activeCategoryId, setActiveCategoryId] = useState<string>(defaultFloor.categories[0].id);
@@ -179,12 +208,12 @@ export default function Flors() {
   const totalSlides = activeSlides.length;
   const currentSlide = totalSlides > 0 ? activeSlide % totalSlides : 0;
   const currentViewerSlide = totalSlides > 0 ? viewerSlide % totalSlides : 0;
-  const currentImage = activeSlides[currentSlide];
   const viewerImage = activeSlides[currentViewerSlide];
 
   const selectFloor = (floor: FloorConfig) => {
+    const nextCategoryId = getFloorDefaultCategoryId(floor);
     setActiveFloorId(floor.id);
-    setActiveCategoryId(floor.categories[0].id);
+    setActiveCategoryId(nextCategoryId);
     setActiveSlide(0);
     setViewerSlide(0);
     setIsViewerOpen(false);
@@ -222,6 +251,24 @@ export default function Flors() {
     setViewerSlide((prev) => (prev + 1) % totalSlides);
   };
 
+  const getGallerySlideOffset = (index: number) => {
+    if (totalSlides < 2) {
+      return 0;
+    }
+
+    let offset = index - currentSlide;
+    const half = Math.floor(totalSlides / 2);
+
+    if (offset > half) {
+      offset -= totalSlides;
+    }
+    if (offset < -half) {
+      offset += totalSlides;
+    }
+
+    return offset;
+  };
+
   return (
     <section id="flors" className="py-15 relative overflow-hidden">
       <div className="hero-glow-layer">
@@ -232,13 +279,10 @@ export default function Flors() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-10 md:mb-12">
-          <h2 className="section-title text-white">
-            <span className="relative inline-block">
-              <span className="relative z-10">{FLORS_TEXT.titleAccent}</span>
-              <span className="absolute bottom-0 left-0 right-0 h-1.5 sm:h-2 md:h-2.5 lg:h-3 bg-gradient-to-r from-[#F5B800] to-[#D89B00] -z-0" />
-            </span>
+          <BalancedHeading as="h2" className="section-title text-white">
+            <HeadingAccent>{FLORS_TEXT.titleAccent}</HeadingAccent>
             {FLORS_TEXT.titleSuffix}
-          </h2>
+          </BalancedHeading>
           <p className="section-subtitle mx-auto">
             {FLORS_TEXT.subtitle}
           </p>
@@ -258,7 +302,7 @@ export default function Flors() {
                 className={`glass-card text-left p-4 md:p-5 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] ${
                   isActive
                     ? 'border-[#F5B800]/70 bg-gradient-to-r from-[#F5B800]/20 to-[#D89B00]/15'
-                    : 'hover:border-white/20 hover:bg-white/[0.04]'
+                    : 'lg:hover:border-white/20 lg:hover:bg-white/[0.04]'
                 }`}
               >
                 <p className="text-lg md:text-xl font-bold text-white">{floor.label}</p>
@@ -284,7 +328,7 @@ export default function Flors() {
                   className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs sm:text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] ${
                     isActive
                       ? 'border-[#F5B800]/70 bg-gradient-to-r from-[#F5B800]/20 to-[#D89B00]/15 text-white'
-                      : 'bg-white/5 text-gray-300 border border-white/10 hover:bg-white/10'
+                      : 'bg-white/5 text-gray-300 border border-white/10 lg:hover:bg-white/10'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -294,44 +338,85 @@ export default function Flors() {
             })}
           </div>
 
-          <div className="relative mt-4 md:mt-5 mx-auto max-w-4xl">
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/40">
-              <button
-                type="button"
-                onClick={openViewer}
-                className="block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800]"
-                aria-label={`Открыть в полноэкранном режиме: ${activeCategory.label}, фото ${currentSlide + 1}`}
-              >
-                <div className="aspect-[5/4] sm:aspect-[16/10] lg:aspect-[16/8]">
-                  <img
-                    key={`${activeCategory.id}-${currentSlide}`}
-                    src={currentImage}
-                    alt={`${activeCategory.label} — фото ${currentSlide + 1}`}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              </button>
+          <div className="relative mt-4 md:mt-5 mx-auto w-full max-w-4xl">
+            <div className="relative h-[420px] sm:h-[480px] md:h-[560px] lg:h-[620px] overflow-hidden">
+              {activeSlides.map((slide, index) => {
+                const offset = getGallerySlideOffset(index);
+                const isActive = offset === 0;
 
+                return (
+                  <button
+                    key={`${activeCategory.id}-${index}`}
+                    type="button"
+                    onClick={() => {
+                      if (isActive) {
+                        openViewer();
+                        return;
+                      }
+                      setActiveSlide(index);
+                    }}
+                    aria-label={
+                      isActive
+                        ? `Открыть в полноэкранном режиме: ${activeCategory.label}, фото ${index + 1}`
+                        : `Показать фото ${index + 1} категории ${activeCategory.label}`
+                    }
+                    className={`absolute top-1/2 left-1/2 h-[96%] w-[68%] sm:w-[62%] md:w-[54%] lg:w-[48%] rounded-2xl overflow-hidden border border-white/15 bg-black/40 shadow-lg transition-all duration-700 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] ${
+                      isActive
+                        ? 'z-20 -translate-x-1/2 -translate-y-1/2 scale-100 opacity-100'
+                        : offset === -1
+                          ? 'z-10 -translate-x-[118%] -translate-y-1/2 scale-90 opacity-35'
+                          : offset === 1
+                            ? 'z-10 translate-x-[18%] -translate-y-1/2 scale-90 opacity-35'
+                            : 'z-0 -translate-x-1/2 -translate-y-1/2 scale-85 opacity-0 pointer-events-none'
+                    }`}
+                  >
+                    <img
+                      src={slide}
+                      alt={`${activeCategory.label} — фото ${index + 1}`}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-full w-full object-cover object-center"
+                    />
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="flex items-center justify-center gap-6 mt-6">
               <button
                 type="button"
                 onClick={prevMainSlide}
                 disabled={totalSlides < 2}
                 aria-label={`Предыдущее фото категории ${activeCategory.label}`}
-                className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-black/55 border border-white/20 text-white transition hover:bg-black/70 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] flex items-center justify-center"
+                className="w-12 h-12 rounded-full bg-white/5 lg:hover:bg-white/10 flex items-center justify-center transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="w-6 h-6 text-gray-400" />
               </button>
+
+              <div className="flex gap-3 flex-wrap justify-center">
+                {activeSlides.map((_, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => setActiveSlide(index)}
+                    className={`h-1 rounded-full transition-all ${
+                      index === currentSlide
+                        ? 'w-16 bg-gradient-to-r from-[#F5B800] to-[#D89B00]'
+                        : 'w-8 bg-white/20'
+                    }`}
+                    aria-label={`Выбрать фото ${index + 1}`}
+                  />
+                ))}
+              </div>
 
               <button
                 type="button"
                 onClick={nextMainSlide}
                 disabled={totalSlides < 2}
                 aria-label={`Следующее фото категории ${activeCategory.label}`}
-                className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-black/55 border border-white/20 text-white transition hover:bg-black/70 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] flex items-center justify-center"
+                className="w-12 h-12 rounded-full bg-white/5 lg:hover:bg-white/10 flex items-center justify-center transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="w-6 h-6 text-gray-400" />
               </button>
             </div>
 
@@ -362,7 +447,7 @@ export default function Flors() {
               onClick={prevViewerSlide}
               disabled={totalSlides < 2}
               aria-label={`Предыдущее фото в просмотре категории ${activeCategory.label}`}
-              className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-black/65 border border-white/20 text-white transition hover:bg-black/80 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] flex items-center justify-center"
+              className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-black/65 border border-white/20 text-white transition lg:hover:bg-black/80 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] flex items-center justify-center"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -372,7 +457,7 @@ export default function Flors() {
               onClick={nextViewerSlide}
               disabled={totalSlides < 2}
               aria-label={`Следующее фото в просмотре категории ${activeCategory.label}`}
-              className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-black/65 border border-white/20 text-white transition hover:bg-black/80 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] flex items-center justify-center"
+              className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-black/65 border border-white/20 text-white transition lg:hover:bg-black/80 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] flex items-center justify-center"
             >
               <ChevronRight className="w-5 h-5" />
             </button>

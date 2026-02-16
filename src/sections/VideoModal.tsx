@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { X } from 'lucide-react';
+import { BalancedHeading } from '@/components/typography/BalancedHeading';
 
 interface VideoModalProps {
   isOpen: boolean;
@@ -46,7 +47,7 @@ export default function VideoModal({ isOpen, onClose }: VideoModalProps) {
       <div className="relative w-full max-w-4xl mx-4">
         <button
           onClick={onClose}
-          className="absolute -top-12 right-0 p-2 text-gray-400 hover:text-white transition-colors z-10"
+          className="absolute -top-12 right-0 p-2 text-gray-400 lg:hover:text-white transition-colors z-10"
         >
           <X className="w-8 h-8" />
         </button>
@@ -61,9 +62,9 @@ export default function VideoModal({ isOpen, onClose }: VideoModalProps) {
           />
         </div>
         <div className="mt-4 text-center">
-          <h3 className="text-white text-xl font-semibold">
+          <BalancedHeading as="h3" className="text-white text-xl font-semibold">
             {VIDEO_MODAL_TEXT.heading}
-          </h3>
+          </BalancedHeading>
           <p className="text-gray-400 mt-2">
             {VIDEO_MODAL_TEXT.description}
           </p>

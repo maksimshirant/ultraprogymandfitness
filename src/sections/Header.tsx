@@ -1,5 +1,5 @@
 import { useState, useEffect, type MouseEvent } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, Phone, X } from 'lucide-react';
 
 interface HeaderProps {
   onOpenModal: () => void;
@@ -12,7 +12,9 @@ const HEADER_ASSETS = {
 
 const HEADER_TEXT = {
   cta: 'Записаться на тренировку',
-  mobileCta: 'Попробовать бесплатно',
+  phone: '8(8443) 323-323',
+  phoneHref: 'tel:+78443323323',
+  callAria: 'Позвонить в Ultra Pro Gym & Fitness',
 } as const;
 
 const HEADER_NAV_ITEMS = [
@@ -90,7 +92,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
               loading="eager"
               fetchPriority="high"
               decoding="async"
-              className="h-7 lg:h-8 xl:h-9 w-auto object-contain brightness-0 invert group-hover:opacity-90 transition-opacity"
+              className="h-7 lg:h-8 xl:h-9 w-auto object-contain brightness-0 invert lg:group-hover:opacity-90 transition-opacity"
             />
           </a>
           <nav className="hidden lg:flex items-center gap-4 xl:gap-8">
@@ -98,28 +100,38 @@ export default function Header({ onOpenModal }: HeaderProps) {
               <a
                 key={item.label}
                 href={item.href}
-                className="text-xs xl:text-sm text-gray-300 hover:text-white transition-colors relative group whitespace-nowrap"
+                className="text-xs xl:text-sm text-gray-300 lg:hover:text-white transition-colors relative group whitespace-nowrap"
                 onClick={(event) => handleAnchorClick(event, item.href)}
               >
                 {item.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#F5B800] to-[#D89B00] group-hover:w-full transition-all duration-300" />
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#F5B800] to-[#D89B00] lg:group-hover:w-full transition-all duration-300" />
               </a>
             ))}
           </nav>
-          <div className="hidden lg:block">
-            <button
-              onClick={onOpenModal}
-              className="rounded-full font-semibold text-white transition-all duration-300 bg-[linear-gradient(135deg,#F5B800_0%,#E2A700_55%,#C98E00_100%)] shadow-[0_4px_20px_rgba(245,184,0,0.4)] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(245,184,0,0.5)] px-4 py-2 text-xs xl:px-6 xl:py-3 xl:text-sm"
+          <div className="flex items-center gap-4 sm:gap-5">
+            <a
+              href={HEADER_TEXT.phoneHref}
+              aria-label={HEADER_TEXT.callAria}
+              title={HEADER_TEXT.phone}
+              className="inline-flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full text-white transition-all duration-300 bg-[linear-gradient(135deg,#F5B800_0%,#E2A700_55%,#C98E00_100%)] shadow-[0_4px_20px_rgba(245,184,0,0.4)] lg:hover:-translate-y-0.5 lg:hover:shadow-[0_8px_30px_rgba(245,184,0,0.5)]"
             >
-              {HEADER_TEXT.cta}
+              <Phone className="h-4 w-4" />
+            </a>
+            <div className="hidden lg:block">
+              <button
+                onClick={onOpenModal}
+                className="rounded-full font-semibold text-white transition-all duration-300 bg-[linear-gradient(135deg,#F5B800_0%,#E2A700_55%,#C98E00_100%)] shadow-[0_4px_20px_rgba(245,184,0,0.4)] lg:hover:-translate-y-0.5 lg:hover:shadow-[0_8px_30px_rgba(245,184,0,0.5)] px-4 py-2 text-xs xl:px-6 xl:py-3 xl:text-sm"
+              >
+                {HEADER_TEXT.cta}
+              </button>
+            </div>
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="lg:hidden p-2 text-white"
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 text-white"
-          >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
         </div>
       </div>
       {isMobileMenuOpen && (
@@ -129,7 +141,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
               <a
                 key={item.label}
                 href={item.href}
-                className="text-gray-300 hover:text-white transition-colors py-2"
+                className="text-gray-300 lg:hover:text-white transition-colors py-2"
                 onClick={(event) => handleAnchorClick(event, item.href)}
               >
                 {item.label}
@@ -142,7 +154,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
               }}
               className="btn-primary text-white mt-4"
             >
-              {HEADER_TEXT.mobileCta}
+              {HEADER_TEXT.cta}
             </button>
           </nav>
         </div>

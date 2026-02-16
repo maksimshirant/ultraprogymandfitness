@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useState, type MouseEvent } from 'react';
-import { Phone, MapPin, Clock3, X } from 'lucide-react';
+import { Phone, MapPin, Clock3, Star, X } from 'lucide-react';
 import { SiVk, SiTelegram } from 'react-icons/si';
 
 const PrivacyPolicyContent = lazy(async () => {
@@ -42,12 +42,16 @@ const FOOTER_TEXT = {
   schedule: 'Ежедневно: 07:00 - 23:00',
   vkLabel: 'VK',
   telegramLabel: 'Telegram',
+  reviewsLabel: 'Отзывы',
   vkAria: 'VK',
   telegramAria: 'Telegram',
+  reviewsAria: 'Отзывы в Яндекс Картах',
+  inn: 'ИНН 343521265164',
+  ogrnip: 'ОГРНИП 326344300004743',
 } as const;
 
 const FOOTER_LINKS = [
-  { label: 'Галерея', href: '#gallery' },
+  { label: 'Фитнесс клуб', href: '#gallery' },
   { label: 'Тренеры', href: '#trainers' },
   { label: 'Абонементы', href: '#subscriptions' },
   { label: 'Частые вопросы', href: '#faq' },
@@ -56,10 +60,13 @@ const FOOTER_LINKS = [
 const FOOTER_SOCIALS = {
   vk: 'https://vk.com/ultrapro_fitness_vlz',
   telegram: 'https://t.me/ultrapro_fitness_vlz',
+  reviews: 'https://yandex.com/maps/org/ultra_pro/233756976456/reviews/?ll=44.777002%2C48.777976&z=16',
 } as const;
 
-const FOOTER_MAP_SRC =
-  'https://yandex.ru/map-widget/v1/?mode=search&text=%D0%B3.%20%D0%92%D0%BE%D0%BB%D0%B6%D1%81%D0%BA%D0%B8%D0%B9%2C%20%D0%9F%D1%80%D0%BE%D1%84%D1%81%D0%BE%D1%8E%D0%B7%D0%BE%D0%B2%207%D0%91%2C%20%D0%A2%D0%A6%20%D0%A0%D0%B0%D0%B4%D1%83%D0%B3%D0%B0&z=17';
+const FOOTER_MAP_QUERY = 'г. Волжский, Профсоюзов 7б, УльтраПро';
+const FOOTER_MAP_SRC = `https://yandex.ru/map-widget/v1/?mode=search&text=${encodeURIComponent(
+  FOOTER_MAP_QUERY
+)}&z=17`;
 const FOOTER_DOCUMENT_FALLBACK = 'Загрузка документа...';
 
 const FOOTER_SCROLL_OFFSET = 96;
@@ -157,7 +164,7 @@ export default function Footer({ onOpenModal }: FooterProps) {
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-[#F5B800]" />
-                <a href={FOOTER_TEXT.phoneHref} className="hover:text-white transition-colors">
+                <a href={FOOTER_TEXT.phoneHref} className="lg:hover:text-white transition-colors">
                   {FOOTER_TEXT.phone}
                 </a>
               </div>
@@ -170,7 +177,7 @@ export default function Footer({ onOpenModal }: FooterProps) {
             <div className="mt-6 flex items-center gap-4">
               <a
                 href={FOOTER_SOCIALS.vk}
-                className="h-10 px-4 rounded-full bg-white/5 flex items-center justify-center gap-2 hover:bg-[#F5B800] hover:text-black transition-colors text-sm font-semibold text-gray-300"
+                className="h-10 px-4 rounded-full bg-white/5 flex items-center justify-center gap-2 lg:hover:bg-[#F5B800] lg:hover:text-black transition-colors text-sm font-semibold text-gray-300"
                 aria-label={FOOTER_TEXT.vkAria}
               >
                 <SiVk className="w-4 h-4" />
@@ -178,11 +185,21 @@ export default function Footer({ onOpenModal }: FooterProps) {
               </a>
               <a
                 href={FOOTER_SOCIALS.telegram}
-                className="h-10 px-4 rounded-full bg-white/5 flex items-center justify-center gap-2 hover:bg-[#F5B800] hover:text-black transition-colors text-sm font-semibold text-gray-300"
+                className="h-10 px-4 rounded-full bg-white/5 flex items-center justify-center gap-2 lg:hover:bg-[#F5B800] lg:hover:text-black transition-colors text-sm font-semibold text-gray-300"
                 aria-label={FOOTER_TEXT.telegramAria}
               >
                 <SiTelegram className="w-4 h-4" />
                 {FOOTER_TEXT.telegramLabel}
+              </a>
+              <a
+                href={FOOTER_SOCIALS.reviews}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-10 px-4 rounded-full bg-white/5 flex items-center justify-center gap-2 lg:hover:bg-[#F5B800] lg:hover:text-black transition-colors text-sm font-semibold text-gray-300"
+                aria-label={FOOTER_TEXT.reviewsAria}
+              >
+                <Star className="w-4 h-4" />
+                {FOOTER_TEXT.reviewsLabel}
               </a>
             </div>
           </div>
@@ -224,7 +241,7 @@ export default function Footer({ onOpenModal }: FooterProps) {
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-gray-400 hover:text-white transition-colors text-sm"
+                    className="text-gray-400 lg:hover:text-white transition-colors text-sm"
                     onClick={(event) => handleAnchorClick(event, link.href)}
                   >
                     {link.label}
@@ -245,7 +262,7 @@ export default function Footer({ onOpenModal }: FooterProps) {
               <a
                 key={link.label}
                 href={link.href}
-                className="text-gray-400 hover:text-white transition-colors text-sm"
+                className="text-gray-400 lg:hover:text-white transition-colors text-sm"
                 onClick={(event) => handleAnchorClick(event, link.href)}
               >
                 {link.label}
@@ -264,18 +281,23 @@ export default function Footer({ onOpenModal }: FooterProps) {
             <button
               type="button"
               onClick={() => setIsPolicyOpen(true)}
-              className="text-gray-500 text-sm hover:text-white transition-colors text-left sm:text-right"
+              className="text-gray-500 text-sm lg:hover:text-white transition-colors text-left sm:text-right"
             >
               {FOOTER_TEXT.policyButton}
             </button>
             <button
               type="button"
               onClick={() => setIsOfferOpen(true)}
-              className="text-gray-500 text-sm hover:text-white transition-colors text-left sm:text-right"
+              className="text-gray-500 text-sm lg:hover:text-white transition-colors text-left sm:text-right"
             >
               {FOOTER_TEXT.offerButton}
             </button>
           </div>
+        </div>
+
+        <div className="mt-4 flex flex-col gap-1 text-gray-500 text-xs sm:text-sm">
+          <p>{FOOTER_TEXT.inn}</p>
+          <p>{FOOTER_TEXT.ogrnip}</p>
         </div>
       </div>
 
@@ -291,7 +313,7 @@ export default function Footer({ onOpenModal }: FooterProps) {
             <button
               type="button"
               onClick={() => setIsPolicyOpen(false)}
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center"
+              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 lg:hover:bg-white/20 transition-colors flex items-center justify-center"
               aria-label={FOOTER_TEXT.closePolicyAria}
             >
               <X className="w-5 h-5 text-white" />
@@ -316,7 +338,7 @@ export default function Footer({ onOpenModal }: FooterProps) {
             <button
               type="button"
               onClick={() => setIsOfferOpen(false)}
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center"
+              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 lg:hover:bg-white/20 transition-colors flex items-center justify-center"
               aria-label={FOOTER_TEXT.closeOfferAria}
             >
               <X className="w-5 h-5 text-white" />
@@ -338,16 +360,18 @@ export default function Footer({ onOpenModal }: FooterProps) {
             className="relative max-w-6xl mx-auto h-[90vh] rounded-2xl border border-white/10 bg-[#111117] p-4 sm:p-6"
             onClick={(event) => event.stopPropagation()}
           >
-            <button
-              type="button"
-              onClick={() => setIsMapOpen(false)}
-              className="absolute top-3 right-3 sm:top-4 sm:right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center z-10"
-              aria-label={FOOTER_TEXT.closeMapAria}
-            >
-              <X className="w-5 h-5 text-white" />
-            </button>
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={() => setIsMapOpen(false)}
+                className="w-10 h-10 rounded-full bg-white/10 lg:hover:bg-white/20 transition-colors flex items-center justify-center z-10"
+                aria-label={FOOTER_TEXT.closeMapAria}
+              >
+                <X className="w-5 h-5 text-white" />
+              </button>
+            </div>
 
-            <div className="h-full rounded-xl overflow-hidden border border-white/10">
+            <div className="mt-3 h-[calc(100%-3.25rem)] rounded-xl overflow-hidden border border-white/10">
               <iframe
                 title={FOOTER_TEXT.mapFrameTitle}
                 src={FOOTER_MAP_SRC}

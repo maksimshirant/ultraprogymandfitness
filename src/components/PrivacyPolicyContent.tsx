@@ -1,4 +1,5 @@
 import { PRIVACY_POLICY_TEXT, PRIVACY_POLICY_TITLE } from '@/content/privacyPolicy';
+import { BalancedHeading } from '@/components/typography/BalancedHeading';
 import { cn } from '@/lib/utils';
 
 interface PrivacyPolicyContentProps {
@@ -14,7 +15,9 @@ export function PrivacyPolicyContent({
 }: PrivacyPolicyContentProps) {
   return (
     <div className={className}>
-      <h3 className={cn('text-2xl font-bold text-white mb-5', titleClassName)}>{PRIVACY_POLICY_TITLE}</h3>
+      <BalancedHeading as="h3" className={cn('text-2xl font-bold text-white mb-5', titleClassName)}>
+        {PRIVACY_POLICY_TITLE}
+      </BalancedHeading>
       <p className={cn('whitespace-pre-line text-sm leading-relaxed text-gray-300', textClassName)}>
         {PRIVACY_POLICY_TEXT}
       </p>

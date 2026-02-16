@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
+import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 
 const FAQ_TEXT = {
   title: 'Частые вопросы',
@@ -56,7 +57,7 @@ export default function FAQ() {
   };
 
   return (
-    <section id="faq" className="py-24 relative overflow-hidden">
+    <section id="faq" className="py-14 md:py-24 relative overflow-hidden">
       <div className="hero-glow-layer">
         <div className="hero-glow-top-right" />
         <div className="hero-glow-bottom-left" />
@@ -64,12 +65,9 @@ export default function FAQ() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="section-title text-white mb-12">
-          <span className="relative inline-block">
-            <span className="relative z-10">{FAQ_TEXT.title}</span>
-            <span className="absolute bottom-0 left-0 right-0 h-1.5 sm:h-2 md:h-2.5 lg:h-3 bg-gradient-to-r from-[#F5B800] to-[#F5B800] -z-0" />
-          </span>
-        </h2>
+        <BalancedHeading as="h2" className="section-title text-white mb-12 text-center">
+          <HeadingAccent>{FAQ_TEXT.title}</HeadingAccent>
+        </BalancedHeading>
         <div className="space-y-4">
           {faqs.map((faq, index) => (
             <div
@@ -80,7 +78,7 @@ export default function FAQ() {
                 onClick={() => toggleFAQ(index)}
                 className="w-full py-4 flex items-center justify-between text-left group"
               >
-                <span className="text-white font-semibold text-lg pr-4 group-hover:text-[#F5B800] transition-colors">
+                <span className="text-white font-semibold text-lg pr-4 lg:group-hover:text-[#F5B800] transition-colors">
                   {faq.question}
                 </span>
                 <div className={`w-8 h-8 rounded-full border border-white/20 flex items-center justify-center flex-shrink-0 transition-all ${

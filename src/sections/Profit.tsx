@@ -1,4 +1,5 @@
 import { Dumbbell, Smile, HeartPulse } from 'lucide-react';
+import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 
 const PROFIT_TEXT = {
   title: 'А еще...',
@@ -39,13 +40,9 @@ export default function Profit() {
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-12">
-          <h2 className="section-title text-white">
-            {PROFIT_TEXT.title}
-            <span className="relative inline-block">
-              <span className="relative z-10">{PROFIT_TEXT.titleAccent}</span>
-              <span className="absolute bottom-0 left-0 right-0 h-1.5 sm:h-2 md:h-2.5 lg:h-3 bg-gradient-to-r from-[#F5B800] to-[#D89B00] -z-0" />
-            </span>
-          </h2>
+          <BalancedHeading as="h2" className="section-title text-white">
+            {PROFIT_TEXT.title} <HeadingAccent>{PROFIT_TEXT.titleAccent}</HeadingAccent>
+          </BalancedHeading>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           {profit.map((item) => {
@@ -53,13 +50,15 @@ export default function Profit() {
             return (
               <article
                 key={item.id}
-                className="glass-card border border-white/10 hover:bg-white/5 transition-colors"
+                className="glass-card border border-white/10 lg:hover:bg-white/5 transition-colors"
               >
                 <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#F5B800] to-[#D89B00] flex items-center justify-center mb-4">
                   <Icon className="w-5 h-5 text-white" />
                 </div>
 
-                <h3 className="text-lg font-semibold text-white mb-3">{item.title}</h3>
+                <BalancedHeading as="h3" className="text-lg font-semibold text-white mb-3">
+                  {item.title}
+                </BalancedHeading>
                 <p className="text-sm text-gray-300 leading-relaxed">{item.description}</p>
               </article>
             );

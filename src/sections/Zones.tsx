@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Dumbbell, Zap, Users, Waves } from 'lucide-react';
+import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 
 const ZONES_TEXT = {
   titleStart: 'Пространство клуба организовано так, чтобы каждая зона',
@@ -64,13 +65,10 @@ export default function Zones() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="section-title text-white">
+            <BalancedHeading as="h2" className="section-title text-white">
               {ZONES_TEXT.titleStart}{' '}
-              <span className="relative inline-block">
-                <span className="relative z-10">{ZONES_TEXT.titleAccent}</span>
-                <span className="absolute bottom-0 left-0 right-0 h-1.5 sm:h-2 md:h-2.5 lg:h-3 bg-gradient-to-r from-[#F5B800] to-[#D89B00] -z-0" />
-              </span>{' '}{ZONES_TEXT.titleEnd}
-            </h2>
+              <HeadingAccent>{ZONES_TEXT.titleAccent}</HeadingAccent> {ZONES_TEXT.titleEnd}
+            </BalancedHeading>
             <p className="section-subtitle">
               {ZONES_TEXT.subtitle}
             </p>
@@ -126,7 +124,7 @@ export default function Zones() {
             <div className="flex items-center justify-center gap-4 mt-4">
               <button
                 onClick={prevZone}
-                className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors"
+                className="p-2 rounded-full bg-white/5 lg:hover:bg-white/10 transition-colors"
               >
                 <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -148,7 +146,7 @@ export default function Zones() {
               </div>
               <button
                 onClick={nextZone}
-                className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors"
+                className="p-2 rounded-full bg-white/5 lg:hover:bg-white/10 transition-colors"
               >
                 <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
