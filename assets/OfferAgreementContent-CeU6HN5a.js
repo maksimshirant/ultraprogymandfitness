@@ -1,4 +1,4 @@
-import{j as t}from"./index-C0vm9SKB.js";import{c as e}from"./utils-fNskMoFt.js";const i="Договор офферты",o=`ДОГОВОР ПУБЛИЧНОЙ ОФЕРТЫ
+import{j as t,B as a,b as e}from"./index-BL-yJduS.js";const i="Договор офферты",l=`ДОГОВОР ПУБЛИЧНОЙ ОФЕРТЫ
 
 на оказание услуг фитнес-клуба «УЛЬТРА ПРО»
 
@@ -64,4 +64,4 @@ import{j as t}from"./index-C0vm9SKB.js";import{c as e}from"./utils-fNskMoFt.js";
 
 8.9.    Об отсутствии технической возможности оказывать предусмотренные настоящим Договором Услуги в полном объеме, Клуб обязуется информировать Члена Клуба, путем размещения информации на рецепции (входных дверях) Клуба, на информационном стенде для Потребителя и на официальном сайте Клуба в сети Интернет (http://ultraprofitness.ru/), в течение 3 (трех) дней с момента возникновения данных событий или с момента, когда Клубу стало известно, что такие события могут возникнуть в будущем.
 8.10. Клуб не несет ответственности за неоказание услуг и неудобства, вызванные проведением городскими (районными) властями сезонных профилактических, ремонтно-строительных и аварийных ремонтно-восстановительных работ.
-8.11. Во всем остальном, что не предусмотрено настоящим Договором, Стороны руководствуются действующим законодательством РФ.`;function x({className:r,titleClassName:s,textClassName:n}){return t.jsxs("div",{className:r,children:[t.jsx("h3",{className:e("text-2xl font-bold text-white mb-5",s),children:i}),t.jsx("p",{className:e("whitespace-pre-line text-sm leading-relaxed text-gray-300",n),children:o})]})}export{x as OfferAgreementContent};
+8.11. Во всем остальном, что не предусмотрено настоящим Договором, Стороны руководствуются действующим законодательством РФ.`;function x({className:s,titleClassName:n,textClassName:r}){return t.jsxs("div",{className:s,children:[t.jsx(a,{as:"h3",className:e("text-2xl font-bold text-white mb-5",n),children:i}),t.jsx("p",{className:e("whitespace-pre-line text-sm leading-relaxed text-gray-300",r),children:l})]})}export{x as OfferAgreementContent};
