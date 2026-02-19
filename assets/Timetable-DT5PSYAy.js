@@ -1,4 +1,4 @@
-import{r as a,j as e,B as n,H as c,X as d}from"./index-Bo4AvO5J.js";const t={title:"Расписание",titleAccent:"групповых занятий",subtitle:"Выбери свое направление и приступай уже сегодня",imageAlt:"Расписание групповых занятий",comingSoon:"Расписание скоро будет доступно",signature:"С уважением команда, Ultra Pro",openFullscreenAria:"Открыть расписание на весь экран",closePreviewAria:"Закрыть просмотр расписания"},o={image:`data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
+import{r as a,j as e,B as n,H as c,X as d}from"./index-C7iLFyQ6.js";const t={title:"Расписание",titleAccent:"групповых занятий",subtitle:"Выбери свое направление и приступай уже сегодня",imageAlt:"Расписание групповых занятий",comingSoon:"Расписание скоро будет доступно",signature:"С уважением команда, Ultra Pro",openFullscreenAria:"Открыть расписание на весь экран",closePreviewAria:"Закрыть просмотр расписания"},o={image:`data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
