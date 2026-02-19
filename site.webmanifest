@@ -1,0 +1,17 @@
+{
+  "name": "Ultra Pro Gym & Fitness",
+  "short_name": "Ultra Pro",
+  "description": "Фитнес-клуб в Волжском: тренажерный зал, тренеры, групповые занятия и абонементы.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#0a0a0f",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    }
+  ]
+}
