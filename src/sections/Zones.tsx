@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Dumbbell, Zap, Users, Waves } from 'lucide-react';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
+import { useSwipeNavigation } from '@/hooks/useSwipeNavigation';
 
 const ZONES_TEXT = {
   titleStart: 'Пространство клуба организовано так, чтобы каждая зона',
@@ -57,6 +58,11 @@ export default function Zones() {
     return offset;
   };
 
+  const swipeHandlers = useSwipeNavigation({
+    onNext: nextZone,
+    onPrev: prevZone,
+  });
+
   return (
     <section id="zones" className="py-20 relative overflow-hidden">
 
@@ -74,7 +80,7 @@ export default function Zones() {
             </p>
           </div>
           <div className="relative">
-            <div className="relative h-[340px] md:h-[380px] overflow-hidden">
+            <div className="relative h-[340px] md:h-[380px] overflow-hidden" {...swipeHandlers}>
               <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#0a0a0f] to-transparent z-20" />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#0a0a0f] to-transparent z-20" />
 

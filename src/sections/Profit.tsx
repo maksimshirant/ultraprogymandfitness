@@ -2,7 +2,7 @@ import { Dumbbell, Smile, HeartPulse } from 'lucide-react';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 
 const PROFIT_TEXT = {
-  title: 'А еще...',
+  title: 'Вы знали, что',
   titleAccent: 'тренировки способствуют',
 } as const;
 

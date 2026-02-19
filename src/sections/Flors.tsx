@@ -4,14 +4,15 @@ import {
   ChevronLeft,
   ChevronRight,
   Dumbbell,
-  Hand,
   Users,
   Waves,
+  X,
   Zap,
   type LucideIcon,
 } from 'lucide-react';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
+import { useSwipeNavigation } from '@/hooks/useSwipeNavigation';
 
 type FloorId = 'floor1' | 'floor2';
 
@@ -31,22 +32,69 @@ type FloorConfig = {
 
 const FLORS_TEXT = {
   titleAccent: 'Два полноценных этажа',
-  titleSuffix: ', где каждая зона отвечает своей цели',
-  subtitle: 'от силовых тренировок до функционального тренинга и восстановления.',
+  titleSuffix: '— чтобы каждая цель имела своё пространство',
+  subtitle: 'От силовых тренировок до функционального тренинга и восстановления.',
+  categoryHintFallback: 'Тут будет описание выбранной зоны. Пока тестовый текст-заглушка.',
   slideWord: 'Слайд',
+  closeViewerAria: 'Закрыть просмотр галереи',
 } as const;
 
+const FLOOR_CATEGORY_HINTS: Record<string, string> = {
+  gym: 'Тут кипит железо, растут цифры в рабочих весах и появляется уверенность в каждом движении.',
+  sauna: 'Тепло, пауза и восстановление: место, где мышцы благодарят вас после нагрузки.',
+  'kids-zone': 'Небольшая территория энергии и улыбок, пока взрослые спокойно закрывают тренировочный план.',
+  'fitness-bar': 'Точка перезагрузки: вода, протеин, перекус и короткая пауза между подходами.',
+  'crossfit-zone': 'Интенсивный ритм, функциональные связки и характер, который становится сильнее с каждой сессией.',
+  'group-workouts': 'Музыка, темп и команда: здесь легко держать дисциплину и не терять мотивацию.',
+  // Временно скрыто. Вернуть при запуске категории "Массаж".
+  // massage: 'Зона, где тело отпускает напряжение, а восстановление становится частью прогресса.',
+  'martial-zone': 'Скорость, техника и концентрация: пространство для ударной работы и уверенного контроля.',
+  'cardio-zone': 'Ровный пульс, выносливость и дыхание: километры, которые работают на ваш результат.',
+};
+
 const FLOOR_PHOTO_SLIDES: Record<string, string[]> = {
-  'cardio-zone': [
-    `${import.meta.env.BASE_URL}floors/floor2/cardio/1.jpg`,
-    `${import.meta.env.BASE_URL}floors/floor2/cardio/2.jpg`,
+  gym: [
+    `${import.meta.env.BASE_URL}floors/floor1/GYM/1.webp`,
+    `${import.meta.env.BASE_URL}floors/floor1/GYM/2.webp`,
+    `${import.meta.env.BASE_URL}floors/floor1/GYM/3.webp`,
+    `${import.meta.env.BASE_URL}floors/floor1/GYM/4.webp`,
+    `${import.meta.env.BASE_URL}floors/floor1/GYM/5.jpg`,
+  ],
+  sauna: [
+    `${import.meta.env.BASE_URL}floors/floor1/SAUNA/1.webp`,
+  ],
+  'kids-zone': [
+    `${import.meta.env.BASE_URL}floors/floor1/KIDS/1.webp`,
+  ],
+  'fitness-bar': [
+    `${import.meta.env.BASE_URL}floors/floor1/RESEPTION/1.webp`,
+  ],
+  'crossfit-zone': [
+    `${import.meta.env.BASE_URL}floors/floor2/crossfit-zone/1.webp`,
+    `${import.meta.env.BASE_URL}floors/floor2/crossfit-zone/2.webp`,
+    `${import.meta.env.BASE_URL}floors/floor2/crossfit-zone/3.jpg`,
+    `${import.meta.env.BASE_URL}floors/floor2/crossfit-zone/4.jpg`,
+    `${import.meta.env.BASE_URL}floors/floor2/crossfit-zone/5.jpg`,
   ],
   'group-workouts': [
     `${import.meta.env.BASE_URL}floors/floor2/group-workouts/1.jpg`,
+    `${import.meta.env.BASE_URL}floors/floor2/group-workouts/2.jpg`,
+    `${import.meta.env.BASE_URL}floors/floor2/group-workouts/3.webp`,
   ],
+  // Временно скрыто. Вернуть при запуске категории "Массаж".
+  // massage: [
+  //   `${import.meta.env.BASE_URL}floors/floor1/SAUNA/1.webp`,
+  // ],
   'martial-zone': [
-    `${import.meta.env.BASE_URL}floors/floor2/martial-zone/1.jpg`,
-    `${import.meta.env.BASE_URL}floors/floor2/martial-zone/2.jpg`,
+    `${import.meta.env.BASE_URL}floors/floor2/martial-zone/1-v2.jpg`,
+    `${import.meta.env.BASE_URL}floors/floor2/martial-zone/2-v2.jpg`,
+  ],
+  'cardio-zone': [
+    `${import.meta.env.BASE_URL}floors/floor2/cardio/1.jpg`,
+    `${import.meta.env.BASE_URL}floors/floor2/cardio/2.jpg`,
+    `${import.meta.env.BASE_URL}floors/floor2/cardio/3.webp`,
+    `${import.meta.env.BASE_URL}floors/floor2/cardio/4.jpg`,
+    `${import.meta.env.BASE_URL}floors/floor2/cardio/5.jpg`,
   ],
 };
 
@@ -156,12 +204,13 @@ const floorConfigs: FloorConfig[] = [
         icon: Users,
         paletteIndex: 5,
       },
-      {
-        id: 'massage',
-        label: 'Массаж',
-        icon: Hand,
-        paletteIndex: 6,
-      },
+      // Временно скрыто. Вернуть при запуске категории "Массаж".
+      // {
+      //   id: 'massage',
+      //   label: 'Массаж',
+      //   icon: Hand,
+      //   paletteIndex: 6,
+      // },
       {
         id: 'martial-zone',
         label: 'Зона единоборств',
@@ -269,6 +318,20 @@ export default function Flors() {
     return offset;
   };
 
+  const mainSwipeHandlers = useSwipeNavigation({
+    onNext: nextMainSlide,
+    onPrev: prevMainSlide,
+    disabled: totalSlides < 2,
+  });
+
+  const viewerSwipeHandlers = useSwipeNavigation({
+    onNext: nextViewerSlide,
+    onPrev: prevViewerSlide,
+    disabled: totalSlides < 2,
+  });
+  const activeCategoryHint =
+    FLOOR_CATEGORY_HINTS[activeCategory.id] ?? FLORS_TEXT.categoryHintFallback;
+
   return (
     <section id="flors" className="py-15 relative overflow-hidden">
       <div className="hero-glow-layer">
@@ -280,8 +343,7 @@ export default function Flors() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-10 md:mb-12">
           <BalancedHeading as="h2" className="section-title text-white">
-            <HeadingAccent>{FLORS_TEXT.titleAccent}</HeadingAccent>
-            {FLORS_TEXT.titleSuffix}
+            <HeadingAccent>{FLORS_TEXT.titleAccent}</HeadingAccent> {FLORS_TEXT.titleSuffix}
           </BalancedHeading>
           <p className="section-subtitle mx-auto">
             {FLORS_TEXT.subtitle}
@@ -338,8 +400,24 @@ export default function Flors() {
             })}
           </div>
 
+          <div className="mt-4 md:mt-5 mx-auto w-full max-w-3xl">
+            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-r from-white/[0.06] via-white/[0.035] to-white/[0.02] px-4 py-4 md:px-6 md:py-5">
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#F5B800] via-[#E2A700] to-[#C98E00]" />
+              <div className="absolute -right-10 -top-10 h-24 w-24 rounded-full bg-[#F5B800]/10 blur-2xl" />
+              <p className="text-[11px] md:text-xs font-semibold tracking-[0.14em] uppercase text-[#F5B800]">
+                Фокус зоны
+              </p>
+              <p className="mt-2 text-center text-sm md:text-base text-gray-200 leading-relaxed">
+                {activeCategoryHint}
+              </p>
+            </div>
+          </div>
+
           <div className="relative mt-4 md:mt-5 mx-auto w-full max-w-4xl">
-            <div className="relative h-[420px] sm:h-[480px] md:h-[560px] lg:h-[620px] overflow-hidden">
+            <div
+              className="relative h-[420px] sm:h-[480px] md:h-[560px] lg:h-[620px] overflow-hidden"
+              {...mainSwipeHandlers}
+            >
               {activeSlides.map((slide, index) => {
                 const offset = getGallerySlideOffset(index);
                 const isActive = offset === 0;
@@ -428,10 +506,21 @@ export default function Flors() {
       </div>
 
       <Dialog open={isViewerOpen} onOpenChange={setIsViewerOpen}>
-        <DialogContent className="top-0 left-0 h-screen w-screen max-w-none sm:max-w-none translate-x-0 translate-y-0 rounded-none border-0 bg-black/95 p-2 sm:p-4">
+        <DialogContent
+          showCloseButton={false}
+          className="top-0 left-0 h-screen w-screen max-w-none sm:max-w-none translate-x-0 translate-y-0 rounded-none border-0 bg-black/95 p-2 sm:p-4"
+        >
           <DialogTitle className="sr-only">{activeCategory.label}</DialogTitle>
+          <button
+            type="button"
+            onClick={() => setIsViewerOpen(false)}
+            className="absolute top-4 right-4 sm:top-6 sm:right-6 w-11 h-11 rounded-full bg-white/10 lg:hover:bg-white/20 transition-colors flex items-center justify-center z-20"
+            aria-label={FLORS_TEXT.closeViewerAria}
+          >
+            <X className="w-6 h-6 text-white" />
+          </button>
           <div className="relative h-[calc(100vh-1rem)] sm:h-[calc(100vh-2rem)]">
-            <div className="h-full overflow-hidden rounded-xl border border-white/10 bg-black/50">
+            <div className="h-full overflow-hidden rounded-xl border border-white/10 bg-black/50" {...viewerSwipeHandlers}>
               <img
                 key={`${activeCategory.id}-viewer-${currentViewerSlide}`}
                 src={viewerImage}

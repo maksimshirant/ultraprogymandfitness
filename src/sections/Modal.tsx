@@ -18,6 +18,7 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   prefilledTopic?: string;
+  prefilledTrainer?: string;
 }
 
 const RU_PHONE_MASK = '+7 (___) ___-__-__';
@@ -31,6 +32,8 @@ const MODAL_TEXT = {
   namePlaceholder: 'Имя',
   topicPlaceholder: 'Какой у вас вопрос?',
   topicAriaLabel: 'Какой у вас вопрос?',
+  trainerPlaceholder: 'Выберите тренера',
+  trainerAriaLabel: 'Выберите тренера',
   messagePlaceholder: 'Дополнительная информация',
   privacyPrefix: 'Я соглашаюсь с',
   privacyLink: 'Политикой конфиденциальности',
@@ -42,6 +45,7 @@ const MODAL_TEXT = {
   errorPrivacy: 'Подтвердите согласие с политикой конфиденциальности.',
   errorPhone: 'Введите номер в формате +7 (999) 999-99-99.',
   errorTopic: 'Выберите тему обращения.',
+  errorTrainer: 'Выберите тренера.',
   phoneTitle: 'Формат: +7 (999) 999-99-99',
   messageFallback: 'Заявка без дополнительного комментария',
   mailSubject: 'Новая заявка с сайта Ultra Pro Gym & Fitness',
@@ -49,6 +53,7 @@ const MODAL_TEXT = {
   mailLabelName: 'Имя',
   mailLabelPhone: 'Телефон',
   mailLabelTopic: 'Тема',
+  mailLabelTrainer: 'Тренер',
   mailLabelMessage: 'Сообщение',
   closeModalAria: 'Закрыть',
   closePolicyAria: 'Закрыть политику',
@@ -64,9 +69,18 @@ const TOPIC_OPTIONS = [
   { value: 'personal', label: 'Записаться на тренировку с тренером' },
   { value: 'group', label: 'Записаться на групповые занятия' },
   { value: 'massage', label: 'Записаться на массаж' },
-  { value: 'fight', label: 'Записаться на единоборства' },
-  { value: 'cycle', label: 'Записаться на сайкл' },
   { value: 'other', label: 'Другое' },
+] as const;
+const TRAINER_OPTIONS = [
+  { value: 'Вилков Сергей', label: 'Вилков Сергей' },
+  { value: 'Зарубина Юлия', label: 'Зарубина Юлия' },
+  { value: 'Моисеев Александр', label: 'Моисеев Александр' },
+  { value: 'Ляликов Павел', label: 'Ляликов Павел' },
+  { value: 'Хлыновский Евгений', label: 'Хлыновский Евгений' },
+  { value: 'Осадчий Ярослав', label: 'Осадчий Ярослав' },
+  { value: 'Гузей Александр', label: 'Гузей Александр' },
+  { value: 'Белявский Антон', label: 'Белявский Антон' },
+  { value: 'Нешпор Анжелика', label: 'Нешпор Анжелика' },
 ] as const;
 
 const formatRussianPhone = (raw: string) => {
@@ -103,15 +117,23 @@ type SubmitNotice = {
 };
 
 const DOCUMENT_FALLBACK_TEXT = 'Загрузка документа...';
-const createInitialFormData = (topic = '') => ({
+const createInitialFormData = (topic = '', trainer = '') => ({
   name: '',
   phone: '',
   topic,
+  trainer,
   question: '',
 });
 
-export default function Modal({ isOpen, onClose, prefilledTopic = '' }: ModalProps) {
-  const [formData, setFormData] = useState(() => createInitialFormData(prefilledTopic));
+export default function Modal({
+  isOpen,
+  onClose,
+  prefilledTopic = '',
+  prefilledTrainer = '',
+}: ModalProps) {
+  const [formData, setFormData] = useState(() =>
+    createInitialFormData(prefilledTopic, prefilledTopic === 'personal' ? prefilledTrainer : '')
+  );
   const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isOfferOpen, setIsOfferOpen] = useState(false);
@@ -168,6 +190,14 @@ export default function Modal({ isOpen, onClose, prefilledTopic = '' }: ModalPro
       return;
     }
 
+    if (formData.topic === 'personal' && !formData.trainer) {
+      setSubmitNotice({
+        type: 'error',
+        text: MODAL_TEXT.errorTrainer,
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitNotice(null);
 
@@ -175,16 +205,20 @@ export default function Modal({ isOpen, onClose, prefilledTopic = '' }: ModalPro
       const payload = new FormData();
       const selectedTopic =
         TOPIC_OPTIONS.find((topic) => topic.value === formData.topic)?.label ?? formData.topic;
+      const selectedTrainer =
+        TRAINER_OPTIONS.find((trainer) => trainer.value === formData.trainer)?.label ?? formData.trainer;
       const messageText = [
         `${MODAL_TEXT.mailLabelName}: ${formData.name.trim()}`,
         `${MODAL_TEXT.mailLabelPhone}: ${formData.phone.trim()}`,
         `${MODAL_TEXT.mailLabelTopic}: ${selectedTopic}`,
+        ...(selectedTrainer ? [`${MODAL_TEXT.mailLabelTrainer}: ${selectedTrainer}`] : []),
         `${MODAL_TEXT.mailLabelMessage}: ${formData.question.trim() || MODAL_TEXT.messageFallback}`,
       ].join('\n');
 
       payload.append('name', formData.name.trim());
       payload.append('phone', formData.phone.trim());
       payload.append('topic', selectedTopic);
+      payload.append('trainer', selectedTrainer);
       payload.append('message', messageText);
       payload.append('subject', MODAL_TEXT.mailSubject);
       payload.append('from_name', MODAL_TEXT.mailFromName);
@@ -235,8 +269,8 @@ export default function Modal({ isOpen, onClose, prefilledTopic = '' }: ModalPro
     setIsSubmitting(false);
     setSubmitNotice(null);
     setIsPrivacyAccepted(false);
-    setFormData(createInitialFormData(prefilledTopic));
-  }, [isOpen, prefilledTopic]);
+    setFormData(createInitialFormData(prefilledTopic, prefilledTopic === 'personal' ? prefilledTrainer : ''));
+  }, [isOpen, prefilledTopic, prefilledTrainer]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -282,7 +316,7 @@ export default function Modal({ isOpen, onClose, prefilledTopic = '' }: ModalPro
             <div className="flex justify-center mb-6">
               <img
                 src={MODAL_ASSETS.logo}
-                alt="Logo"
+                alt="Логотип Ultra Pro Gym & Fitness"
                 loading="lazy"
                 decoding="async"
                 className="h-8 sm:h-9 w-auto object-contain brightness-0 invert"
@@ -335,6 +369,7 @@ export default function Modal({ isOpen, onClose, prefilledTopic = '' }: ModalPro
                     setFormData({
                       ...formData,
                       topic: nextTopic,
+                      trainer: nextTopic === 'personal' ? formData.trainer : '',
                     });
                     if (submitNotice) setSubmitNotice(null);
                   }}
@@ -361,6 +396,42 @@ export default function Modal({ isOpen, onClose, prefilledTopic = '' }: ModalPro
                   </SelectContent>
                 </Select>
               </div>
+
+              {formData.topic === 'personal' ? (
+                <div>
+                  <Select
+                    value={formData.trainer || undefined}
+                    onValueChange={(nextTrainer) => {
+                      setFormData({
+                        ...formData,
+                        trainer: nextTrainer,
+                      });
+                      if (submitNotice) setSubmitNotice(null);
+                    }}
+                  >
+                    <SelectTrigger
+                      aria-label={MODAL_TEXT.trainerAriaLabel}
+                      className="w-full h-auto min-h-[3rem] rounded-xl border-white/10 bg-white/5 px-4 py-3 text-white data-[placeholder]:text-gray-500 focus-visible:ring-0 focus-visible:border-[#F5B800] [&_svg]:mr-1 [&>[data-slot=select-value]]:max-w-[calc(100%-1.75rem)] [&>[data-slot=select-value]]:truncate [&>[data-slot=select-value]]:text-left"
+                    >
+                      <SelectValue
+                        placeholder={MODAL_TEXT.trainerPlaceholder}
+                        className="data-[placeholder]:text-gray-500"
+                      />
+                    </SelectTrigger>
+                    <SelectContent className="z-[140] border-white/15 bg-[#111117] text-white max-h-72">
+                      {TRAINER_OPTIONS.map((trainer) => (
+                        <SelectItem
+                          key={trainer.value}
+                          value={trainer.value}
+                          className="text-white focus:bg-white/10 focus:text-white"
+                        >
+                          {trainer.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              ) : null}
 
               <div>
                 <textarea

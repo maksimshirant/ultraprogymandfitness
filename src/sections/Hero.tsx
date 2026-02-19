@@ -8,7 +8,7 @@ interface HeroProps {
 
 const HERO_ASSETS = {
   card: `${import.meta.env.BASE_URL}card.png`,
-  cardAlt: 'Fitness Card',
+  cardAlt: 'Клубная карта Ultra Pro',
 } as const;
 
 const HERO_TEXT = {

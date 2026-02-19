@@ -21,7 +21,7 @@ const FOOTER_ASSETS = {
 } as const;
 
 const FOOTER_TEXT = {
-  logoAlt: 'Ultra Pro Gym & Fitness',
+  logoAlt: 'Логотип Ultra Pro Gym & Fitness',
   sectionsTitle: 'РАЗДЕЛЫ',
   mapTitle: 'КАРТА',
   openMap: 'Открыть карту',
@@ -39,7 +39,10 @@ const FOOTER_TEXT = {
   address: 'г. Волжский, Профсоюзов 7Б, ТЦ Радуга',
   phone: '8(8443) 323-323',
   phoneHref: 'tel:+78443323323',
-  schedule: 'Ежедневно: 07:00 - 23:00',
+  schedule: [
+    { day: 'Понедельник–Суббота:', time: '07:00–00:00' },
+    { day: 'Воскресенье:', time: '07:00–22:00' },
+  ],
   vkLabel: 'VK',
   telegramLabel: 'Telegram',
   reviewsLabel: 'Отзывы',
@@ -168,9 +171,16 @@ export default function Footer({ onOpenModal }: FooterProps) {
                   {FOOTER_TEXT.phone}
                 </a>
               </div>
-              <div className="flex items-center gap-2">
-                <Clock3 className="w-4 h-4 text-[#F5B800]" />
-                <span>{FOOTER_TEXT.schedule}</span>
+              <div className="flex items-start gap-2">
+                <Clock3 className="w-4 h-4 text-[#F5B800] mt-0.5" />
+                <div className="space-y-1">
+                  {FOOTER_TEXT.schedule.map((slot) => (
+                    <p key={slot.day} className="leading-snug">
+                      <span className="text-gray-400 mr-2">{slot.day}</span>
+                      <span>{slot.time}</span>
+                    </p>
+                  ))}
+                </div>
               </div>
             </div>
 

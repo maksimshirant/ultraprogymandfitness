@@ -1,9 +1,8 @@
 import { Suspense, lazy, useState } from 'react';
 import Header from './sections/Header';
 import Hero from './sections/Hero';
-import Stats from './sections/Stats';
 
-const Profit = lazy(() => import('./sections/Profit'));
+
 const Flors = lazy(() => import('./sections/Flors'));
 const Timetable = lazy(() => import('./sections/Timetable'));
 const Personal = lazy(() => import('./sections/Personal'));
@@ -42,17 +41,22 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [modalPrefilledTopic, setModalPrefilledTopic] = useState('');
+  const [modalPrefilledTrainer, setModalPrefilledTrainer] = useState('');
 
-  const openModal = (topic?: string | unknown) => {
+  const openModal = (topic?: string | unknown, trainer?: string | unknown) => {
     const normalizedTopic =
       typeof topic === 'string' && ALLOWED_MODAL_TOPICS.has(topic) ? topic : '';
+    const normalizedTrainer =
+      normalizedTopic === 'personal' && typeof trainer === 'string' ? trainer : '';
     setModalPrefilledTopic(normalizedTopic);
+    setModalPrefilledTrainer(normalizedTrainer);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setModalPrefilledTopic('');
+    setModalPrefilledTrainer('');
   };
 
   return (
@@ -60,10 +64,6 @@ function App() {
       <Header onOpenModal={openModal} />
       <main>
         <Hero onOpenModal={openModal} />
-        <Stats />
-        <Suspense fallback={<SectionFallback />}>
-          <Profit />
-        </Suspense>
         <Suspense fallback={<SectionFallback />}>
           <Flors />
         </Suspense>
@@ -86,10 +86,11 @@ function App() {
       {isModalOpen ? (
         <Suspense fallback={null}>
           <Modal
-            key={modalPrefilledTopic || 'default-modal-topic'}
+            key={`${modalPrefilledTopic || 'default-modal-topic'}-${modalPrefilledTrainer || 'default-modal-trainer'}`}
             isOpen={isModalOpen}
             onClose={closeModal}
             prefilledTopic={modalPrefilledTopic}
+            prefilledTrainer={modalPrefilledTrainer}
           />
         </Suspense>
       ) : null}

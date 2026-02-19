@@ -7,7 +7,7 @@ interface HeaderProps {
 
 const HEADER_ASSETS = {
   logo: `${import.meta.env.BASE_URL}logo.webp`,
-  logoAlt: 'Ultra Pro Gym & Fitness',
+  logoAlt: 'Логотип Ultra Pro Gym & Fitness',
 } as const;
 
 const HEADER_TEXT = {
