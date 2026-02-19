@@ -35,6 +35,7 @@ const createHealthClubSchema = (): JsonLdObject => ({
   legalName: siteConfig.business.legalName,
   url: `${siteConfig.siteUrl}/`,
   image: toAbsoluteUrl(siteConfig.business.image),
+  description: siteConfig.defaultDescription,
   telephone: siteConfig.business.phone,
   address: {
     '@type': 'PostalAddress',
@@ -44,6 +45,21 @@ const createHealthClubSchema = (): JsonLdObject => ({
     postalCode: siteConfig.business.address.postalCode,
     addressCountry: siteConfig.business.address.addressCountry,
   },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 48.777976,
+    longitude: 44.777002,
+  },
+  areaServed: [
+    {
+      '@type': 'City',
+      name: siteConfig.business.address.addressLocality,
+    },
+    {
+      '@type': 'AdministrativeArea',
+      name: siteConfig.business.address.addressRegion,
+    },
+  ],
   openingHours: siteConfig.business.openingHours,
   sameAs: siteConfig.business.sameAs,
 });
@@ -53,8 +69,9 @@ const createOrganizationSchema = (): JsonLdObject => ({
   '@type': 'Organization',
   '@id': `${siteConfig.siteUrl}/#organization`,
   name: siteConfig.siteName,
+  description: siteConfig.defaultDescription,
   url: `${siteConfig.siteUrl}/`,
-  logo: toAbsoluteUrl(siteConfig.ogImage),
+  logo: toAbsoluteUrl('/logo.webp'),
   contactPoint: [
     {
       '@type': 'ContactPoint',

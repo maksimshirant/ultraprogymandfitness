@@ -32,6 +32,13 @@ const commonModes = [
   'Зона единоборств',
 ];
 
+const freezeModes = {
+  month1: 'Заморозка абонемента 14 дней',
+  month3: 'Заморозка абонемента 21 день',
+  month6: 'Заморозка абонемента 30 дней',
+  year: 'Заморозка абонемента 60 дней',
+} as const;
+
 const abonements = [
   {
     id: 1,
@@ -41,7 +48,7 @@ const abonements = [
     note: 'Оптимально, чтобы познакомиться с клубом и режимом тренировок.',
     icon: Rocket,
     topicValue: 'sub_1m',
-    modes: commonModes,
+    modes: [...commonModes, freezeModes.month1],
   },
   {
     id: 2,
@@ -51,7 +58,7 @@ const abonements = [
     note: 'Для тех, кто хочет закрепить привычку и видеть регулярный прогресс.',
     icon: CalendarClock,
     topicValue: 'sub_3m',
-    modes: commonModes,
+    modes: [...commonModes, freezeModes.month3],
   },
   {
     id: 3,
@@ -61,7 +68,7 @@ const abonements = [
     note: 'Подходит для долгосрочной работы над силой, формой и выносливостью.',
     icon: Trophy,
     topicValue: 'sub_6m',
-    modes: commonModes,
+    modes: [...commonModes, freezeModes.month6],
   },
   {
     id: 4,
@@ -71,7 +78,7 @@ const abonements = [
     note: 'Годовой план для тех, кто нацелен на устойчивый спортивный результат.',
     icon: Crown,
     topicValue: 'sub_12m',
-    modes: [...commonModes,  'Заморозка абонемента 60 дней (На время отпуска или болезни)', '5 гостевых посещений для друзей']
+    modes: [...commonModes, freezeModes.year, '5 гостевых посещений для друзей'],
   },
   {
     id: 5,
@@ -81,7 +88,7 @@ const abonements = [
     note: 'Специальный формат для тренировок в первой половине дня.',
     icon: Sunrise,
     topicValue: 'sub_12m_day',
-    modes: ['Время посещения: с 7:00 до 16:00', ...commonModes, 'Заморозка абонемента 60 дней (На время отпуска или болезни)',  '5 гостевых посещений для друзей'],
+    modes: ['Время посещения: с 7:00 до 16:00', ...commonModes, freezeModes.year, '5 гостевых посещений для друзей'],
   },
   {
     id: 6,
@@ -262,6 +269,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
             </button>
           </div>
         </div>
+
       </div>
     </section>
   );

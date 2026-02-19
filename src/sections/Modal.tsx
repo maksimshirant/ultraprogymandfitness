@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useRef, useState } from 'react';
-import { Loader2, X } from 'lucide-react';
+import { CircleCheck, Loader2, TriangleAlert, X } from 'lucide-react';
 import { sendForm } from '@/api/forms';
 import { BalancedHeading } from '@/components/typography/BalancedHeading';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -41,6 +41,8 @@ const MODAL_TEXT = {
   submitDefault: 'Отправить',
   submitLoading: 'Отправляем заявку...',
   success: 'Форма отправлена, с вами свяжутся.',
+  successHint: 'Окно закроется автоматически.',
+  returnToForm: 'Вернуться к форме',
   errorFallback: 'Произошла ошибка, попробуйте позже.',
   errorPrivacy: 'Подтвердите согласие с политикой конфиденциальности.',
   errorPhone: 'Введите номер в формате +7 (999) 999-99-99.',
@@ -66,6 +68,7 @@ const TOPIC_OPTIONS = [
   { value: 'sub_12m', label: 'Хочу приобрести абонемент: 12 месяцев' },
   { value: 'sub_12m_day', label: 'Хочу приобрести абонемент: 12 месяцев (дневной)' },
   { value: 'sub_once', label: 'Хочу приобрести абонемент: Разовое посещение' },
+  { value: 'free_trial', label: 'Записаться на пробную тренировку' },
   { value: 'personal', label: 'Записаться на тренировку с тренером' },
   { value: 'group', label: 'Записаться на групповые занятия' },
   { value: 'massage', label: 'Записаться на массаж' },
@@ -111,7 +114,7 @@ const formatRussianPhone = (raw: string) => {
 };
 
 const isValidRussianPhone = (phone: string) => RU_PHONE_REGEX.test(phone);
-type SubmitNotice = {
+type ResultNotice = {
   type: 'success' | 'error';
   text: string;
 };
@@ -138,7 +141,8 @@ export default function Modal({
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isOfferOpen, setIsOfferOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitNotice, setSubmitNotice] = useState<SubmitNotice | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [resultNotice, setResultNotice] = useState<ResultNotice | null>(null);
   const closeTimeoutRef = useRef<number | null>(null);
 
   const clearCloseTimer = () => {
@@ -148,18 +152,18 @@ export default function Modal({
     }
   };
 
-  const resetForm = (clearNotice = true) => {
+  const resetForm = (clearResult = true) => {
     setFormData(createInitialFormData());
     setIsPrivacyAccepted(false);
-    if (clearNotice) {
-      setSubmitNotice(null);
-    }
+    setFormError(null);
+    if (clearResult) setResultNotice(null);
   };
 
   const handleModalClose = () => {
     clearCloseTimer();
     setIsSubmitting(false);
-    setSubmitNotice(null);
+    setFormError(null);
+    setResultNotice(null);
     onClose();
   };
 
@@ -167,39 +171,28 @@ export default function Modal({
     e.preventDefault();
 
     if (!isPrivacyAccepted) {
-      setSubmitNotice({
-        type: 'error',
-        text: MODAL_TEXT.errorPrivacy,
-      });
+      setFormError(MODAL_TEXT.errorPrivacy);
       return;
     }
 
     if (!isValidRussianPhone(formData.phone)) {
-      setSubmitNotice({
-        type: 'error',
-        text: MODAL_TEXT.errorPhone,
-      });
+      setFormError(MODAL_TEXT.errorPhone);
       return;
     }
 
     if (!formData.topic) {
-      setSubmitNotice({
-        type: 'error',
-        text: MODAL_TEXT.errorTopic,
-      });
+      setFormError(MODAL_TEXT.errorTopic);
       return;
     }
 
     if (formData.topic === 'personal' && !formData.trainer) {
-      setSubmitNotice({
-        type: 'error',
-        text: MODAL_TEXT.errorTrainer,
-      });
+      setFormError(MODAL_TEXT.errorTrainer);
       return;
     }
 
     setIsSubmitting(true);
-    setSubmitNotice(null);
+    setFormError(null);
+    setResultNotice(null);
 
     try {
       const payload = new FormData();
@@ -227,14 +220,14 @@ export default function Modal({
       const result = await sendForm(payload);
 
       if (!result.ok) {
-        setSubmitNotice({
+        setResultNotice({
           type: 'error',
           text: result.message ?? result.error ?? MODAL_TEXT.errorFallback,
         });
         return;
       }
 
-      setSubmitNotice({
+      setResultNotice({
         type: 'success',
         text: MODAL_TEXT.success,
       });
@@ -242,10 +235,10 @@ export default function Modal({
       clearCloseTimer();
       closeTimeoutRef.current = window.setTimeout(() => {
         onClose();
-        setSubmitNotice(null);
+        setResultNotice(null);
       }, 3000);
     } catch {
-      setSubmitNotice({
+      setResultNotice({
         type: 'error',
         text: MODAL_TEXT.errorFallback,
       });
@@ -267,7 +260,8 @@ export default function Modal({
 
     clearCloseTimer();
     setIsSubmitting(false);
-    setSubmitNotice(null);
+    setFormError(null);
+    setResultNotice(null);
     setIsPrivacyAccepted(false);
     setFormData(createInitialFormData(prefilledTopic, prefilledTopic === 'personal' ? prefilledTrainer : ''));
   }, [isOpen, prefilledTopic, prefilledTrainer]);
@@ -300,204 +294,239 @@ export default function Modal({
       <div className="fixed inset-0 z-[100] flex items-center justify-center">
         <div
           className="absolute inset-0 bg-black/80 backdrop-blur-xl"
-          onClick={handleModalClose}
+          onClick={resultNotice ? undefined : handleModalClose}
         />
 
         <div className="relative w-full max-w-md mx-4">
-          <div className="glass-card modal-surface p-8 relative">
-            <button
-              onClick={handleModalClose}
-              className="absolute top-4 right-4 p-2 text-gray-400 lg:hover:text-white transition-colors"
-              aria-label={MODAL_TEXT.closeModalAria}
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="flex justify-center mb-6">
-              <img
-                src={MODAL_ASSETS.logo}
-                alt="Логотип Ultra Pro Gym & Fitness"
-                loading="lazy"
-                decoding="async"
-                className="h-8 sm:h-9 w-auto object-contain brightness-0 invert"
-              />
-            </div>
-
-            <BalancedHeading as="h2" className="text-1xl font-bold text-white text-center mb-8">
-              {MODAL_TEXT.title}
-            </BalancedHeading>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <input
-                  type="text"
-                  required
-                  placeholder={MODAL_TEXT.namePlaceholder}
-                  value={formData.name}
-                  onChange={(e) => {
-                    setFormData({ ...formData, name: e.target.value });
-                    if (submitNotice) setSubmitNotice(null);
-                  }}
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#F5B800] transition-colors"
-                />
-              </div>
-
-              <div>
-                <input
-                  type="text"
-                  required
-                  inputMode="numeric"
-                  autoComplete="tel"
-                  placeholder={RU_PHONE_MASK}
-                  maxLength={18}
-                  pattern="^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$"
-                  title={MODAL_TEXT.phoneTitle}
-                  value={formData.phone}
-                  onChange={(e) => {
-                    const nextPhone = formatRussianPhone(e.target.value);
-                    setFormData({ ...formData, phone: nextPhone });
-                    if (submitNotice) setSubmitNotice(null);
-                  }}
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#F5B800] transition-colors"
-                />
-              </div>
-
-              <div>
-                <Select
-                  value={formData.topic || undefined}
-                  onValueChange={(nextTopic) => {
-                    setFormData({
-                      ...formData,
-                      topic: nextTopic,
-                      trainer: nextTopic === 'personal' ? formData.trainer : '',
-                    });
-                    if (submitNotice) setSubmitNotice(null);
-                  }}
-                >
-                  <SelectTrigger
-                    aria-label={MODAL_TEXT.topicAriaLabel}
-                    className="w-full h-auto min-h-[3rem] rounded-xl border-white/10 bg-white/5 px-4 py-3 text-white data-[placeholder]:text-gray-500 focus-visible:ring-0 focus-visible:border-[#F5B800] [&_svg]:mr-1 [&>[data-slot=select-value]]:max-w-[calc(100%-1.75rem)] [&>[data-slot=select-value]]:truncate [&>[data-slot=select-value]]:text-left"
-                  >
-                    <SelectValue
-                      placeholder={MODAL_TEXT.topicPlaceholder}
-                      className="data-[placeholder]:text-gray-500"
-                    />
-                  </SelectTrigger>
-                  <SelectContent className="z-[140] border-white/15 bg-[#111117] text-white max-h-72">
-                    {TOPIC_OPTIONS.map((option) => (
-                      <SelectItem
-                        key={option.value}
-                        value={option.value}
-                        className="text-white focus:bg-white/10 focus:text-white"
-                      >
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {formData.topic === 'personal' ? (
-                <div>
-                  <Select
-                    value={formData.trainer || undefined}
-                    onValueChange={(nextTrainer) => {
-                      setFormData({
-                        ...formData,
-                        trainer: nextTrainer,
-                      });
-                      if (submitNotice) setSubmitNotice(null);
-                    }}
-                  >
-                    <SelectTrigger
-                      aria-label={MODAL_TEXT.trainerAriaLabel}
-                      className="w-full h-auto min-h-[3rem] rounded-xl border-white/10 bg-white/5 px-4 py-3 text-white data-[placeholder]:text-gray-500 focus-visible:ring-0 focus-visible:border-[#F5B800] [&_svg]:mr-1 [&>[data-slot=select-value]]:max-w-[calc(100%-1.75rem)] [&>[data-slot=select-value]]:truncate [&>[data-slot=select-value]]:text-left"
+          <div className={`glass-card modal-surface relative ${resultNotice ? 'p-0' : 'p-8'}`}>
+            {resultNotice ? (
+              <div className="flex h-[70vh] min-h-[420px] max-h-[560px] w-full items-center justify-center px-8 py-10 text-center">
+                <div className="max-w-[22rem]">
+                  <div className="mb-5 flex justify-center">
+                    {resultNotice.type === 'success' ? (
+                      <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-emerald-300/40 bg-emerald-500/15 text-emerald-200">
+                        <CircleCheck className="h-7 w-7" />
+                      </span>
+                    ) : (
+                      <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-red-300/40 bg-red-500/15 text-red-200">
+                        <TriangleAlert className="h-7 w-7" />
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-base sm:text-lg font-semibold text-white">{resultNotice.text}</p>
+                  {resultNotice.type === 'success' ? (
+                    <p className="mt-3 text-sm text-gray-300">{MODAL_TEXT.successHint}</p>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setResultNotice(null)}
+                      className="mt-6 w-full rounded-full border border-transparent bg-white px-6 py-3 text-sm font-semibold text-black transition-colors lg:hover:bg-[#F5B800]"
                     >
-                      <SelectValue
-                        placeholder={MODAL_TEXT.trainerPlaceholder}
-                        className="data-[placeholder]:text-gray-500"
-                      />
-                    </SelectTrigger>
-                    <SelectContent className="z-[140] border-white/15 bg-[#111117] text-white max-h-72">
-                      {TRAINER_OPTIONS.map((trainer) => (
-                        <SelectItem
-                          key={trainer.value}
-                          value={trainer.value}
-                          className="text-white focus:bg-white/10 focus:text-white"
-                        >
-                          {trainer.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                      {MODAL_TEXT.returnToForm}
+                    </button>
+                  )}
                 </div>
-              ) : null}
-
-              <div>
-                <textarea
-                  placeholder={MODAL_TEXT.messagePlaceholder}
-                  value={formData.question}
-                  onChange={(e) => {
-                    setFormData({ ...formData, question: e.target.value });
-                    if (submitNotice) setSubmitNotice(null);
-                  }}
-                  rows={4}
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#F5B800] transition-colors resize-none"
-                />
               </div>
+            ) : (
+              <>
+                <button
+                  onClick={handleModalClose}
+                  className="absolute top-4 right-4 p-2 text-gray-400 lg:hover:text-white transition-colors"
+                  aria-label={MODAL_TEXT.closeModalAria}
+                >
+                  <X className="w-5 h-5" />
+                </button>
 
-              <label className="flex items-start gap-3 text-sm text-gray-300">
-                <input
-                  type="checkbox"
-                  checked={isPrivacyAccepted}
-                  onChange={(e) => {
-                    setIsPrivacyAccepted(e.target.checked);
-                    if (submitNotice) setSubmitNotice(null);
-                  }}
-                  className="mt-1 h-4 w-4 rounded border-white/30 bg-transparent accent-[#F5B800]"
-                />
-                <span>
-                  {MODAL_TEXT.privacyPrefix}{' '}
-                  <button
-                    type="button"
-                    onClick={() => setIsPrivacyOpen(true)}
-                    className="text-[#F5B800] underline lg:hover:text-[#FFD247] transition-colors"
-                  >
-                    {MODAL_TEXT.privacyLink}
-                  </button>
-                  {' и '}
-                  <button
-                    type="button"
-                    onClick={() => setIsOfferOpen(true)}
-                    className="text-[#F5B800] underline lg:hover:text-[#FFD247] transition-colors"
-                  >
-                    {MODAL_TEXT.offerLink}
-                  </button>
-                </span>
-              </label>
+                <div className="flex justify-center mb-6">
+                  <img
+                    src={MODAL_ASSETS.logo}
+                    alt="Логотип Ultra Pro Gym & Fitness"
+                    loading="lazy"
+                    decoding="async"
+                    className="h-8 sm:h-9 w-auto object-contain brightness-0 invert"
+                  />
+                </div>
 
-              <button
-                type="submit"
-                disabled={!isPrivacyAccepted || isSubmitting || submitNotice?.type === 'success'}
-                aria-live="polite"
-                className={`w-full py-3 font-semibold rounded-full border transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
-                  submitNotice?.type === 'success'
-                    ? 'border-emerald-300/40 bg-emerald-500/15 text-emerald-100 lg:hover:bg-emerald-500/15'
-                    : submitNotice?.type === 'error'
-                      ? 'border-red-300/40 bg-red-500/15 text-red-100 lg:hover:bg-red-500/20'
-                      : 'border-transparent bg-white text-black lg:hover:bg-[#F5B800]'
-                }`}
-              >
-                {isSubmitting ? (
-                  <span className="inline-flex items-center justify-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin text-[#F5B800]" />
-                    {MODAL_TEXT.submitLoading}
-                  </span>
-                ) : (
-                  submitNotice?.text ?? MODAL_TEXT.submitDefault
-                )}
-              </button>
-            </form>
+                <BalancedHeading as="h2" className="text-1xl font-bold text-white text-center mb-8">
+                  {MODAL_TEXT.title}
+                </BalancedHeading>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <input
+                      type="text"
+                      required
+                      placeholder={MODAL_TEXT.namePlaceholder}
+                      value={formData.name}
+                      onChange={(e) => {
+                        setFormData({ ...formData, name: e.target.value });
+                        if (formError) setFormError(null);
+                      }}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#F5B800] transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <input
+                      type="text"
+                      required
+                      inputMode="numeric"
+                      autoComplete="tel"
+                      placeholder={RU_PHONE_MASK}
+                      maxLength={18}
+                      pattern="^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$"
+                      title={MODAL_TEXT.phoneTitle}
+                      value={formData.phone}
+                      onChange={(e) => {
+                        const nextPhone = formatRussianPhone(e.target.value);
+                        setFormData({ ...formData, phone: nextPhone });
+                        if (formError) setFormError(null);
+                      }}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#F5B800] transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <Select
+                      value={formData.topic || undefined}
+                      onValueChange={(nextTopic) => {
+                        setFormData({
+                          ...formData,
+                          topic: nextTopic,
+                          trainer: nextTopic === 'personal' ? formData.trainer : '',
+                        });
+                        if (formError) setFormError(null);
+                      }}
+                    >
+                      <SelectTrigger
+                        aria-label={MODAL_TEXT.topicAriaLabel}
+                        className="w-full h-auto min-h-[3rem] rounded-xl border-white/10 bg-white/5 px-4 py-3 text-white data-[placeholder]:text-gray-500 focus-visible:ring-0 focus-visible:border-[#F5B800] [&_svg]:mr-1 [&>[data-slot=select-value]]:max-w-[calc(100%-1.75rem)] [&>[data-slot=select-value]]:truncate [&>[data-slot=select-value]]:text-left"
+                      >
+                        <SelectValue
+                          placeholder={MODAL_TEXT.topicPlaceholder}
+                          className="data-[placeholder]:text-gray-500"
+                        />
+                      </SelectTrigger>
+                      <SelectContent className="z-[140] border-white/15 bg-[#111117] text-white max-h-72">
+                        {TOPIC_OPTIONS.map((option) => (
+                          <SelectItem
+                            key={option.value}
+                            value={option.value}
+                            className="text-white focus:bg-white/10 focus:text-white"
+                          >
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {formData.topic === 'personal' ? (
+                    <div>
+                      <Select
+                        value={formData.trainer || undefined}
+                        onValueChange={(nextTrainer) => {
+                          setFormData({
+                            ...formData,
+                            trainer: nextTrainer,
+                          });
+                          if (formError) setFormError(null);
+                        }}
+                      >
+                        <SelectTrigger
+                          aria-label={MODAL_TEXT.trainerAriaLabel}
+                          className="w-full h-auto min-h-[3rem] rounded-xl border-white/10 bg-white/5 px-4 py-3 text-white data-[placeholder]:text-gray-500 focus-visible:ring-0 focus-visible:border-[#F5B800] [&_svg]:mr-1 [&>[data-slot=select-value]]:max-w-[calc(100%-1.75rem)] [&>[data-slot=select-value]]:truncate [&>[data-slot=select-value]]:text-left"
+                        >
+                          <SelectValue
+                            placeholder={MODAL_TEXT.trainerPlaceholder}
+                            className="data-[placeholder]:text-gray-500"
+                          />
+                        </SelectTrigger>
+                        <SelectContent className="z-[140] border-white/15 bg-[#111117] text-white max-h-72">
+                          {TRAINER_OPTIONS.map((trainer) => (
+                            <SelectItem
+                              key={trainer.value}
+                              value={trainer.value}
+                              className="text-white focus:bg-white/10 focus:text-white"
+                            >
+                              {trainer.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  ) : null}
+
+                  <div>
+                    <textarea
+                      placeholder={MODAL_TEXT.messagePlaceholder}
+                      value={formData.question}
+                      onChange={(e) => {
+                        setFormData({ ...formData, question: e.target.value });
+                        if (formError) setFormError(null);
+                      }}
+                      rows={4}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#F5B800] transition-colors resize-none"
+                    />
+                  </div>
+
+                  <label className="flex items-start gap-3 text-sm text-gray-300">
+                    <input
+                      type="checkbox"
+                      checked={isPrivacyAccepted}
+                      onChange={(e) => {
+                        setIsPrivacyAccepted(e.target.checked);
+                        if (formError) setFormError(null);
+                      }}
+                      className="mt-1 h-4 w-4 rounded border-white/30 bg-transparent accent-[#F5B800]"
+                    />
+                    <span>
+                      {MODAL_TEXT.privacyPrefix}{' '}
+                      <button
+                        type="button"
+                        onClick={() => setIsPrivacyOpen(true)}
+                        className="text-[#F5B800] underline lg:hover:text-[#FFD247] transition-colors"
+                      >
+                        {MODAL_TEXT.privacyLink}
+                      </button>
+                      {' и '}
+                      <button
+                        type="button"
+                        onClick={() => setIsOfferOpen(true)}
+                        className="text-[#F5B800] underline lg:hover:text-[#FFD247] transition-colors"
+                      >
+                        {MODAL_TEXT.offerLink}
+                      </button>
+                    </span>
+                  </label>
+
+                  {formError ? (
+                    <p
+                      role="alert"
+                      className="rounded-xl border border-red-300/35 bg-red-500/15 px-4 py-2 text-sm text-red-100"
+                    >
+                      {formError}
+                    </p>
+                  ) : null}
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    aria-live="polite"
+                    className="w-full py-3 font-semibold rounded-full border border-transparent bg-white text-black transition-colors disabled:opacity-60 disabled:cursor-not-allowed lg:hover:bg-[#F5B800]"
+                  >
+                    {isSubmitting ? (
+                      <span className="inline-flex items-center justify-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin text-[#F5B800]" />
+                        {MODAL_TEXT.submitLoading}
+                      </span>
+                    ) : (
+                      MODAL_TEXT.submitDefault
+                    )}
+                  </button>
+                </form>
+              </>
+            )}
           </div>
         </div>
       </div>

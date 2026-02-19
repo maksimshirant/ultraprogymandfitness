@@ -7,6 +7,7 @@ const Flors = lazy(() => import('./sections/Flors'));
 const Timetable = lazy(() => import('./sections/Timetable'));
 const Personal = lazy(() => import('./sections/Personal'));
 const Abonements = lazy(() => import('./sections/Abonements'));
+const TryFree = lazy(() => import('./sections/TryFree'));
 const FAQ = lazy(() => import('./sections/FAQ'));
 const Footer = lazy(() => import('./sections/Footer'));
 const Modal = lazy(() => import('./sections/Modal'));
@@ -19,6 +20,7 @@ const ALLOWED_MODAL_TOPICS = new Set([
   'sub_12m',
   'sub_12m_day',
   'sub_once',
+  'free_trial',
   'personal',
   'group',
   'massage',
@@ -75,6 +77,9 @@ function App() {
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
           <Abonements onOpenModal={openModal} />
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <TryFree onOpenModal={openModal} />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
           <FAQ />

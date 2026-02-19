@@ -30,19 +30,19 @@ export interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  siteUrl: 'https://example.com',
+  siteUrl: 'https://ultraprofitness.ru',
   siteName: 'Ultra Pro Gym & Fitness',
   defaultTitle: 'Ultra Pro Gym & Fitness - фитнес-клуб в Волжском',
   defaultDescription:
     'Фитнес-клуб Ultra Pro в Волжском: тренажерный зал, персональные тренировки, групповые занятия, сауна и абонементы на удобных условиях.',
   locale: 'ru_RU',
-  ogImage: 'https://example.com/logo.webp',
+  ogImage: 'https://ultraprofitness.ru/og-image.jpg',
   business: {
     name: 'Ultra Pro Gym & Fitness',
     legalName: 'Ultra Pro Gym & Fitness',
     phone: '+7 (8443) 323-323',
     phoneHref: 'tel:+78443323323',
-    image: 'https://example.com/logo.webp',
+    image: 'https://ultraprofitness.ru/og-image.jpg',
     addressText: 'г. Волжский, Профсоюзов 7Б, ТЦ Радуга',
     address: {
       streetAddress: 'Профсоюзов 7Б, ТЦ Радуга',
@@ -51,15 +51,15 @@ export const siteConfig: SiteConfig = {
       postalCode: '404130',
       addressCountry: 'RU',
     },
-    openingHoursText: 'Ежедневно: 07:00 - 23:00',
+    openingHoursText: 'Понедельник–Суббота: 07:00–00:00, Воскресенье: 07:00–22:00',
     openingHours: [
-      'Mo 07:00-23:00',
-      'Tu 07:00-23:00',
-      'We 07:00-23:00',
-      'Th 07:00-23:00',
-      'Fr 07:00-23:00',
-      'Sa 07:00-23:00',
-      'Su 07:00-23:00',
+      'Mo 07:00-00:00',
+      'Tu 07:00-00:00',
+      'We 07:00-00:00',
+      'Th 07:00-00:00',
+      'Fr 07:00-00:00',
+      'Sa 07:00-00:00',
+      'Su 07:00-22:00',
     ],
     sameAs: [
       'https://vk.com/ultrapro_fitness_vlz',
