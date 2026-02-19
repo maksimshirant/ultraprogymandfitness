@@ -438,7 +438,7 @@ export default function Flors() {
                         ? `Открыть в полноэкранном режиме: ${activeCategory.label}, фото ${index + 1}`
                         : `Показать фото ${index + 1} категории ${activeCategory.label}`
                     }
-                    className={`absolute top-1/2 left-1/2 h-[96%] w-[68%] sm:w-[62%] md:w-[54%] lg:w-[48%] rounded-2xl overflow-hidden border border-white/15 bg-black/40 shadow-lg transition-all duration-700 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] ${
+                    className={`flors-slide-motion absolute top-1/2 left-1/2 h-[96%] w-[68%] sm:w-[62%] md:w-[54%] lg:w-[48%] rounded-2xl overflow-hidden border border-white/15 bg-black/40 shadow-lg transition-all duration-700 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] ${
                       isActive
                         ? 'z-20 -translate-x-1/2 -translate-y-1/2 scale-100 opacity-100'
                         : offset === -1
@@ -466,7 +466,7 @@ export default function Flors() {
                 onClick={prevMainSlide}
                 disabled={totalSlides < 2}
                 aria-label={`Предыдущее фото категории ${activeCategory.label}`}
-                className="w-12 h-12 rounded-full bg-white/5 lg:hover:bg-white/10 flex items-center justify-center transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="flors-control-motion w-12 h-12 rounded-full bg-white/5 lg:hover:bg-white/10 flex items-center justify-center transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <ChevronLeft className="w-6 h-6 text-gray-400" />
               </button>
@@ -477,7 +477,7 @@ export default function Flors() {
                     key={index}
                     type="button"
                     onClick={() => setActiveSlide(index)}
-                    className={`h-1 rounded-full transition-all ${
+                    className={`flors-control-motion h-1 rounded-full transition-all ${
                       index === currentSlide
                         ? 'w-16 bg-gradient-to-r from-[#F5B800] to-[#D89B00]'
                         : 'w-8 bg-white/20'
@@ -492,7 +492,7 @@ export default function Flors() {
                 onClick={nextMainSlide}
                 disabled={totalSlides < 2}
                 aria-label={`Следующее фото категории ${activeCategory.label}`}
-                className="w-12 h-12 rounded-full bg-white/5 lg:hover:bg-white/10 flex items-center justify-center transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="flors-control-motion w-12 h-12 rounded-full bg-white/5 lg:hover:bg-white/10 flex items-center justify-center transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <ChevronRight className="w-6 h-6 text-gray-400" />
               </button>

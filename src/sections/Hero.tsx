@@ -8,6 +8,7 @@ interface HeroProps {
 
 const HERO_ASSETS = {
   card: `${import.meta.env.BASE_URL}card.png`,
+  cardMobile: `${import.meta.env.BASE_URL}card-mobile.png`,
   cardAlt: 'Клубная карта Ultra Pro',
 } as const;
 
@@ -58,7 +59,7 @@ export default function Hero({ onOpenModal }: HeroProps) {
           <div className="absolute bottom-[-140px] left-[-90px] w-[420px] h-[420px] rounded-full bg-[#F5B800]/18 blur-[90px]" />
         </div>
 
-        <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden hidden lg:block">
           <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#F5B800]/20 rounded-full blur-[120px]" />
           <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-[#F5B800]/20 rounded-full blur-[120px]" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#F5B800]/10 rounded-full blur-[150px]" />
@@ -100,6 +101,10 @@ export default function Hero({ onOpenModal }: HeroProps) {
                   <span className="pointer-events-none absolute -bottom-8 left-[10%] w-32 h-32 bg-[#F5B800]/20 rounded-full blur-xl opacity-0 transition-opacity duration-300 lg:group-hover:opacity-100 group-focus-visible:opacity-100" />
                   <img
                     src={HERO_ASSETS.card}
+                    srcSet={`${HERO_ASSETS.cardMobile} 720w, ${HERO_ASSETS.card} 1280w`}
+                    sizes="(max-width: 768px) 88vw, (max-width: 1280px) 52vw, 760px"
+                    width={1280}
+                    height={853}
                     alt={HERO_ASSETS.cardAlt}
                     loading="eager"
                     fetchPriority="high"
@@ -139,6 +144,10 @@ export default function Hero({ onOpenModal }: HeroProps) {
             <div className="flex justify-center py-1 mt-2">
               <img
                 src={HERO_ASSETS.card}
+                srcSet={`${HERO_ASSETS.cardMobile} 720w, ${HERO_ASSETS.card} 1280w`}
+                sizes="(max-width: 640px) 70vw, 300px"
+                width={1280}
+                height={853}
                 alt={HERO_ASSETS.cardAlt}
                 loading="lazy"
                 decoding="async"

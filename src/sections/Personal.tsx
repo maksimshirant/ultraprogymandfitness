@@ -175,17 +175,17 @@ export default function Personal({ onOpenModal }: PersonalProps) {
       key={trainer.id}
       className="glass-card border border-white/10 lg:hover:bg-white/5 transition-colors p-0 flex flex-col overflow-hidden min-h-[520px]"
     >
-      <div className="rounded-lg overflow-hidden m-4 mb-0 aspect-[4/5] border border-white/10 bg-black/40 flex items-center justify-center">
+      <div className="relative m-4 mb-0 aspect-[4/5] overflow-hidden rounded-xl border border-white/10 bg-black/40">
         {trainer.image ? (
           <img
             src={trainer.image}
             alt={trainer.name}
             loading="lazy"
             decoding="async"
-            className="h-full w-full object-cover object-center"
+            className="absolute inset-0 block h-full w-full object-cover object-center"
           />
         ) : (
-          <div className="h-full w-full bg-gradient-to-br from-[#1A1A27] via-[#111117] to-[#0A0A0F] flex flex-col items-center justify-center">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1A1A27] via-[#111117] to-[#0A0A0F] flex flex-col items-center justify-center">
             <span className="text-6xl md:text-7xl font-black text-[#F5B800] leading-none">
               {String(trainer.id).padStart(2, '0')}
             </span>
@@ -256,7 +256,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
         <div className="md:hidden">
           <div className="overflow-hidden" {...mobileSwipeHandlers}>
             <div
-              className="flex transition-transform duration-500 ease-out"
+              className="trainer-slide-motion flex transition-transform duration-500 ease-out"
               style={{ transform: `translateX(-${mobileActiveIndex * 100}%)` }}
             >
               {trainers.map((trainer) => (
@@ -270,7 +270,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
           <div className="flex items-center justify-center gap-6 mt-6">
             <button
               onClick={prevMobileSlide}
-              className="w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
+              className="trainer-control-motion w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
               aria-label={PERSONAL_TEXT.prevAria}
             >
               <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -283,7 +283,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
                 <button
                   key={trainer.id}
                   onClick={() => setMobileActiveIndex(index)}
-                  className={`h-1 rounded-full transition-all ${
+                  className={`trainer-control-motion h-1 rounded-full transition-all ${
                     index === mobileActiveIndex
                       ? 'w-16 bg-gradient-to-r from-[#F5B800] to-[#D89B00]'
                       : 'w-8 bg-white/20'
@@ -295,7 +295,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
 
             <button
               onClick={nextMobileSlide}
-              className="w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
+              className="trainer-control-motion w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
               aria-label={PERSONAL_TEXT.nextAria}
             >
               <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

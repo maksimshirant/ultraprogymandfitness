@@ -381,6 +381,25 @@
     transition-timing-function: ease !important;
   }
 
+  #flors .flors-slide-motion {
+    transition-property: all !important;
+    transition-duration: 700ms !important;
+    transition-timing-function: ease-out !important;
+  }
+
+  #flors .flors-control-motion,
+  #trainers .trainer-control-motion {
+    transition-property: all !important;
+    transition-duration: 300ms !important;
+    transition-timing-function: ease !important;
+  }
+
+  #trainers .trainer-slide-motion {
+    transition-property: transform !important;
+    transition-duration: 500ms !important;
+    transition-timing-function: ease-out !important;
+  }
+
   /* Disable hover states on tablet/mobile outside subscriptions slider */
   .btn-primary:hover {
     transform: none !important;

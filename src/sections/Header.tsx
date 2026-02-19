@@ -90,7 +90,6 @@ export default function Header({ onOpenModal }: HeaderProps) {
               src={HEADER_ASSETS.logo}
               alt={HEADER_ASSETS.logoAlt}
               loading="eager"
-              fetchPriority="high"
               decoding="async"
               className="h-7 lg:h-8 xl:h-9 w-auto object-contain brightness-0 invert lg:group-hover:opacity-90 transition-opacity"
             />
