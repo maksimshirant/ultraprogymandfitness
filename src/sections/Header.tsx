@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type MouseEvent } from 'react';
 import { Menu, Phone, X } from 'lucide-react';
-import { SECTION_ROUTE_PATHS } from '@/navigation/sectionRoutes';
 
 interface HeaderProps {
   onOpenModal: () => void;
@@ -19,12 +18,16 @@ const HEADER_TEXT = {
 } as const;
 
 const HEADER_NAV_ITEMS = [
-  { label: 'Фитнес клуб', href: SECTION_ROUTE_PATHS.flors },
-  { label: 'Расписание', href: SECTION_ROUTE_PATHS.schedule },
-  { label: 'Тренеры', href: SECTION_ROUTE_PATHS.trainers },
-  { label: 'Абонементы', href: SECTION_ROUTE_PATHS.subscriptions },
-  { label: 'Контакты', href: SECTION_ROUTE_PATHS.contacts },
+  { label: 'Фитнес клуб', href: '#flors' },
+  { label: 'Расписание', href: '#schedule' },
+  { label: 'Тренеры', href: '#trainers' },
+  { label: 'Абонементы', href: '#subscriptions' },
+  { label: 'Контакты', href: '#contacts' },
 ] as const;
+
+const HEADER_SCROLL_OFFSET = 96;
+const HEADER_SCROLL_RETRY_LIMIT = 25;
+const HEADER_SCROLL_RETRY_DELAY = 120;
 
 export default function Header({ onOpenModal }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -38,6 +41,40 @@ export default function Header({ onOpenModal }: HeaderProps) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleAnchorClick = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (!href.startsWith('#')) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const targetId = href.slice(1);
+    window.history.replaceState(null, '', href);
+
+    const scrollToTarget = (attempt = 0) => {
+      const targetElement = document.getElementById(targetId);
+
+      if (!targetElement) {
+        if (attempt < HEADER_SCROLL_RETRY_LIMIT) {
+          window.setTimeout(() => scrollToTarget(attempt + 1), HEADER_SCROLL_RETRY_DELAY);
+        }
+        return;
+      }
+
+      const targetTop =
+        targetElement.getBoundingClientRect().top + window.pageYOffset - HEADER_SCROLL_OFFSET;
+
+      window.scrollTo({
+        top: Math.max(targetTop, 0),
+        behavior: 'smooth',
+      });
+
+      setIsMobileMenuOpen(false);
+    };
+
+    scrollToTarget();
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
@@ -48,7 +85,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-5 xl:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
-          <a href={SECTION_ROUTE_PATHS.home} className="flex items-center group">
+          <a href="#" className="flex items-center group">
             <img
               src={HEADER_ASSETS.logo}
               alt={HEADER_ASSETS.logoAlt}
@@ -63,6 +100,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
                 key={item.label}
                 href={item.href}
                 className="text-xs xl:text-sm text-gray-300 lg:hover:text-white transition-colors relative group whitespace-nowrap"
+                onClick={(event) => handleAnchorClick(event, item.href)}
               >
                 {item.label}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#F5B800] to-[#D89B00] lg:group-hover:w-full transition-all duration-300" />
@@ -103,7 +141,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
                 key={item.label}
                 href={item.href}
                 className="text-gray-300 lg:hover:text-white transition-colors py-2"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={(event) => handleAnchorClick(event, item.href)}
               >
                 {item.label}
               </a>

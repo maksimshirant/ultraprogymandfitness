@@ -1,7 +1,6 @@
-import { Suspense, lazy, useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState, type MouseEvent } from 'react';
 import { Phone, MapPin, Clock3, Star, X } from 'lucide-react';
 import { SiVk, SiTelegram } from 'react-icons/si';
-import { SECTION_ROUTE_PATHS } from '@/navigation/sectionRoutes';
 
 const PrivacyPolicyContent = lazy(async () => {
   const module = await import('@/components/PrivacyPolicyContent');
@@ -55,10 +54,10 @@ const FOOTER_TEXT = {
 } as const;
 
 const FOOTER_LINKS = [
-  { label: 'Фитнес клуб', href: SECTION_ROUTE_PATHS.flors },
-  { label: 'Тренеры', href: SECTION_ROUTE_PATHS.trainers },
-  { label: 'Абонементы', href: SECTION_ROUTE_PATHS.subscriptions },
-  { label: 'Частые вопросы', href: SECTION_ROUTE_PATHS.faq },
+  { label: 'Фитнесс клуб', href: '#gallery' },
+  { label: 'Тренеры', href: '#trainers' },
+  { label: 'Абонементы', href: '#subscriptions' },
+  { label: 'Частые вопросы', href: '#faq' },
 ] as const;
 
 const FOOTER_SOCIALS = {
@@ -72,6 +71,10 @@ const FOOTER_MAP_SRC = `https://yandex.ru/map-widget/v1/?mode=search&text=${enco
   FOOTER_MAP_QUERY
 )}&z=17`;
 const FOOTER_DOCUMENT_FALLBACK = 'Загрузка документа...';
+
+const FOOTER_SCROLL_OFFSET = 96;
+const FOOTER_SCROLL_RETRY_LIMIT = 25;
+const FOOTER_SCROLL_RETRY_DELAY = 120;
 
 export default function Footer({ onOpenModal }: FooterProps) {
   const [isPolicyOpen, setIsPolicyOpen] = useState(false);
@@ -100,6 +103,38 @@ export default function Footer({ onOpenModal }: FooterProps) {
     };
   }, [isMapOpen, isOfferOpen, isPolicyOpen]);
 
+  const handleAnchorClick = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (!href.startsWith('#')) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const targetId = href.slice(1);
+    window.history.replaceState(null, '', href);
+
+    const scrollToTarget = (attempt = 0) => {
+      const targetElement = document.getElementById(targetId);
+
+      if (!targetElement) {
+        if (attempt < FOOTER_SCROLL_RETRY_LIMIT) {
+          window.setTimeout(() => scrollToTarget(attempt + 1), FOOTER_SCROLL_RETRY_DELAY);
+        }
+        return;
+      }
+
+      const targetTop =
+        targetElement.getBoundingClientRect().top + window.pageYOffset - FOOTER_SCROLL_OFFSET;
+
+      window.scrollTo({
+        top: Math.max(targetTop, 0),
+        behavior: 'smooth',
+      });
+    };
+
+    scrollToTarget();
+  };
+
   return (
     <footer id="contacts" className="py-16 border-t border-white/5 relative overflow-hidden">
       <div className="hero-glow-layer">
@@ -111,7 +146,7 @@ export default function Footer({ onOpenModal }: FooterProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-10 lg:gap-12">
           <div className="md:col-span-2">
-            <a href={SECTION_ROUTE_PATHS.home} className="inline-flex items-center mb-5">
+            <a href="#" className="inline-flex items-center mb-5">
               <img
                 src={FOOTER_ASSETS.logo}
                 alt={FOOTER_TEXT.logoAlt}
@@ -217,6 +252,7 @@ export default function Footer({ onOpenModal }: FooterProps) {
                   <a
                     href={link.href}
                     className="text-gray-400 lg:hover:text-white transition-colors text-sm"
+                    onClick={(event) => handleAnchorClick(event, link.href)}
                   >
                     {link.label}
                   </a>
@@ -237,6 +273,7 @@ export default function Footer({ onOpenModal }: FooterProps) {
                 key={link.label}
                 href={link.href}
                 className="text-gray-400 lg:hover:text-white transition-colors text-sm"
+                onClick={(event) => handleAnchorClick(event, link.href)}
               >
                 {link.label}
               </a>

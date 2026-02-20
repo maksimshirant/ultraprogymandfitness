@@ -32,9 +32,9 @@ export interface SiteConfig {
 export const siteConfig: SiteConfig = {
   siteUrl: 'https://ultraprofitness.ru',
   siteName: 'Ultra Pro Gym & Fitness',
-  defaultTitle: 'Ultra Pro Gym & Fitness — фитнес-клуб в Волжском',
+  defaultTitle: 'Ultra Pro Gym & Fitness - фитнес-клуб в Волжском',
   defaultDescription:
-    'Современное оборудование. Профессиональные тренеры. Сауна. Фитнес-бар. Групповые тренировки. Бесплатное пробное занятие.',
+    'Фитнес-клуб Ultra Pro в Волжском: тренажерный зал, персональные тренировки, групповые занятия, сауна и абонементы на удобных условиях.',
   locale: 'ru_RU',
   ogImage: 'https://ultraprofitness.ru/og-image.jpg',
   business: {

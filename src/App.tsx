@@ -1,7 +1,6 @@
-import { Suspense, lazy, useEffect, useState } from 'react';
+import { Suspense, lazy, useState } from 'react';
 import Header from './sections/Header';
 import Hero from './sections/Hero';
-import { getSectionIdFromPathname } from '@/navigation/sectionRoutes';
 
 
 const Flors = lazy(() => import('./sections/Flors'));
@@ -29,10 +28,6 @@ const ALLOWED_MODAL_TOPICS = new Set([
   'cycle',
   'other',
 ]);
-
-const SECTION_SCROLL_OFFSET = 96;
-const SECTION_SCROLL_RETRY_LIMIT = 25;
-const SECTION_SCROLL_RETRY_DELAY = 120;
 
 function SectionFallback() {
   return (
@@ -65,42 +60,6 @@ function App() {
     setModalPrefilledTopic('');
     setModalPrefilledTrainer('');
   };
-
-  useEffect(() => {
-    const sectionFromPath = getSectionIdFromPathname(window.location.pathname);
-    const sectionFromHash = window.location.hash.startsWith('#') ? window.location.hash.slice(1) : '';
-    const targetId = sectionFromPath ?? sectionFromHash;
-
-    if (!targetId) {
-      return;
-    }
-
-    const targetHash = `#${targetId}`;
-    if (window.location.hash !== targetHash) {
-      window.history.replaceState(null, '', `${window.location.pathname}${targetHash}`);
-    }
-
-    const scrollToTarget = (attempt = 0) => {
-      const targetElement = document.getElementById(targetId);
-
-      if (!targetElement) {
-        if (attempt < SECTION_SCROLL_RETRY_LIMIT) {
-          window.setTimeout(() => scrollToTarget(attempt + 1), SECTION_SCROLL_RETRY_DELAY);
-        }
-        return;
-      }
-
-      const targetTop =
-        targetElement.getBoundingClientRect().top + window.pageYOffset - SECTION_SCROLL_OFFSET;
-
-      window.scrollTo({
-        top: Math.max(targetTop, 0),
-        behavior: 'smooth',
-      });
-    };
-
-    scrollToTarget();
-  }, []);
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white overflow-x-hidden">
