@@ -54,7 +54,7 @@ const FOOTER_TEXT = {
 } as const;
 
 const FOOTER_LINKS = [
-  { label: 'Фитнесс клуб', href: '#gallery' },
+  { label: 'Фитнес-клуб', href: '#flors' },
   { label: 'Тренеры', href: '#trainers' },
   { label: 'Абонементы', href: '#subscriptions' },
   { label: 'Частые вопросы', href: '#faq' },
