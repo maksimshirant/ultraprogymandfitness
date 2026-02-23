@@ -118,6 +118,18 @@ const trainers: Trainer[] = [
   },
   {
     id: 7,
+    name: 'Нешпор Анжелика',
+    experience: 'Опыт работы: 8 лет',
+    achievements: [
+      'Дипломированный тренер тренажерного зала / инструктор групповых программ',
+      'Специалист по коррекции осанки',
+      'Специалист по адаптивному и функциональному фитнесу',
+      'Сертифицированный тренер специальных групп населения',
+    ],
+    image: PERSONAL_ASSETS.angelina,
+  },
+  {
+    id: 8,
     name: 'Гузей Александр',
     experience: 'Опыт работы: 10 лет',
     achievements: [
@@ -131,7 +143,7 @@ const trainers: Trainer[] = [
     image: PERSONAL_ASSETS.saikl,
   },
   {
-    id: 8,
+    id: 9,
     name: 'Белявский Антон',
     experience: 'Опыт работы: 8 лет',
     achievements: [
@@ -142,18 +154,7 @@ const trainers: Trainer[] = [
     ],
     image: PERSONAL_ASSETS.anton,
   },
-  {
-    id: 9,
-    name: 'Нешпор Анжелика',
-    experience: 'Опыт работы: 8 лет',
-    achievements: [
-      'Дипломированный тренер тренажерного зала / инструктор групповых программ',
-      'Специалист по коррекции осанки',
-      'Специалист по адаптивному и функциональному фитнесу',
-      'Сертифицированный тренер специальных групп населения',
-    ],
-    image: PERSONAL_ASSETS.angelina,
-  },
+
 ];
 
 export default function Personal({ onOpenModal }: PersonalProps) {
