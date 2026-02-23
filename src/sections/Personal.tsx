@@ -36,6 +36,7 @@ const PERSONAL_ASSETS = {
   yaroslav: `${import.meta.env.BASE_URL}trainers/yaroslav.jpg`,
   saikl: `${import.meta.env.BASE_URL}trainers/saikl.jpg`,
   anton: `${import.meta.env.BASE_URL}trainers/anton.jpg`,
+  angelina: `${import.meta.env.BASE_URL}trainers/angelina.jpg`,
 } as const;
 
 const trainers: Trainer[] = [
@@ -151,6 +152,7 @@ const trainers: Trainer[] = [
       'Специалист по адаптивному и функциональному фитнесу',
       'Сертифицированный тренер специальных групп населения',
     ],
+    image: PERSONAL_ASSETS.angelina,
   },
 ];
 
