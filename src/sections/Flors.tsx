@@ -350,7 +350,7 @@ export default function Flors() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+        <div className="grid grid-cols-2 gap-3 md:gap-4">
           {floorConfigs.map((floor) => {
             const isActive = floor.id === activeFloorId;
 
@@ -361,14 +361,14 @@ export default function Flors() {
                 onClick={() => selectFloor(floor)}
                 aria-pressed={isActive}
                 aria-label={`Выбрать ${floor.label}`}
-                className={`glass-card text-left p-4 md:p-5 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] ${
+                className={`glass-card text-center md:text-left p-3 md:p-5 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] ${
                   isActive
                     ? 'border-[#F5B800]/70 bg-gradient-to-r from-[#F5B800]/20 to-[#D89B00]/15'
                     : 'lg:hover:border-white/20 lg:hover:bg-white/[0.04]'
                 }`}
               >
-                <p className="text-lg md:text-xl font-bold text-white">{floor.label}</p>
-                <p className="mt-1 text-sm text-gray-300">{floor.subtitle}</p>
+                <p className="text-base md:text-xl font-bold text-white">{floor.label}</p>
+                <p className="hidden md:block mt-1 text-sm text-gray-300">{floor.subtitle}</p>
               </button>
             );
           })}

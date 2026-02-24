@@ -8,13 +8,13 @@ interface VideoModalProps {
 }
 
 const VIDEO_MODAL_ASSETS = {
-  src: 'ссылка на видео',
+  src: 'https://vk.com/video_ext.php?oid=-174979815&id=456239183&hd=2&autoplay=1',
 } as const;
 
 const VIDEO_MODAL_TEXT = {
-  frameTitle: 'UltraPro Welcome',
-  heading: 'Добро пожаловать в UltraPro',
-  description: '',
+  frameTitle: 'Ultra Pro VK Clip',
+  heading: 'Ultra Pro',
+  description: 'Видео о клубе',
 } as const;
 
 export default function VideoModal({ isOpen, onClose }: VideoModalProps) {
@@ -44,20 +44,20 @@ export default function VideoModal({ isOpen, onClose }: VideoModalProps) {
         className="absolute inset-0 bg-black/90 backdrop-blur-xl"
         onClick={onClose}
       />
-      <div className="relative w-full max-w-4xl mx-4">
+      <div className="relative w-full max-w-[460px] mx-4">
         <button
           onClick={onClose}
           className="absolute -top-12 right-0 p-2 text-gray-400 lg:hover:text-white transition-colors z-10"
         >
           <X className="w-8 h-8" />
         </button>
-        <div className="relative aspect-video bg-black rounded-2xl overflow-hidden">
+        <div className="relative bg-black rounded-2xl overflow-hidden" style={{ aspectRatio: '9 / 16' }}>
           <iframe
             src={VIDEO_MODAL_ASSETS.src}
             title={VIDEO_MODAL_TEXT.frameTitle}
             loading="lazy"
             className="absolute inset-0 w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
             allowFullScreen
           />
         </div>

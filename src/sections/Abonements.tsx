@@ -226,7 +226,8 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
 
                     <button
                       onClick={() => onOpenModal(abonement.topicValue)}
-                      className="btn-primary text-white w-full mt-4"
+                      disabled={!isActive}
+                      className="btn-primary text-white w-full mt-4 disabled:opacity-55 disabled:cursor-not-allowed disabled:pointer-events-none"
                     >
                       {ABONEMENTS_TEXT.cta}
                     </button>

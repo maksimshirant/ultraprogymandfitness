@@ -39,6 +39,7 @@
   }
   html {
     scroll-behavior: smooth;
+    background: #0a0a0f;
   }
   body {
     @apply bg-background text-foreground antialiased;
@@ -395,8 +396,8 @@
   }
 
   #trainers .trainer-slide-motion {
-    transition-property: transform !important;
-    transition-duration: 500ms !important;
+    transition-property: all !important;
+    transition-duration: 700ms !important;
     transition-timing-function: ease-out !important;
   }
 
@@ -423,4 +424,39 @@
   background: #101015 !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+}
+
+/* Active trainer card should be solid on tablet/desktop carousel */
+#trainers .trainer-card-active {
+  background: #101015 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Keep fixed header compositing stable to avoid tablet scroll jitter */
+#site-header.site-header {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  #site-header.header-scrolled {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(10, 10, 15, 0.94) !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  #site-header.site-header {
+    top: -1px;
+    padding-top: 1px;
+    background: rgba(10, 10, 15, 0.94) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    transition-property: background-color, border-color !important;
+  }
 }

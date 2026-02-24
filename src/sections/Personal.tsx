@@ -158,25 +158,41 @@ const trainers: Trainer[] = [
 ];
 
 export default function Personal({ onOpenModal }: PersonalProps) {
-  const [mobileActiveIndex, setMobileActiveIndex] = useState(0);
+  const [activeTrainerIndex, setActiveTrainerIndex] = useState(0);
 
-  const nextMobileSlide = () => {
-    setMobileActiveIndex((prev) => (prev + 1) % trainers.length);
+  const nextSlide = () => {
+    setActiveTrainerIndex((prev) => (prev + 1) % trainers.length);
   };
 
-  const prevMobileSlide = () => {
-    setMobileActiveIndex((prev) => (prev - 1 + trainers.length) % trainers.length);
+  const prevSlide = () => {
+    setActiveTrainerIndex((prev) => (prev - 1 + trainers.length) % trainers.length);
   };
 
-  const mobileSwipeHandlers = useSwipeNavigation({
-    onNext: nextMobileSlide,
-    onPrev: prevMobileSlide,
+  const getSlideOffset = (index: number) => {
+    let offset = index - activeTrainerIndex;
+    const half = Math.floor(trainers.length / 2);
+
+    if (offset > half) {
+      offset -= trainers.length;
+    }
+    if (offset < -half) {
+      offset += trainers.length;
+    }
+
+    return offset;
+  };
+
+  const swipeHandlers = useSwipeNavigation({
+    onNext: nextSlide,
+    onPrev: prevSlide,
   });
 
-  const renderTrainerCard = (trainer: Trainer) => (
+  const renderTrainerCard = (trainer: Trainer, isActive = false, isActionDisabled = false) => (
     <article
       key={trainer.id}
-      className="glass-card border border-white/10 lg:hover:bg-white/5 transition-colors p-0 flex flex-col overflow-hidden min-h-[520px]"
+      className={`glass-card border border-white/10 lg:hover:bg-white/5 transition-colors p-0 flex flex-col overflow-hidden min-h-[520px] ${
+        isActive ? 'trainer-card-active' : ''
+      }`}
     >
       <div className="relative m-4 mb-0 aspect-[4/5] overflow-hidden rounded-xl border border-white/10 bg-black/40">
         {trainer.image ? (
@@ -232,7 +248,11 @@ export default function Personal({ onOpenModal }: PersonalProps) {
           })}
         </ul>
 
-        <button onClick={() => onOpenModal('personal', trainer.name)} className="btn-primary text-white w-full mt-6">
+        <button
+          onClick={() => onOpenModal('personal', trainer.name)}
+          disabled={isActionDisabled}
+          className="btn-primary text-white w-full mt-6 disabled:opacity-55 disabled:cursor-not-allowed disabled:pointer-events-none"
+        >
           {PERSONAL_TEXT.cta}
         </button>
       </div>
@@ -257,10 +277,10 @@ export default function Personal({ onOpenModal }: PersonalProps) {
         </div>
 
         <div className="md:hidden">
-          <div className="overflow-hidden" {...mobileSwipeHandlers}>
+          <div className="overflow-hidden" {...swipeHandlers}>
             <div
               className="trainer-slide-motion flex transition-transform duration-500 ease-out"
-              style={{ transform: `translateX(-${mobileActiveIndex * 100}%)` }}
+              style={{ transform: `translateX(-${activeTrainerIndex * 100}%)` }}
             >
               {trainers.map((trainer) => (
                 <div key={trainer.id} className="w-full shrink-0">
@@ -269,47 +289,69 @@ export default function Personal({ onOpenModal }: PersonalProps) {
               ))}
             </div>
           </div>
+        </div>
 
-          <div className="flex items-center justify-center gap-6 mt-6">
-            <button
-              onClick={prevMobileSlide}
-              className="trainer-control-motion w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
-              aria-label={PERSONAL_TEXT.prevAria}
-            >
-              <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
+        <div className="hidden md:block">
+          <div className="relative h-[920px] lg:h-[900px] overflow-hidden" {...swipeHandlers}>
+            {trainers.map((trainer, index) => {
+              const offset = getSlideOffset(index);
+              const isActive = offset === 0;
 
-            <div className="flex gap-3 flex-wrap justify-center">
-              {trainers.map((trainer, index) => (
-                <button
+              return (
+                <article
                   key={trainer.id}
-                  onClick={() => setMobileActiveIndex(index)}
-                  className={`trainer-control-motion h-1 rounded-full transition-all ${
-                    index === mobileActiveIndex
-                      ? 'w-16 bg-gradient-to-r from-[#F5B800] to-[#D89B00]'
-                      : 'w-8 bg-white/20'
+                  className={`trainer-slide-motion absolute top-1/2 left-1/2 w-[72%] lg:w-[60%] max-w-[24rem] will-change-transform transition-all duration-700 ease-out ${
+                    isActive
+                      ? 'z-20 -translate-x-1/2 -translate-y-1/2 scale-100 opacity-100'
+                      : offset === -1
+                        ? 'z-10 -translate-x-[124%] lg:-translate-x-[138%] -translate-y-1/2 scale-92 opacity-35'
+                        : offset === 1
+                          ? 'z-10 translate-x-[24%] lg:translate-x-[38%] -translate-y-1/2 scale-92 opacity-35'
+                          : 'z-0 -translate-x-1/2 -translate-y-1/2 scale-90 opacity-0 pointer-events-none'
                   }`}
-                  aria-label={`${PERSONAL_TEXT.selectAriaPrefix} ${index + 1}`}
-                />
-              ))}
-            </div>
-
-            <button
-              onClick={nextMobileSlide}
-              className="trainer-control-motion w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
-              aria-label={PERSONAL_TEXT.nextAria}
-            >
-              <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
+                >
+                  {renderTrainerCard(trainer, isActive, !isActive)}
+                </article>
+              );
+            })}
           </div>
         </div>
 
-        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {trainers.map((trainer) => renderTrainerCard(trainer))}
+        <div className="flex items-center justify-center gap-6 mt-6">
+          <button
+            onClick={prevSlide}
+            className="trainer-control-motion w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
+            aria-label={PERSONAL_TEXT.prevAria}
+          >
+            <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <div className="flex gap-3 flex-wrap justify-center">
+            {trainers.map((trainer, index) => (
+              <button
+                key={trainer.id}
+                onClick={() => setActiveTrainerIndex(index)}
+                className={`trainer-control-motion h-1 rounded-full transition-all ${
+                  index === activeTrainerIndex
+                    ? 'w-16 bg-gradient-to-r from-[#F5B800] to-[#D89B00]'
+                    : 'w-8 bg-white/20'
+                }`}
+                aria-label={`${PERSONAL_TEXT.selectAriaPrefix} ${index + 1}`}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={nextSlide}
+            className="trainer-control-motion w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
+            aria-label={PERSONAL_TEXT.nextAria}
+          >
+            <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
         </div>
       </div>
     </section>

@@ -11,7 +11,6 @@ const TryFree = lazy(() => import('./sections/TryFree'));
 const FAQ = lazy(() => import('./sections/FAQ'));
 const Footer = lazy(() => import('./sections/Footer'));
 const Modal = lazy(() => import('./sections/Modal'));
-const VideoModal = lazy(() => import('./sections/VideoModal'));
 
 const ALLOWED_MODAL_TOPICS = new Set([
   'sub_1m',
@@ -41,7 +40,6 @@ function SectionFallback() {
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [modalPrefilledTopic, setModalPrefilledTopic] = useState('');
   const [modalPrefilledTrainer, setModalPrefilledTrainer] = useState('');
 
@@ -97,11 +95,6 @@ function App() {
             prefilledTopic={modalPrefilledTopic}
             prefilledTrainer={modalPrefilledTrainer}
           />
-        </Suspense>
-      ) : null}
-      {isVideoOpen ? (
-        <Suspense fallback={null}>
-          <VideoModal isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
         </Suspense>
       ) : null}
     </div>
