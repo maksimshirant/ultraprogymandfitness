@@ -39,19 +39,19 @@ export default function VideoModal({ isOpen, onClose }: VideoModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto p-4 sm:p-6">
       <div
         className="absolute inset-0 bg-black/90 backdrop-blur-xl"
         onClick={onClose}
       />
-      <div className="relative w-full max-w-[460px] mx-4">
+      <div className="relative w-full max-w-[460px] mx-auto my-auto">
         <button
           onClick={onClose}
-          className="absolute -top-12 right-0 p-2 text-gray-400 lg:hover:text-white transition-colors z-10"
+          className="absolute top-3 right-3 p-2 rounded-full bg-black/50 text-gray-300 lg:hover:text-white transition-colors z-10"
         >
           <X className="w-8 h-8" />
         </button>
-        <div className="relative bg-black rounded-2xl overflow-hidden" style={{ aspectRatio: '9 / 16' }}>
+        <div className="relative bg-black rounded-2xl overflow-hidden aspect-[9/16] w-full max-h-[70vh] max-h-[70dvh]">
           <iframe
             src={VIDEO_MODAL_ASSETS.src}
             title={VIDEO_MODAL_TEXT.frameTitle}

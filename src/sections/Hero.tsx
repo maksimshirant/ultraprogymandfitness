@@ -119,14 +119,14 @@ export default function Hero({ onOpenModal }: HeroProps) {
       </section>
 
       {isCardInfoOpen && (
-        <div className="fixed inset-0 z-[105] flex items-center justify-center">
+        <div className="fixed inset-0 z-[105] flex items-center justify-center overflow-y-auto p-4 sm:p-6">
           <div
             className="absolute inset-0 bg-black/80 backdrop-blur-sm"
             onClick={() => setIsCardInfoOpen(false)}
           />
 
           <div
-            className="relative w-full max-w-md mx-4 rounded-2xl border border-white/10 bg-[#111117] p-6 sm:p-7"
+            className="relative w-full max-w-md mx-auto my-auto overflow-y-auto max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] rounded-2xl border border-white/10 bg-[#111117] p-6 sm:p-7"
             onClick={(event) => event.stopPropagation()}
           >
             <button

@@ -291,16 +291,16 @@ export default function Modal({
 
   return (
     <>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto p-4 sm:p-6">
         <div
           className="absolute inset-0 bg-black/80 backdrop-blur-xl"
           onClick={resultNotice ? undefined : handleModalClose}
         />
 
-        <div className="relative w-full max-w-md mx-4">
-          <div className={`glass-card modal-surface relative ${resultNotice ? 'p-0' : 'p-8'}`}>
+        <div className="relative w-full max-w-md mx-auto my-auto">
+          <div className={`glass-card modal-surface relative overflow-y-auto max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] ${resultNotice ? 'p-0' : 'p-8'}`}>
             {resultNotice ? (
-              <div className="flex h-[70vh] min-h-[420px] max-h-[560px] w-full items-center justify-center px-8 py-10 text-center">
+              <div className="flex h-[min(70vh,560px)] min-h-[320px] sm:min-h-[420px] w-full items-center justify-center px-8 py-10 text-center">
                 <div className="max-w-[22rem]">
                   <div className="mb-5 flex justify-center">
                     {resultNotice.type === 'success' ? (
@@ -532,13 +532,13 @@ export default function Modal({
       </div>
 
       {isPrivacyOpen && (
-        <div className="fixed inset-0 z-[110] flex items-center justify-center">
+        <div className="fixed inset-0 z-[110] flex items-center justify-center overflow-y-auto p-4 sm:p-6">
           <div
             className="absolute inset-0 bg-black/80 backdrop-blur-md"
             onClick={() => setIsPrivacyOpen(false)}
           />
 
-          <div className="relative w-full max-w-2xl mx-4 glass-card modal-surface p-6">
+          <div className="relative w-full max-w-2xl mx-auto my-auto overflow-y-auto max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] glass-card modal-surface p-6">
             <button
               onClick={() => setIsPrivacyOpen(false)}
               className="absolute top-4 right-4 p-2 text-gray-400 lg:hover:text-white transition-colors"
@@ -560,13 +560,13 @@ export default function Modal({
       )}
 
       {isOfferOpen && (
-        <div className="fixed inset-0 z-[111] flex items-center justify-center">
+        <div className="fixed inset-0 z-[111] flex items-center justify-center overflow-y-auto p-4 sm:p-6">
           <div
             className="absolute inset-0 bg-black/80 backdrop-blur-md"
             onClick={() => setIsOfferOpen(false)}
           />
 
-          <div className="relative w-full max-w-2xl mx-4 glass-card modal-surface p-6">
+          <div className="relative w-full max-w-2xl mx-auto my-auto overflow-y-auto max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] glass-card modal-surface p-6">
             <button
               onClick={() => setIsOfferOpen(false)}
               className="absolute top-4 right-4 p-2 text-gray-400 lg:hover:text-white transition-colors"
