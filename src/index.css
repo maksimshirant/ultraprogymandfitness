@@ -321,7 +321,7 @@
 }
 
 /* Mobile performance mode: disable costly motion/effects */
-@media (max-width: 1023px), (prefers-reduced-motion: reduce) {
+@media (max-width: 1023px) {
   html {
     scroll-behavior: auto;
   }
@@ -416,6 +416,30 @@
   #subscriptions .btn-primary:hover {
     transform: translateY(-2px) !important;
     box-shadow: 0 8px 30px rgba(245, 184, 0, 0.5) !important;
+  }
+}
+
+/* Respect reduced-motion without removing static desktop glow backgrounds */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .wave-animation,
+  .pulse-glow,
+  .float-animation,
+  .slide-up,
+  .fade-in,
+  .scale-in {
+    animation: none !important;
+    transform: none !important;
   }
 }
 
