@@ -18,6 +18,7 @@ interface FooterProps {
 
 const FOOTER_ASSETS = {
   logo: `${import.meta.env.BASE_URL}logo.webp`,
+  maxIcon: 'https://logo-teka.com/wp-content/uploads/2025/07/max-messenger-sign-logo.svg',
 } as const;
 
 const FOOTER_TEXT = {
@@ -45,9 +46,11 @@ const FOOTER_TEXT = {
   ],
   vkLabel: 'VK',
   telegramLabel: 'Telegram',
+  maxLabel: 'Max',
   reviewsLabel: 'Отзывы',
   vkAria: 'VK',
   telegramAria: 'Telegram',
+  maxAria: 'Max',
   reviewsAria: 'Отзывы в Яндекс Картах',
   inn: 'ИНН 343521265164',
   ogrnip: 'ОГРНИП 326344300004743',
@@ -63,6 +66,7 @@ const FOOTER_LINKS = [
 const FOOTER_SOCIALS = {
   vk: 'https://vk.com/ultrapro_fitness_vlz',
   telegram: 'https://t.me/ultrapro_fitness_vlz',
+  max: 'https://max.ru/join/EBdCAZCx276jxGGS7-tFsXj5KHvwM1QOhP128UvDN1I',
   reviews: 'https://yandex.com/maps/org/ultra_pro/233756976456/reviews/?ll=44.777002%2C48.777976&z=16',
 } as const;
 
@@ -187,28 +191,43 @@ export default function Footer({ onOpenModal }: FooterProps) {
             <div className="mt-6 flex items-center gap-4">
               <a
                 href={FOOTER_SOCIALS.vk}
-                className="h-10 px-4 rounded-full bg-white/5 flex items-center justify-center gap-2 lg:hover:bg-[#F5B800] lg:hover:text-black transition-colors text-sm font-semibold text-gray-300"
+                className="h-10 w-10 sm:w-auto px-0 sm:px-4 rounded-full bg-white/5 flex items-center justify-center gap-0 sm:gap-2 lg:hover:bg-[#F5B800] lg:hover:text-black transition-colors text-sm font-semibold text-gray-300"
                 aria-label={FOOTER_TEXT.vkAria}
               >
-                <SiVk className="w-4 h-4" />
-                {FOOTER_TEXT.vkLabel}
+                <SiVk className="w-4 h-4 text-[#0077FF]" />
+                <span className="hidden sm:inline">{FOOTER_TEXT.vkLabel}</span>
               </a>
               <a
                 href={FOOTER_SOCIALS.telegram}
-                className="h-10 px-4 rounded-full bg-white/5 flex items-center justify-center gap-2 lg:hover:bg-[#F5B800] lg:hover:text-black transition-colors text-sm font-semibold text-gray-300"
+                className="h-10 w-10 sm:w-auto px-0 sm:px-4 rounded-full bg-white/5 flex items-center justify-center gap-0 sm:gap-2 lg:hover:bg-[#F5B800] lg:hover:text-black transition-colors text-sm font-semibold text-gray-300"
                 aria-label={FOOTER_TEXT.telegramAria}
               >
-                <SiTelegram className="w-4 h-4" />
-                {FOOTER_TEXT.telegramLabel}
+                <SiTelegram className="w-4 h-4 text-[#26A5E4]" />
+                <span className="hidden sm:inline">{FOOTER_TEXT.telegramLabel}</span>
+              </a>
+              <a
+                href={FOOTER_SOCIALS.max}
+                className="h-10 w-10 sm:w-auto px-0 sm:px-4 rounded-full bg-white/5 flex items-center justify-center gap-0 sm:gap-2 lg:hover:bg-[#F5B800] lg:hover:text-black transition-colors text-sm font-semibold text-gray-300"
+                aria-label={FOOTER_TEXT.maxAria}
+              >
+                <img
+                  src={FOOTER_ASSETS.maxIcon}
+                  alt=""
+                  aria-hidden="true"
+                  loading="lazy"
+                  decoding="async"
+                  className="w-4 h-4 object-contain"
+                />
+                <span className="hidden sm:inline">{FOOTER_TEXT.maxLabel}</span>
               </a>
               <a
                 href={FOOTER_SOCIALS.reviews}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="h-10 px-4 rounded-full bg-white/5 flex items-center justify-center gap-2 lg:hover:bg-[#F5B800] lg:hover:text-black transition-colors text-sm font-semibold text-gray-300"
+                className="group h-10 px-4 rounded-full bg-white/5 flex items-center justify-center gap-2 lg:hover:bg-[#F5B800] lg:hover:text-black transition-colors text-sm font-semibold text-gray-300"
                 aria-label={FOOTER_TEXT.reviewsAria}
               >
-                <Star className="w-4 h-4" />
+                <Star className="w-4 h-4 text-[#F5B800] lg:group-hover:text-black transition-colors" />
                 {FOOTER_TEXT.reviewsLabel}
               </a>
             </div>

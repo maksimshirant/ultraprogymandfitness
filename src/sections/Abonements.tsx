@@ -204,10 +204,10 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
 
                     <div className="mt-3">
                       <span className="relative inline-flex items-end gap-2">
-                        <span className="relative z-10 text-4xl md:text-5xl font-black text-white">
+                        <span className="relative z-10 text-4xl md:text-5xl font-black text-[rgb(255,255,255,0.82)]">
                           {abonement.price}
                         </span>
-                        <span className="absolute bottom-1 left-0 right-0 h-2.5 bg-gradient-to-r from-[#F5B800] to-[#D89B00] z-0" />
+                        <span className="absolute bottom-1 left-0 right-0 h-1.5 bg-gradient-to-r from-[#F5B800] to-[#D89B00] z-0" />
                       </span>
                     </div>
 

@@ -120,11 +120,11 @@
     display: inline;
     white-space: normal;
     padding-inline: 0.03em;
-    padding-bottom: 0.02em;
+    padding-bottom: 0.12em;
     background-image: linear-gradient(90deg, #F5B800 0%, #FFD247 52%, #D89B00 100%);
     background-repeat: no-repeat;
-    background-size: 100% 0.3em;
-    background-position: 0 88%;
+    background-size: 100% 0.16em;
+    background-position: 0 100%;
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
   }
@@ -274,6 +274,10 @@
 ::selection {
   background: rgba(245, 184, 0, 0.3);
   color: white;
+}
+
+.text-white {
+  color: rgb(255 255 255 / 0.82) !important;
 }
 
 @media (min-width: 1920px) {
