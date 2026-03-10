@@ -1,6 +1,8 @@
 import { Suspense, lazy, useState } from 'react';
 import Header from './sections/Header';
 import Hero from './sections/Hero';
+import Announcement from './sections/Announcement';
+import Modal from './sections/Modal';
 
 
 const Flors = lazy(() => import('./sections/Flors'));
@@ -10,7 +12,6 @@ const Abonements = lazy(() => import('./sections/Abonements'));
 const TryFree = lazy(() => import('./sections/TryFree'));
 const FAQ = lazy(() => import('./sections/FAQ'));
 const Footer = lazy(() => import('./sections/Footer'));
-const Modal = lazy(() => import('./sections/Modal'));
 
 const ALLOWED_MODAL_TOPICS = new Set([
   'sub_1m',
@@ -86,6 +87,7 @@ function App() {
       <Suspense fallback={null}>
         <Footer onOpenModal={openModal} />
       </Suspense>
+      <Announcement isBlocked={isModalOpen} />
       {isModalOpen ? (
         <Suspense fallback={null}>
           <Modal

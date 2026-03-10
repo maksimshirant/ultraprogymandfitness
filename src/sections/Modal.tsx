@@ -19,6 +19,12 @@ interface ModalProps {
   onClose: () => void;
   prefilledTopic?: string;
   prefilledTrainer?: string;
+  announcement?: {
+    label: string;
+    title: string;
+    message: readonly string[];
+    closeButtonLabel: string;
+  };
 }
 
 const RU_PHONE_MASK = '+7 (___) ___-__-__';
@@ -133,7 +139,9 @@ export default function Modal({
   onClose,
   prefilledTopic = '',
   prefilledTrainer = '',
+  announcement,
 }: ModalProps) {
+  const isAnnouncementMode = Boolean(announcement);
   const [formData, setFormData] = useState(() =>
     createInitialFormData(prefilledTopic, prefilledTopic === 'personal' ? prefilledTrainer : '')
   );
@@ -299,7 +307,41 @@ export default function Modal({
 
         <div className="relative w-full max-w-md mx-auto my-auto">
           <div className={`glass-card modal-surface relative overflow-y-auto max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] ${resultNotice ? 'p-0' : 'p-8'}`}>
-            {resultNotice ? (
+            {isAnnouncementMode && announcement ? (
+              <>
+                <button
+                  onClick={handleModalClose}
+                  className="absolute top-4 right-4 p-2 text-gray-400 lg:hover:text-white transition-colors"
+                  aria-label={MODAL_TEXT.closeModalAria}
+                >
+                  <X className="w-5 h-5" />
+                </button>
+
+                <div className="flex flex-col items-center text-center">
+                  <span className="mb-4 inline-flex rounded-full border border-[#F5B800]/30 bg-[#F5B800]/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-[#F5B800]">
+                    {announcement.label}
+                  </span>
+
+                  <BalancedHeading as="h2" className="text-2xl font-bold text-white">
+                    {announcement.title}
+                  </BalancedHeading>
+
+                  <div className="mt-5 space-y-3 text-sm leading-6 text-gray-300 sm:text-base">
+                    {announcement.message.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleModalClose}
+                    className="mt-8 w-full rounded-full border border-transparent bg-white px-6 py-3 text-sm font-semibold text-black transition-colors lg:hover:bg-[#F5B800]"
+                  >
+                    {announcement.closeButtonLabel}
+                  </button>
+                </div>
+              </>
+            ) : resultNotice ? (
               <div className="flex h-[min(70vh,560px)] min-h-[320px] sm:min-h-[420px] w-full items-center justify-center px-8 py-10 text-center">
                 <div className="max-w-[22rem]">
                   <div className="mb-5 flex justify-center">
