@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Modal from './Modal';
 
-const SHOW_ANNOUNCEMENT = true;
+const SHOW_ANNOUNCEMENT = false;
 const ANNOUNCEMENT_DELAY_MS = 1000;
 const ANNOUNCEMENT_CONTENT = {
   label: 'Объявление',
