@@ -10,6 +10,7 @@ interface Trainer {
   experience: string;
   achievements: string[];
   image?: string;
+  imageClassName?: string;
 }
 
 interface PersonalProps {
@@ -37,6 +38,7 @@ const PERSONAL_ASSETS = {
   saikl: `${import.meta.env.BASE_URL}trainers/saikl.jpg`,
   anton: `${import.meta.env.BASE_URL}trainers/anton.jpg`,
   angelina: `${import.meta.env.BASE_URL}trainers/angelina.jpg`,
+  mark: `${import.meta.env.BASE_URL}trainers/mark.JPG?v=20260327b`,
 } as const;
 
 const trainers: Trainer[] = [
@@ -130,6 +132,17 @@ const trainers: Trainer[] = [
   },
   {
     id: 8,
+    name: 'Вольвач Марк',
+    experience: 'Опыт работы: более 2 лет',
+    achievements: [
+      'Сертифицированный тренер по фитнесу',
+      'Специализация: восстановление после травм и операций, коррекция фигуры, набор мышечной массы, бокс',
+    ],
+    image: PERSONAL_ASSETS.mark,
+    imageClassName: 'scale-[1.12]',
+  },
+  {
+    id: 9,
     name: 'Гузей Александр',
     experience: 'Опыт работы: 10 лет',
     achievements: [
@@ -143,7 +156,7 @@ const trainers: Trainer[] = [
     image: PERSONAL_ASSETS.saikl,
   },
   {
-    id: 9,
+    id: 10,
     name: 'Белявский Антон',
     experience: 'Опыт работы: 8 лет',
     achievements: [
@@ -154,7 +167,6 @@ const trainers: Trainer[] = [
     ],
     image: PERSONAL_ASSETS.anton,
   },
-
 ];
 
 export default function Personal({ onOpenModal }: PersonalProps) {
@@ -201,7 +213,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
             alt={trainer.name}
             loading="lazy"
             decoding="async"
-            className="absolute inset-0 block h-full w-full object-cover object-center"
+            className={`absolute inset-0 block h-full w-full object-cover object-center ${trainer.imageClassName ?? ''}`}
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-[#1A1A27] via-[#111117] to-[#0A0A0F] flex flex-col items-center justify-center">
