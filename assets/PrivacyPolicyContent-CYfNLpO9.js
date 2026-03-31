@@ -1,4 +1,4 @@
-import{j as e,B as r,l as s}from"./index-CAMGBkTr.js";const n="Политика конфиденциальности",o=`Настоящая Политика конфиденциальности персональных данных (далее — Политика конфиденциальности) действует в отношении всей информации, которую сайт «УЛЬТРА ПРО ФИТНЕСС», расположенный на доменном имени ultraprofitness.ru
+import{j as e}from"./vendor-_OBlFfL9.js";import{B as o}from"./BalancedHeading-Cot5KTD7.js";import{c as t}from"./index-B--kKAJw.js";import"./vendor-ui-BVHTRVtr.js";const a="Политика конфиденциальности",n=`Настоящая Политика конфиденциальности персональных данных (далее — Политика конфиденциальности) действует в отношении всей информации, которую сайт «УЛЬТРА ПРО ФИТНЕСС», расположенный на доменном имени ultraprofitness.ru
 может получить о Пользователе во время использования сайта, программ и продуктов.
 
 
@@ -146,4 +146,4 @@ import{j as e,B as r,l as s}from"./index-CAMGBkTr.js";const n="Политика 
 
 9.4. Действующая Политика конфиденциальности размещена на странице по адресу www.ultraprofitness.ru
 
-Для связи с администратором сайта по любым вопросам вы можете написать письмо на e-mail: ultrapro.fitness34@yandex.ru`;function c({className:t,titleClassName:a,textClassName:i}){return e.jsxs("div",{className:t,children:[e.jsx(r,{as:"h3",className:s("text-2xl font-bold text-white mb-5",a),children:n}),e.jsx("p",{className:s("whitespace-pre-line text-sm leading-relaxed text-gray-300",i),children:o})]})}export{c as PrivacyPolicyContent};
+Для связи с администратором сайта по любым вопросам вы можете написать письмо на e-mail: ultrapro.fitness34@yandex.ru`;function p({className:r,titleClassName:s,textClassName:i}){return e.jsxs("div",{className:r,children:[e.jsx(o,{as:"h3",className:t("text-2xl font-bold text-white mb-5",s),children:a}),e.jsx("p",{className:t("whitespace-pre-line text-sm leading-relaxed text-gray-300",i),children:n})]})}export{p as PrivacyPolicyContent};
