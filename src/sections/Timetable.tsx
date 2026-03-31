@@ -14,20 +14,7 @@ const TIMETABLE_TEXT = {
 } as const;
 
 const TIMETABLE_ASSETS = {
-  image: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
-  <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1E293B" />
-      <stop offset="100%" stop-color="#0B0B12" />
-    </linearGradient>
-  </defs>
-  <rect width="1600" height="900" fill="url(#bg)" />
-  <rect x="60" y="60" width="1480" height="780" rx="30" fill="none" stroke="#F5B800" stroke-width="8" stroke-opacity="0.5" />
-  <text x="800" y="420" text-anchor="middle" font-family="Inter, sans-serif" font-size="64" fill="#FFFFFF" font-weight="700">${TIMETABLE_TEXT.comingSoon}</text>
-  <text x="800" y="510" text-anchor="middle" font-family="Inter, sans-serif" font-size="40" fill="#E5E7EB" opacity="0.95">${TIMETABLE_TEXT.signature}</text>
-</svg>
-`)}`,
+  image: `${import.meta.env.BASE_URL}фонмороз.png`,
 } as const;
 
 export default function Timetable() {
@@ -53,6 +40,27 @@ export default function Timetable() {
     };
   }, [isPreviewOpen]);
 
+  const renderTimetablePreview = (isFullscreen = false) => (
+    <div
+      className={`relative overflow-hidden ${
+        isFullscreen ? 'max-w-full max-h-full rounded-2xl border border-white/20' : 'w-full'
+      }`}
+    >
+      <img
+        src={TIMETABLE_ASSETS.image}
+        alt={TIMETABLE_TEXT.imageAlt}
+        loading="lazy"
+        decoding="async"
+        className="w-full h-auto object-cover"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,7,12,0.2)_0%,rgba(5,7,12,0.72)_58%,rgba(5,7,12,0.88)_100%)]" />
+      <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
+        <p className="text-2xl font-bold text-white sm:text-4xl md:text-5xl">{TIMETABLE_TEXT.comingSoon}</p>
+        <p className="mt-4 text-sm text-gray-200 sm:text-lg md:text-xl">{TIMETABLE_TEXT.signature}</p>
+      </div>
+    </div>
+  );
+
   return (
     <section id="schedule" className="py-14 relative overflow-hidden scroll-mt-24">
       <div className="hero-glow-layer">
@@ -71,20 +79,14 @@ export default function Timetable() {
         </div>
 
         <div className="max-w-4xl mx-auto">
-          <div className="glass-card p-3 md:p-4">
+          <div className="overflow-hidden rounded-2xl">
             <button
               type="button"
               onClick={() => setIsPreviewOpen(true)}
-              className="block w-full rounded-2xl overflow-hidden border border-white/10"
+              className="block w-full"
               aria-label={TIMETABLE_TEXT.openFullscreenAria}
             >
-              <img
-                src={TIMETABLE_ASSETS.image}
-                alt={TIMETABLE_TEXT.imageAlt}
-                loading="lazy"
-                decoding="async"
-                className="w-full h-auto"
-              />
+              {renderTimetablePreview()}
             </button>
           </div>
         </div>
@@ -105,14 +107,9 @@ export default function Timetable() {
           </button>
 
           <div className="w-full h-full flex items-center justify-center">
-            <img
-              src={TIMETABLE_ASSETS.image}
-              alt={TIMETABLE_TEXT.imageAlt}
-              loading="lazy"
-              decoding="async"
-              className="max-w-full max-h-full rounded-2xl border border-white/20"
-              onClick={(event) => event.stopPropagation()}
-            />
+            <div className="max-w-full max-h-full" onClick={(event) => event.stopPropagation()}>
+              {renderTimetablePreview(true)}
+            </div>
           </div>
         </div>
       )}

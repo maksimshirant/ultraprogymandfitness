@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
   Check,
+  ChevronDown,
   Rocket,
   CalendarClock,
   Trophy,
@@ -13,15 +14,20 @@ import {
 import type { LucideIcon } from 'lucide-react';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 import { useSwipeNavigation } from '@/hooks/useSwipeNavigation';
+import { cn } from '@/lib/utils';
 
 const ABONEMENTS_TEXT = {
   sectionTitleAccent: 'Абонементы',
   sectionSubtitle: 'Выберите формат посещения под ваш график и цель.',
   cta: 'Приобрести абонемент',
+  showMore: 'Показать больше',
+  showLess: 'Скрыть',
   prevAria: 'Предыдущий абонемент',
   nextAria: 'Следующий абонемент',
   selectAriaPrefix: 'Выбрать абонемент',
 } as const;
+
+const PREVIEW_MODES_COUNT = 3;
 
 const commonModes = [
   'Тренажерный зал (Площадь 1800м2, 2 этажа, 50+ тренажеров)',
@@ -88,7 +94,17 @@ const abonements = [
     note: 'Специальный формат для тренировок в первой половине дня.',
     icon: Sunrise,
     topicValue: 'sub_12m_day',
-    modes: ['Время посещения: с 7:00 до 16:00', ...commonModes, freezeModes.year, '5 гостевых посещений для друзей'],
+    modes: [
+      'Время посещения: с 7:00 до 16:00',
+      commonModes[0],
+      commonModes[2],
+      commonModes[1],
+      commonModes[3],
+      commonModes[4],
+      commonModes[5],
+      freezeModes.year,
+      '5 гостевых посещений для друзей',
+    ],
   },
   {
     id: 6,
@@ -117,7 +133,12 @@ interface AbonementsProps {
 }
 
 export default function Abonements({ onOpenModal }: AbonementsProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(1);
+  const [expandedAbonementId, setExpandedAbonementId] = useState<number | null>(null);
+
+  useEffect(() => {
+    setExpandedAbonementId(null);
+  }, [currentIndex]);
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % abonements.length);
@@ -165,27 +186,53 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
         </div>
 
         <div className="relative w-full">
-          <div className="relative h-[810px] sm:h-[800px] md:h-[770px] overflow-hidden" {...swipeHandlers}>
+          <button
+            onClick={prevSlide}
+            className="abonement-control-motion absolute left-0 top-[21rem] z-30 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-[#111217]/90 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-colors hover:border-white/35 hover:bg-[#181a22] md:flex"
+            aria-label={ABONEMENTS_TEXT.prevAria}
+          >
+            <ChevronLeft className="w-6 h-6 text-white" />
+          </button>
+
+          <button
+            onClick={nextSlide}
+            className="abonement-control-motion absolute right-0 top-[21rem] z-30 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-[#111217]/90 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-colors hover:border-white/35 hover:bg-[#181a22] md:flex"
+            aria-label={ABONEMENTS_TEXT.nextAria}
+          >
+            <ChevronRight className="w-6 h-6 text-white" />
+          </button>
+
+          <div
+            className={cn(
+              'relative overflow-hidden transition-[height] duration-300 ease-out',
+              expandedAbonementId === null
+                ? 'h-[620px] sm:h-[610px] md:h-[590px]'
+                : 'h-[820px] sm:h-[800px] md:h-[760px]'
+            )}
+            {...swipeHandlers}
+          >
             {abonements.map((abonement, index) => {
               const offset = getSlideOffset(index);
               const Icon = abonement.icon as LucideIcon;
               const isActive = offset === 0;
+              const hasHiddenModes = abonement.modes.length > PREVIEW_MODES_COUNT;
+              const isExpanded = isActive && expandedAbonementId === abonement.id;
 
               return (
                 <article
                   key={abonement.id}
-                  className={`abonement-slide-motion absolute top-1/2 left-1/2 w-[88%] sm:w-[72%] md:w-[62%] max-w-[30rem] will-change-transform transition-all duration-700 ease-out ${
+                  className={`abonement-slide-motion absolute left-1/2 top-12 md:top-16 w-[88%] sm:w-[72%] md:w-[62%] max-w-[30rem] will-change-transform transition-all duration-700 ease-out ${
                     isActive
-                      ? 'z-20 -translate-x-1/2 -translate-y-1/2 scale-100 opacity-100'
+                      ? 'z-20 -translate-x-1/2 scale-100 opacity-100'
                       : offset === -1
-                        ? 'z-10 -translate-x-[122%] -translate-y-1/2 scale-92 opacity-35'
+                        ? 'z-10 -translate-x-[122%] scale-92 opacity-35'
                         : offset === 1
-                          ? 'z-10 translate-x-[22%] -translate-y-1/2 scale-92 opacity-35'
-                          : 'z-0 -translate-x-1/2 -translate-y-1/2 scale-90 opacity-0 pointer-events-none'
+                          ? 'z-10 translate-x-[22%] scale-92 opacity-35'
+                          : 'z-0 -translate-x-1/2 scale-90 opacity-0 pointer-events-none'
                   }`}
                 >
                   <div
-                    className={`glass-card p-5 md:p-6 h-[660px] md:h-[670px] flex flex-col ${
+                    className={`glass-card p-5 md:p-6 flex flex-col transition-[height] duration-300 ${
                       isActive
                         ? 'abonement-card-active border border-[#F5B800]/30'
                         : 'border border-white/5'
@@ -198,7 +245,13 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
                       </div>
                     </div>
 
-                    <BalancedHeading as="h3" className="text-3xl md:text-4xl font-extrabold text-white leading-tight">
+                    <BalancedHeading
+                      as="h3"
+                      className={cn(
+                        'font-extrabold text-white leading-tight',
+                        abonement.id === 5 ? 'text-[1.55rem] md:text-[1.9rem] whitespace-nowrap' : 'text-3xl md:text-4xl'
+                      )}
+                    >
                       {abonement.title}
                     </BalancedHeading>
 
@@ -213,16 +266,51 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
 
                     <p className="text-sm text-gray-300 mt-4 mb-4">{abonement.note}</p>
 
-                    <ul className="space-y-2 flex-1">
-                      {abonement.modes.map((mode, modeIndex) => (
-                        <li key={modeIndex} className="flex items-start gap-3">
-                          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#F5B800] to-[#D89B00] flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <Check className="w-3 h-3 text-white" />
-                          </div>
-                          <span className="text-sm text-gray-300 leading-relaxed">{mode}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    <div className="relative">
+                      <ul
+                        className={cn(
+                          'space-y-2 overflow-hidden transition-[max-height] duration-300 ease-out',
+                          !isExpanded && hasHiddenModes && 'pointer-events-none'
+                        )}
+                        style={{
+                          maxHeight: isExpanded ? '32rem' : '9.5rem',
+                          WebkitMaskImage:
+                            !isExpanded && hasHiddenModes
+                              ? 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 72%, rgba(0, 0, 0, 0) 100%)'
+                              : undefined,
+                          maskImage:
+                            !isExpanded && hasHiddenModes
+                              ? 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 72%, rgba(0, 0, 0, 0) 100%)'
+                              : undefined,
+                        }}
+                      >
+                        {abonement.modes.map((mode, modeIndex) => (
+                          <li key={modeIndex} className="flex items-start gap-3">
+                            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#F5B800] to-[#D89B00] flex items-center justify-center flex-shrink-0 mt-0.5">
+                              <Check className="w-3 h-3 text-white" />
+                            </div>
+                            <span className="text-sm text-gray-300 leading-relaxed">{mode}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {hasHiddenModes ? (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedAbonementId((prev) => (prev === abonement.id ? null : abonement.id))
+                        }
+                        disabled={!isActive}
+                        aria-expanded={isExpanded}
+                        className="mt-3 inline-flex items-center gap-2 self-start text-sm font-medium text-[#F5B800] transition-opacity hover:text-[#FFD351] disabled:pointer-events-none disabled:opacity-45"
+                      >
+                        <span>{isExpanded ? ABONEMENTS_TEXT.showLess : ABONEMENTS_TEXT.showMore}</span>
+                        <ChevronDown
+                          className={cn('h-4 w-4 transition-transform duration-300', isExpanded && 'rotate-180')}
+                        />
+                      </button>
+                    ) : null}
 
                     <button
                       onClick={() => onOpenModal(abonement.topicValue)}
@@ -237,10 +325,10 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
             })}
           </div>
 
-          <div className="flex items-center justify-center gap-6 mt-6">
+          <div className="mt-[0.88125rem] md:mt-[2.0125rem] flex items-center justify-center gap-6 md:gap-3">
             <button
               onClick={prevSlide}
-              className="abonement-control-motion w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
+              className="abonement-control-motion flex h-12 w-12 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10 md:hidden"
               aria-label={ABONEMENTS_TEXT.prevAria}
             >
               <ChevronLeft className="w-6 h-6 text-gray-400" />
@@ -263,7 +351,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
 
             <button
               onClick={nextSlide}
-              className="abonement-control-motion w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
+              className="abonement-control-motion flex h-12 w-12 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10 md:hidden"
               aria-label={ABONEMENTS_TEXT.nextAria}
             >
               <ChevronRight className="w-6 h-6 text-gray-400" />

@@ -134,6 +134,8 @@ const createInitialFormData = (topic = '', trainer = '') => ({
   trainer,
   question: '',
 });
+const FORM_FIELD_CLASS =
+  'w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white placeholder-gray-500 transition-colors focus:outline-none focus:border-white/25';
 
 export default function Modal({
   isOpen,
@@ -153,6 +155,7 @@ export default function Modal({
   const [formError, setFormError] = useState<string | null>(null);
   const [resultNotice, setResultNotice] = useState<ResultNotice | null>(null);
   const closeTimeoutRef = useRef<number | null>(null);
+  const isPersonalTopic = formData.topic === 'personal';
 
   const clearCloseTimer = () => {
     if (closeTimeoutRef.current !== null) {
@@ -300,19 +303,23 @@ export default function Modal({
 
   return (
     <>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto p-4 sm:p-6">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto p-2 sm:p-6">
         <div
-          className="absolute inset-0 bg-black/80 backdrop-blur-xl"
+          className="document-modal-overlay absolute inset-0 bg-[#05070c]/82 backdrop-blur-md"
           onClick={resultNotice ? undefined : handleModalClose}
         />
 
-        <div className="relative w-full max-w-md mx-auto my-auto">
-          <div className={`glass-card modal-surface relative overflow-y-auto max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] ${resultNotice ? 'p-0' : 'p-8'}`}>
+        <div className="relative mx-auto my-auto w-full max-w-lg">
+          <div
+            className={`glass-card modal-surface relative flex flex-col overflow-hidden rounded-[26px] sm:rounded-[30px] border border-white/10 shadow-[0_28px_120px_rgba(0,0,0,0.45)] max-h-[calc(100vh-1rem)] max-h-[calc(100dvh-1rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] ${
+              resultNotice ? 'p-0' : isPersonalTopic ? 'p-4 sm:p-6' : 'p-4 sm:p-8'
+            }`}
+          >
             {isAnnouncementMode && announcement ? (
               <>
                 <button
                   onClick={handleModalClose}
-                  className="absolute top-4 right-4 p-2 text-gray-400 lg:hover:text-white transition-colors"
+                  className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center text-gray-300 transition-colors lg:hover:text-white sm:top-4 sm:right-4"
                   aria-label={MODAL_TEXT.closeModalAria}
                 >
                   <X className="w-5 h-5" />
@@ -336,7 +343,7 @@ export default function Modal({
                   <button
                     type="button"
                     onClick={handleModalClose}
-                    className="mt-8 w-full rounded-full border border-transparent bg-white px-6 py-3 text-sm font-semibold text-black transition-colors lg:hover:bg-[#F5B800]"
+                    className="btn-primary mt-8 w-full text-white"
                   >
                     {announcement.closeButtonLabel}
                   </button>
@@ -363,7 +370,7 @@ export default function Modal({
                     <button
                       type="button"
                       onClick={() => setResultNotice(null)}
-                      className="mt-6 w-full rounded-full border border-transparent bg-white px-6 py-3 text-sm font-semibold text-black transition-colors lg:hover:bg-[#F5B800]"
+                      className="btn-primary mt-6 w-full text-white"
                     >
                       {MODAL_TEXT.returnToForm}
                     </button>
@@ -374,27 +381,34 @@ export default function Modal({
               <>
                 <button
                   onClick={handleModalClose}
-                  className="absolute top-4 right-4 p-2 text-gray-400 lg:hover:text-white transition-colors"
+                  className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center text-gray-300 transition-colors lg:hover:text-white sm:top-4 sm:right-4"
                   aria-label={MODAL_TEXT.closeModalAria}
                 >
                   <X className="w-5 h-5" />
                 </button>
 
-                <div className="flex justify-center mb-6">
-                  <img
-                    src={MODAL_ASSETS.logo}
-                    alt="Логотип Ultra Pro Gym & Fitness"
-                    loading="lazy"
-                    decoding="async"
-                    className="h-8 sm:h-9 w-auto object-contain brightness-0 invert"
-                  />
+                <div className={`flex justify-center ${isPersonalTopic ? 'mb-3 sm:mb-4' : 'mb-4 sm:mb-6'}`}>
+                  <div className="inline-flex px-4 py-2 sm:px-5 sm:py-3">
+                    <img
+                      src={MODAL_ASSETS.logo}
+                      alt="Логотип Ultra Pro Gym & Fitness"
+                      loading="lazy"
+                      decoding="async"
+                      className="h-7 w-auto object-contain brightness-0 invert sm:h-9"
+                    />
+                  </div>
                 </div>
 
-                <BalancedHeading as="h2" className="text-1xl font-bold text-white text-center mb-8">
+                <BalancedHeading
+                  as="h2"
+                  className={`text-center text-lg font-bold text-white sm:text-2xl ${
+                    isPersonalTopic ? 'mb-4 sm:mb-5' : 'mb-5 sm:mb-8'
+                  }`}
+                >
                   {MODAL_TEXT.title}
                 </BalancedHeading>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className={isPersonalTopic ? 'space-y-2.5 sm:space-y-3' : 'space-y-3 sm:space-y-4'}>
                   <div>
                     <input
                       type="text"
@@ -405,7 +419,7 @@ export default function Modal({
                         setFormData({ ...formData, name: e.target.value });
                         if (formError) setFormError(null);
                       }}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#F5B800] transition-colors"
+                      className={FORM_FIELD_CLASS}
                     />
                   </div>
 
@@ -425,7 +439,7 @@ export default function Modal({
                         setFormData({ ...formData, phone: nextPhone });
                         if (formError) setFormError(null);
                       }}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#F5B800] transition-colors"
+                      className={FORM_FIELD_CLASS}
                     />
                   </div>
 
@@ -443,7 +457,7 @@ export default function Modal({
                     >
                       <SelectTrigger
                         aria-label={MODAL_TEXT.topicAriaLabel}
-                        className="w-full h-auto min-h-[3rem] rounded-xl border-white/10 bg-white/5 px-4 py-3 text-white data-[placeholder]:text-gray-500 focus-visible:ring-0 focus-visible:border-[#F5B800] [&_svg]:mr-1 [&>[data-slot=select-value]]:max-w-[calc(100%-1.75rem)] [&>[data-slot=select-value]]:truncate [&>[data-slot=select-value]]:text-left"
+                        className="w-full h-auto min-h-[3rem] rounded-2xl border-white/10 bg-white/[0.04] px-4 py-3 text-white data-[placeholder]:text-gray-500 focus-visible:ring-0 focus-visible:border-white/25 [&_svg]:mr-1 [&>[data-slot=select-value]]:max-w-[calc(100%-1.75rem)] [&>[data-slot=select-value]]:truncate [&>[data-slot=select-value]]:text-left"
                       >
                         <SelectValue
                           placeholder={MODAL_TEXT.topicPlaceholder}
@@ -478,7 +492,7 @@ export default function Modal({
                       >
                         <SelectTrigger
                           aria-label={MODAL_TEXT.trainerAriaLabel}
-                          className="w-full h-auto min-h-[3rem] rounded-xl border-white/10 bg-white/5 px-4 py-3 text-white data-[placeholder]:text-gray-500 focus-visible:ring-0 focus-visible:border-[#F5B800] [&_svg]:mr-1 [&>[data-slot=select-value]]:max-w-[calc(100%-1.75rem)] [&>[data-slot=select-value]]:truncate [&>[data-slot=select-value]]:text-left"
+                          className="w-full h-auto min-h-[3rem] rounded-2xl border-white/10 bg-white/[0.04] px-4 py-3 text-white data-[placeholder]:text-gray-500 focus-visible:ring-0 focus-visible:border-white/25 [&_svg]:mr-1 [&>[data-slot=select-value]]:max-w-[calc(100%-1.75rem)] [&>[data-slot=select-value]]:truncate [&>[data-slot=select-value]]:text-left"
                         >
                           <SelectValue
                             placeholder={MODAL_TEXT.trainerPlaceholder}
@@ -508,12 +522,12 @@ export default function Modal({
                         setFormData({ ...formData, question: e.target.value });
                         if (formError) setFormError(null);
                       }}
-                      rows={4}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#F5B800] transition-colors resize-none"
+                      rows={isPersonalTopic ? 2 : 3}
+                      className={`${FORM_FIELD_CLASS} resize-none ${isPersonalTopic ? 'min-h-[4.5rem] sm:min-h-[5rem]' : 'min-h-24 sm:min-h-28'}`}
                     />
                   </div>
 
-                  <label className="flex items-start gap-3 text-sm text-gray-300">
+                  <label className={`flex items-start gap-3 text-xs text-gray-300 sm:text-sm ${isPersonalTopic ? '' : ''}`}>
                     <input
                       type="checkbox"
                       checked={isPrivacyAccepted}
@@ -528,7 +542,7 @@ export default function Modal({
                       <button
                         type="button"
                         onClick={() => setIsPrivacyOpen(true)}
-                        className="text-[#F5B800] underline lg:hover:text-[#FFD247] transition-colors"
+                        className="text-white underline underline-offset-4 lg:hover:text-gray-200 transition-colors"
                       >
                         {MODAL_TEXT.privacyLink}
                       </button>
@@ -536,7 +550,7 @@ export default function Modal({
                       <button
                         type="button"
                         onClick={() => setIsOfferOpen(true)}
-                        className="text-[#F5B800] underline lg:hover:text-[#FFD247] transition-colors"
+                        className="text-white underline underline-offset-4 lg:hover:text-gray-200 transition-colors"
                       >
                         {MODAL_TEXT.offerLink}
                       </button>
@@ -556,7 +570,7 @@ export default function Modal({
                     type="submit"
                     disabled={isSubmitting}
                     aria-live="polite"
-                    className="w-full py-3 font-semibold rounded-full border border-transparent bg-white text-black transition-colors disabled:opacity-60 disabled:cursor-not-allowed lg:hover:bg-[#F5B800]"
+                    className="btn-primary w-full text-white disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
                       <span className="inline-flex items-center justify-center gap-2">
@@ -575,22 +589,25 @@ export default function Modal({
       </div>
 
       {isPrivacyOpen && (
-        <div className="fixed inset-0 z-[110] flex items-center justify-center overflow-y-auto p-4 sm:p-6">
+        <div className="fixed inset-0 z-[110] flex items-center justify-center overflow-hidden p-4 sm:p-6">
           <div
-            className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            className="document-modal-overlay absolute inset-0 bg-black/80 backdrop-blur-md"
             onClick={() => setIsPrivacyOpen(false)}
           />
 
-          <div className="relative w-full max-w-2xl mx-auto my-auto overflow-y-auto max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] glass-card modal-surface p-6">
+          <div
+            className="glass-card modal-surface relative mx-auto my-auto flex w-full max-w-2xl flex-col overflow-hidden rounded-[30px] p-6 max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] sm:p-8"
+            onClick={(event) => event.stopPropagation()}
+          >
             <button
               onClick={() => setIsPrivacyOpen(false)}
-              className="absolute top-4 right-4 p-2 text-gray-400 lg:hover:text-white transition-colors"
+              className="absolute top-4 right-4 z-10 p-2 text-gray-400 transition-colors lg:hover:text-white"
               aria-label={MODAL_TEXT.closePolicyAria}
             >
               <X className="w-5 h-5" />
             </button>
 
-            <div className="max-h-[60vh] overflow-y-auto pr-2">
+            <div className="document-modal-scroll min-h-0 flex-1 overflow-y-auto pr-2 pt-8 sm:pr-3 sm:pt-10">
               <Suspense fallback={<p className="text-sm text-gray-300">{DOCUMENT_FALLBACK_TEXT}</p>}>
                 <PrivacyPolicyContent
                   titleClassName="text-xl font-semibold text-white pr-10 mb-4"
@@ -603,22 +620,25 @@ export default function Modal({
       )}
 
       {isOfferOpen && (
-        <div className="fixed inset-0 z-[111] flex items-center justify-center overflow-y-auto p-4 sm:p-6">
+        <div className="fixed inset-0 z-[111] flex items-center justify-center overflow-hidden p-4 sm:p-6">
           <div
-            className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            className="document-modal-overlay absolute inset-0 bg-black/80 backdrop-blur-md"
             onClick={() => setIsOfferOpen(false)}
           />
 
-          <div className="relative w-full max-w-2xl mx-auto my-auto overflow-y-auto max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] glass-card modal-surface p-6">
+          <div
+            className="glass-card modal-surface relative mx-auto my-auto flex w-full max-w-2xl flex-col overflow-hidden rounded-[30px] p-6 max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] sm:p-8"
+            onClick={(event) => event.stopPropagation()}
+          >
             <button
               onClick={() => setIsOfferOpen(false)}
-              className="absolute top-4 right-4 p-2 text-gray-400 lg:hover:text-white transition-colors"
+              className="absolute top-4 right-4 z-10 p-2 text-gray-400 transition-colors lg:hover:text-white"
               aria-label={MODAL_TEXT.closeOfferAria}
             >
               <X className="w-5 h-5" />
             </button>
 
-            <div className="max-h-[60vh] overflow-y-auto pr-2">
+            <div className="document-modal-scroll min-h-0 flex-1 overflow-y-auto pr-2 pt-8 sm:pr-3 sm:pt-10">
               <Suspense fallback={<p className="text-sm text-gray-300">{DOCUMENT_FALLBACK_TEXT}</p>}>
                 <OfferAgreementContent
                   titleClassName="text-xl font-semibold text-white pr-10 mb-4"

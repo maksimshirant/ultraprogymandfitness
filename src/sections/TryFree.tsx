@@ -8,7 +8,7 @@ const TRY_FREE_TEXT = {
   title: 'Попробуйте бесплатно',
   subtitle:
     'Проверьте формат, атмосферу и оборудование лично. Первое посещение абсолютно бесплатно.',
-  cta: 'Записаться на пробную тренировку',
+  cta: 'Записаться',
 } as const;
 
 export default function TryFree({ onOpenModal }: TryFreeProps) {

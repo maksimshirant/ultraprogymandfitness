@@ -3,14 +3,7 @@ module.exports = {
   darkMode: ["class"],
   content: [
     './index.html',
-    './src/main.tsx',
-    './src/App.tsx',
-    './src/index.css',
-    './src/sections/**/*.{js,ts,jsx,tsx}',
-    './src/components/PrivacyPolicyContent.tsx',
-    './src/components/OfferAgreementContent.tsx',
-    './src/components/ui/dialog.tsx',
-    './src/components/ui/select.tsx',
+    './src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {

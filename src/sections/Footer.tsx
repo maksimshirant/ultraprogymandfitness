@@ -1,6 +1,8 @@
 import { Suspense, lazy, useEffect, useState, type MouseEvent } from 'react';
-import { Phone, MapPin, Clock3, Star, X } from 'lucide-react';
-import { SiVk, SiTelegram } from 'react-icons/si';
+import { X } from 'lucide-react';
+import { NavLink, useLocation } from 'react-router-dom';
+import { cn } from '@/lib/utils';
+import { siteConfig } from '@/seo/siteConfig';
 
 const PrivacyPolicyContent = lazy(async () => {
   const module = await import('@/components/PrivacyPolicyContent');
@@ -12,81 +14,51 @@ const OfferAgreementContent = lazy(async () => {
   return { default: module.OfferAgreementContent };
 });
 
-interface FooterProps {
-  onOpenModal: () => void;
-}
-
 const FOOTER_ASSETS = {
   logo: `${import.meta.env.BASE_URL}logo.webp`,
-  maxIcon: 'https://logo-teka.com/wp-content/uploads/2025/07/max-messenger-sign-logo.svg',
+  logoAlt: 'Логотип Ultra Pro Gym & Fitness',
 } as const;
 
+const FOOTER_NAV_ITEMS = [
+  { label: 'Главная', to: '/' },
+  { label: 'Расписание', to: '/schedule' },
+  { label: 'Тренеры', to: '/trainers' },
+  { label: 'Абонементы', to: '/memberships' },
+  { label: 'О нас', to: '/contacts' },
+] as const;
+
 const FOOTER_TEXT = {
-  logoAlt: 'Логотип Ultra Pro Gym & Fitness',
-  sectionsTitle: 'РАЗДЕЛЫ',
-  mapTitle: 'КАРТА',
-  openMap: 'Открыть карту',
-  openMapAria: 'Открыть карту на весь экран',
-  closeMapAria: 'Закрыть карту',
-  cta: 'Записаться на тренировку',
-  copyright: '© 2026 Ultra Pro Gym & Fitness. Все права защищены.',
+  company: '© 2026 Ultra Pro Gym & Fitness. Все права защищены.',
+  scheduleTitle: 'График работы',
+  phoneTitle: 'Телефон',
+  emailTitle: 'E-mail',
   policyButton: 'Политика конфиденциальности',
   offerButton: 'Договор офферты',
   closePolicyAria: 'Закрыть политику конфиденциальности',
   closeOfferAria: 'Закрыть договор офферты',
-  mapFrameTitle: 'Карта: г. Волжский, Профсоюзов 7Б, ТЦ Радуга',
-  intro:
-    'Пространство для регулярных тренировок, восстановления и стабильного прогресса. Выберите удобный формат посещения и начните уже сейчас.',
-  address: 'г. Волжский, Профсоюзов 7Б, ТЦ Радуга',
-  phone: '8(8443) 323-323',
-  phoneHref: 'tel:+78443323323',
-  schedule: [
-    { day: 'Понедельник–Суббота:', time: '07:00–00:00' },
-    { day: 'Воскресенье:', time: '07:00–22:00' },
-  ],
-  vkLabel: 'VK',
-  telegramLabel: 'Telegram',
-  maxLabel: 'Max',
-  reviewsLabel: 'Отзывы',
-  vkAria: 'VK',
-  telegramAria: 'Telegram',
-  maxAria: 'Max',
-  reviewsAria: 'Отзывы в Яндекс Картах',
   inn: 'ИНН 343521265164',
   ogrnip: 'ОГРНИП 326344300004743',
+  email: 'ultrapro.fitness34@yandex.ru',
 } as const;
 
-const FOOTER_LINKS = [
-  { label: 'Фитнес-клуб', href: '#flors' },
-  { label: 'Тренеры', href: '#trainers' },
-  { label: 'Абонементы', href: '#subscriptions' },
-  { label: 'Частые вопросы', href: '#faq' },
-] as const;
-
-const FOOTER_SOCIALS = {
-  vk: 'https://vk.com/ultrapro_fitness_vlz',
-  telegram: 'https://t.me/ultrapro_fitness_vlz',
-  max: 'https://max.ru/join/EBdCAZCx276jxGGS7-tFsXj5KHvwM1QOhP128UvDN1I',
-  reviews: 'https://yandex.com/maps/org/ultra_pro/233756976456/reviews/?ll=44.777002%2C48.777976&z=16',
-} as const;
-
-const FOOTER_MAP_QUERY = 'г. Волжский, Профсоюзов 7б, УльтраПро';
-const FOOTER_MAP_SRC = `https://yandex.ru/map-widget/v1/?mode=search&text=${encodeURIComponent(
-  FOOTER_MAP_QUERY
-)}&z=17`;
 const FOOTER_DOCUMENT_FALLBACK = 'Загрузка документа...';
 
-const FOOTER_SCROLL_OFFSET = 96;
-const FOOTER_SCROLL_RETRY_LIMIT = 25;
-const FOOTER_SCROLL_RETRY_DELAY = 120;
-
-export default function Footer({ onOpenModal }: FooterProps) {
+export default function Footer() {
+  const { pathname } = useLocation();
   const [isPolicyOpen, setIsPolicyOpen] = useState(false);
   const [isOfferOpen, setIsOfferOpen] = useState(false);
-  const [isMapOpen, setIsMapOpen] = useState(false);
+
+  const handleHomeNavigation = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (pathname !== '/') {
+      return;
+    }
+
+    event.preventDefault();
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  };
 
   useEffect(() => {
-    if (!isPolicyOpen && !isOfferOpen && !isMapOpen) {
+    if (!isPolicyOpen && !isOfferOpen) {
       return;
     }
 
@@ -94,7 +66,6 @@ export default function Footer({ onOpenModal }: FooterProps) {
       if (event.key === 'Escape') {
         setIsPolicyOpen(false);
         setIsOfferOpen(false);
-        setIsMapOpen(false);
       }
     };
 
@@ -105,311 +76,146 @@ export default function Footer({ onOpenModal }: FooterProps) {
       document.removeEventListener('keydown', onKeyDown);
       document.body.style.overflow = '';
     };
-  }, [isMapOpen, isOfferOpen, isPolicyOpen]);
-
-  const handleAnchorClick = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (!href.startsWith('#')) {
-      return;
-    }
-
-    event.preventDefault();
-
-    const targetId = href.slice(1);
-    window.history.replaceState(null, '', href);
-
-    const scrollToTarget = (attempt = 0) => {
-      const targetElement = document.getElementById(targetId);
-
-      if (!targetElement) {
-        if (attempt < FOOTER_SCROLL_RETRY_LIMIT) {
-          window.setTimeout(() => scrollToTarget(attempt + 1), FOOTER_SCROLL_RETRY_DELAY);
-        }
-        return;
-      }
-
-      const targetTop =
-        targetElement.getBoundingClientRect().top + window.pageYOffset - FOOTER_SCROLL_OFFSET;
-
-      window.scrollTo({
-        top: Math.max(targetTop, 0),
-        behavior: 'smooth',
-      });
-    };
-
-    scrollToTarget();
-  };
+  }, [isOfferOpen, isPolicyOpen]);
 
   return (
-    <footer id="contacts" className="py-16 border-t border-white/5 relative overflow-hidden">
-      <div className="hero-glow-layer">
-        <div className="hero-glow-top-right" />
-        <div className="hero-glow-bottom-left" />
-        <div className="hero-glow-center" />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-10 lg:gap-12">
-          <div className="md:col-span-2">
-            <a href="#" className="inline-flex items-center mb-5">
+    <footer className="py-10 border-t border-white/5">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-start md:gap-10 lg:grid-cols-[minmax(300px,1fr)_minmax(250px,0.8fr)_minmax(180px,0.55fr)] lg:items-start lg:gap-16 xl:gap-20">
+          <div className="order-2 space-y-5 pt-2 md:order-1 md:pt-0 lg:order-1">
+            <NavLink to="/" className="flex items-center justify-center md:justify-start" end onClick={handleHomeNavigation}>
               <img
                 src={FOOTER_ASSETS.logo}
-                alt={FOOTER_TEXT.logoAlt}
+                alt={FOOTER_ASSETS.logoAlt}
                 loading="lazy"
                 decoding="async"
-                className="h-10 w-auto object-contain brightness-0 invert"
+                className="h-8 w-auto object-contain brightness-0 invert"
               />
-            </a>
+            </NavLink>
+            <div className="space-y-2 text-center md:text-left">
+              <p className="text-sm text-gray-300">{FOOTER_TEXT.company}</p>
+              <p className="text-xs sm:text-sm text-gray-500">{FOOTER_TEXT.inn}</p>
+              <p className="text-xs sm:text-sm text-gray-500">{FOOTER_TEXT.ogrnip}</p>
+            </div>
+            <div className="flex flex-col items-center gap-3 pt-2 md:items-start">
+              <button
+                type="button"
+                onClick={() => setIsPolicyOpen(true)}
+                className="text-sm text-gray-400 transition-colors lg:hover:text-white"
+              >
+                {FOOTER_TEXT.policyButton}
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsOfferOpen(true)}
+                className="text-sm text-gray-400 transition-colors lg:hover:text-white"
+              >
+                {FOOTER_TEXT.offerButton}
+              </button>
+            </div>
+          </div>
 
-            <p className="text-gray-400 text-sm max-w-md leading-relaxed">
-              {FOOTER_TEXT.intro}
-            </p>
-
-            <div className="mt-6 space-y-3 text-sm text-gray-300">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-[#F5B800]" />
-                <span>{FOOTER_TEXT.address}</span>
+          <div className="order-1 space-y-4 text-center md:order-2 md:space-y-5 md:text-left lg:order-2">
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <p className="text-xs uppercase tracking-[0.18em] text-gray-500">{FOOTER_TEXT.scheduleTitle}</p>
+                <p className="text-sm text-gray-300">{siteConfig.business.openingHoursText}</p>
               </div>
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-[#F5B800]" />
-                <a href={FOOTER_TEXT.phoneHref} className="lg:hover:text-white transition-colors">
-                  {FOOTER_TEXT.phone}
+              <div className="space-y-1">
+                <p className="text-xs uppercase tracking-[0.18em] text-gray-500">{FOOTER_TEXT.phoneTitle}</p>
+                <a
+                  href={siteConfig.business.phoneHref}
+                  className="text-sm text-gray-300 transition-colors lg:hover:text-white"
+                >
+                  {siteConfig.business.phone}
                 </a>
               </div>
-              <div className="flex items-start gap-2">
-                <Clock3 className="w-4 h-4 text-[#F5B800] mt-0.5" />
-                <div className="space-y-1">
-                  {FOOTER_TEXT.schedule.map((slot) => (
-                    <p key={slot.day} className="leading-snug">
-                      <span className="text-gray-400 mr-2">{slot.day}</span>
-                      <span>{slot.time}</span>
-                    </p>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6 flex items-center gap-4">
-              <a
-                href={FOOTER_SOCIALS.vk}
-                className="h-10 w-10 sm:w-auto px-0 sm:px-4 rounded-full bg-white/5 flex items-center justify-center gap-0 sm:gap-2 lg:hover:bg-[#F5B800] lg:hover:text-black transition-colors text-sm font-semibold text-gray-300"
-                aria-label={FOOTER_TEXT.vkAria}
-              >
-                <SiVk className="w-4 h-4 text-[#0077FF]" />
-                <span className="hidden sm:inline">{FOOTER_TEXT.vkLabel}</span>
-              </a>
-              <a
-                href={FOOTER_SOCIALS.telegram}
-                className="h-10 w-10 sm:w-auto px-0 sm:px-4 rounded-full bg-white/5 flex items-center justify-center gap-0 sm:gap-2 lg:hover:bg-[#F5B800] lg:hover:text-black transition-colors text-sm font-semibold text-gray-300"
-                aria-label={FOOTER_TEXT.telegramAria}
-              >
-                <SiTelegram className="w-4 h-4 text-[#26A5E4]" />
-                <span className="hidden sm:inline">{FOOTER_TEXT.telegramLabel}</span>
-              </a>
-              <a
-                href={FOOTER_SOCIALS.max}
-                className="h-10 w-10 sm:w-auto px-0 sm:px-4 rounded-full bg-white/5 flex items-center justify-center gap-0 sm:gap-2 lg:hover:bg-[#F5B800] lg:hover:text-black transition-colors text-sm font-semibold text-gray-300"
-                aria-label={FOOTER_TEXT.maxAria}
-              >
-                <img
-                  src={FOOTER_ASSETS.maxIcon}
-                  alt=""
-                  aria-hidden="true"
-                  loading="lazy"
-                  decoding="async"
-                  className="w-4 h-4 object-contain"
-                />
-                <span className="hidden sm:inline">{FOOTER_TEXT.maxLabel}</span>
-              </a>
-              <a
-                href={FOOTER_SOCIALS.reviews}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group h-10 px-4 rounded-full bg-white/5 flex items-center justify-center gap-2 lg:hover:bg-[#F5B800] lg:hover:text-black transition-colors text-sm font-semibold text-gray-300"
-                aria-label={FOOTER_TEXT.reviewsAria}
-              >
-                <Star className="w-4 h-4 text-[#F5B800] lg:group-hover:text-black transition-colors" />
-                {FOOTER_TEXT.reviewsLabel}
-              </a>
-            </div>
-          </div>
-
-          <div>
-            <h4 className="text-white font-semibold text-sm mb-4">{FOOTER_TEXT.mapTitle}</h4>
-            <div
-              className="relative rounded-xl overflow-hidden border border-white/10 bg-black/30 h-[220px] cursor-zoom-in"
-              onClick={() => setIsMapOpen(true)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  event.preventDefault();
-                  setIsMapOpen(true);
-                }
-              }}
-              aria-label={FOOTER_TEXT.openMapAria}
-            >
-              <iframe
-                title={FOOTER_TEXT.mapFrameTitle}
-                src={FOOTER_MAP_SRC}
-                width="100%"
-                height="100%"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="w-full h-full pointer-events-none"
-              />
-              <div className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-black/70 text-xs text-white border border-white/15">
-                {FOOTER_TEXT.openMap}
+              <div className="space-y-1">
+                <p className="text-xs uppercase tracking-[0.18em] text-gray-500">{FOOTER_TEXT.emailTitle}</p>
+                <a
+                  href={`mailto:${FOOTER_TEXT.email}`}
+                  className="text-sm text-gray-300 transition-colors lg:hover:text-white break-all"
+                >
+                  {FOOTER_TEXT.email}
+                </a>
               </div>
             </div>
           </div>
 
-          <div className="md:hidden lg:block">
-            <h4 className="text-white font-semibold text-sm mb-4">{FOOTER_TEXT.sectionsTitle}</h4>
-            <ul className="space-y-3">
-              {FOOTER_LINKS.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-gray-400 lg:hover:text-white transition-colors text-sm"
-                    onClick={(event) => handleAnchorClick(event, link.href)}
-                  >
-                    {link.label}
-                  </a>
-                </li>
+          <div className="hidden text-center md:col-span-2 md:block md:border-t md:border-white/5 md:pt-6 lg:order-3 lg:col-span-1 lg:border-t-0 lg:pt-0 lg:justify-self-end lg:text-left">
+            <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 md:gap-x-8 lg:flex-col lg:items-start lg:justify-start lg:gap-4">
+              {FOOTER_NAV_ITEMS.map((item) => (
+                <NavLink
+                  key={item.label}
+                  to={item.to}
+                  end={item.to === '/'}
+                  onClick={item.to === '/' ? handleHomeNavigation : undefined}
+                  className={({ isActive }) =>
+                    cn(
+                      'relative whitespace-nowrap text-lg md:text-base lg:text-sm',
+                      isActive ? 'text-white' : 'text-gray-300 md:hover:text-white'
+                    )
+                  }
+                >
+                  {item.label}
+                </NavLink>
               ))}
-            </ul>
-
-            <button onClick={onOpenModal} className="btn-primary text-white mt-6 w-full">
-              {FOOTER_TEXT.cta}
-            </button>
+            </nav>
           </div>
-        </div>
-
-        <div className="hidden md:flex lg:hidden mt-10 pt-6 border-t border-white/5 items-center justify-between gap-4 flex-wrap">
-          <div className="flex items-center gap-4 flex-wrap">
-            {FOOTER_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="text-gray-400 lg:hover:text-white transition-colors text-sm"
-                onClick={(event) => handleAnchorClick(event, link.href)}
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-
-          <button onClick={onOpenModal} className="btn-primary text-white whitespace-nowrap">
-            {FOOTER_TEXT.cta}
-          </button>
-        </div>
-
-        <div className="mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <p className="text-gray-500 text-sm">{FOOTER_TEXT.copyright}</p>
-          <div className="flex items-center flex-wrap gap-x-5 gap-y-2 sm:justify-end">
-            <button
-              type="button"
-              onClick={() => setIsPolicyOpen(true)}
-              className="text-gray-500 text-sm lg:hover:text-white transition-colors text-left sm:text-right"
-            >
-              {FOOTER_TEXT.policyButton}
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsOfferOpen(true)}
-              className="text-gray-500 text-sm lg:hover:text-white transition-colors text-left sm:text-right"
-            >
-              {FOOTER_TEXT.offerButton}
-            </button>
-          </div>
-        </div>
-
-        <div className="mt-4 flex flex-col gap-1 text-gray-500 text-xs sm:text-sm">
-          <p>{FOOTER_TEXT.inn}</p>
-          <p>{FOOTER_TEXT.ogrnip}</p>
         </div>
       </div>
 
       {isPolicyOpen && (
         <div
-          className="fixed inset-0 z-[130] bg-black/85 backdrop-blur-sm p-4 sm:p-6"
+          className="fixed inset-0 z-[130] flex items-center justify-center overflow-hidden p-4 sm:p-6"
           onClick={() => setIsPolicyOpen(false)}
         >
+          <div className="document-modal-overlay absolute inset-0 bg-[#05070c]/82 backdrop-blur-md" />
           <div
-            className="relative max-w-3xl mx-auto max-h-[90vh] overflow-y-auto rounded-2xl border border-white/10 bg-[#111117] p-6 sm:p-8"
+            className="glass-card modal-surface relative mx-auto my-auto flex w-full max-w-3xl flex-col overflow-hidden rounded-[30px] border border-white/10 p-6 shadow-[0_28px_120px_rgba(0,0,0,0.45)] max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] sm:p-8"
             onClick={(event) => event.stopPropagation()}
           >
             <button
               type="button"
               onClick={() => setIsPolicyOpen(false)}
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 lg:hover:bg-white/20 transition-colors flex items-center justify-center"
+              className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-gray-300 transition-colors lg:hover:bg-white/10 lg:hover:text-white"
               aria-label={FOOTER_TEXT.closePolicyAria}
             >
-              <X className="w-5 h-5 text-white" />
+              <X className="h-5 w-5" />
             </button>
 
-            <Suspense fallback={<p className="text-sm text-gray-300">{FOOTER_DOCUMENT_FALLBACK}</p>}>
-              <PrivacyPolicyContent />
-            </Suspense>
+            <div className="document-modal-scroll min-h-0 flex-1 overflow-y-auto pr-2 pt-8 sm:pr-3 sm:pt-10">
+              <Suspense fallback={<p className="text-sm text-gray-300">{FOOTER_DOCUMENT_FALLBACK}</p>}>
+                <PrivacyPolicyContent />
+              </Suspense>
+            </div>
           </div>
         </div>
       )}
 
       {isOfferOpen && (
         <div
-          className="fixed inset-0 z-[130] bg-black/85 backdrop-blur-sm p-4 sm:p-6"
+          className="fixed inset-0 z-[130] flex items-center justify-center overflow-hidden p-4 sm:p-6"
           onClick={() => setIsOfferOpen(false)}
         >
+          <div className="document-modal-overlay absolute inset-0 bg-[#05070c]/82 backdrop-blur-md" />
           <div
-            className="relative max-w-3xl mx-auto max-h-[90vh] overflow-y-auto rounded-2xl border border-white/10 bg-[#111117] p-6 sm:p-8"
+            className="glass-card modal-surface relative mx-auto my-auto flex w-full max-w-3xl flex-col overflow-hidden rounded-[30px] border border-white/10 p-6 shadow-[0_28px_120px_rgba(0,0,0,0.45)] max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] sm:p-8"
             onClick={(event) => event.stopPropagation()}
           >
             <button
               type="button"
               onClick={() => setIsOfferOpen(false)}
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 lg:hover:bg-white/20 transition-colors flex items-center justify-center"
+              className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-gray-300 transition-colors lg:hover:bg-white/10 lg:hover:text-white"
               aria-label={FOOTER_TEXT.closeOfferAria}
             >
-              <X className="w-5 h-5 text-white" />
+              <X className="h-5 w-5" />
             </button>
 
-            <Suspense fallback={<p className="text-sm text-gray-300">{FOOTER_DOCUMENT_FALLBACK}</p>}>
-              <OfferAgreementContent />
-            </Suspense>
-          </div>
-        </div>
-      )}
-
-      {isMapOpen && (
-        <div
-          className="fixed inset-0 z-[140] bg-black/90 backdrop-blur-sm p-4 sm:p-6"
-          onClick={() => setIsMapOpen(false)}
-        >
-          <div
-            className="relative max-w-6xl mx-auto h-[90vh] rounded-2xl border border-white/10 bg-[#111117] p-4 sm:p-6"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className="flex justify-end">
-              <button
-                type="button"
-                onClick={() => setIsMapOpen(false)}
-                className="w-10 h-10 rounded-full bg-white/10 lg:hover:bg-white/20 transition-colors flex items-center justify-center z-10"
-                aria-label={FOOTER_TEXT.closeMapAria}
-              >
-                <X className="w-5 h-5 text-white" />
-              </button>
-            </div>
-
-            <div className="mt-3 h-[calc(100%-3.25rem)] rounded-xl overflow-hidden border border-white/10">
-              <iframe
-                title={FOOTER_TEXT.mapFrameTitle}
-                src={FOOTER_MAP_SRC}
-                width="100%"
-                height="100%"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="w-full h-full"
-              />
+            <div className="document-modal-scroll min-h-0 flex-1 overflow-y-auto pr-2 pt-8 sm:pr-3 sm:pt-10">
+              <Suspense fallback={<p className="text-sm text-gray-300">{FOOTER_DOCUMENT_FALLBACK}</p>}>
+                <OfferAgreementContent />
+              </Suspense>
             </div>
           </div>
         </div>

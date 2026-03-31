@@ -27,6 +27,11 @@ const upsertJsonLdScript = (id: string, payload: JsonLdObject) => {
   script.text = JSON.stringify(payload);
 };
 
+const removeJsonLdScript = (id: string) => {
+  const script = document.getElementById(id);
+  script?.remove();
+};
+
 const createHealthClubSchema = (): JsonLdObject => ({
   '@context': 'https://schema.org',
   '@type': 'HealthClub',
@@ -97,8 +102,14 @@ const createFaqSchema = (): JsonLdObject => ({
   })),
 });
 
-export const syncStructuredData = () => {
+export const syncStructuredData = (pathname = '/') => {
   upsertJsonLdScript(HEALTH_CLUB_SCRIPT_ID, createHealthClubSchema());
   upsertJsonLdScript(ORGANIZATION_SCRIPT_ID, createOrganizationSchema());
-  upsertJsonLdScript(FAQ_SCRIPT_ID, createFaqSchema());
+
+  if (pathname === '/') {
+    upsertJsonLdScript(FAQ_SCRIPT_ID, createFaqSchema());
+    return;
+  }
+
+  removeJsonLdScript(FAQ_SCRIPT_ID);
 };

@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import Modal from './Modal';
+import { Suspense, lazy, useEffect, useState } from 'react';
+
+const Modal = lazy(() => import('./Modal'));
 
 const SHOW_ANNOUNCEMENT = false;
 const ANNOUNCEMENT_DELAY_MS = 1000;
@@ -56,10 +57,12 @@ export default function Announcement({ isBlocked = false }: AnnouncementProps) {
   }
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={() => setIsDismissed(true)}
-      announcement={ANNOUNCEMENT_CONTENT}
-    />
+    <Suspense fallback={null}>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => setIsDismissed(true)}
+        announcement={ANNOUNCEMENT_CONTENT}
+      />
+    </Suspense>
   );
 }
