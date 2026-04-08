@@ -13,7 +13,7 @@ const TRY_FREE_TEXT = {
 
 export default function TryFree({ onOpenModal }: TryFreeProps) {
   return (
-    <section id="tryfree" className="pb-10 md:pb-14 relative overflow-hidden scroll-mt-24">
+    <section id="tryfree" className="deferred-section relative overflow-hidden pb-10 scroll-mt-24 md:pb-14">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="glass-card border border-[#F5B800]/20 bg-gradient-to-r from-[#F5B800]/12 via-white/[0.04] to-[#D89B00]/12 p-6 md:p-8 text-center">
           <BalancedHeading as="h2" className="section-title text-white">

@@ -59,7 +59,8 @@
   }
   
   .btn-primary {
-    @apply px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300;
+    @apply px-6 py-3 rounded-full font-semibold text-sm duration-300;
+    transition-property: transform, box-shadow, background-color, color, opacity;
     background: linear-gradient(135deg, #F5B800 0%, #E2A700 55%, #C98E00 100%);
     box-shadow: 0 4px 20px rgba(245, 184, 0, 0.4);
   }
@@ -70,7 +71,8 @@
   }
   
   .btn-white {
-    @apply px-6 py-3 rounded-full font-semibold text-sm bg-white text-black transition-all duration-300;
+    @apply px-6 py-3 rounded-full font-semibold text-sm bg-white text-black duration-300;
+    transition-property: transform, box-shadow, background-color, color, opacity;
   }
   
   .btn-white:hover {
@@ -107,6 +109,18 @@
   .modal-surface {
     background: rgba(17, 17, 23, 0.92);
     border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .deferred-section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 960px;
+  }
+
+  .site-header.header-scrolled {
+    background: rgba(10, 10, 15, 0.72);
+    border-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
   }
   
   .section-title {
@@ -400,18 +414,20 @@
   }
 
   .document-modal-overlay {
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
+    background: rgba(5, 7, 12, 0.88) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 
   .mobile-menu-overlay {
-    backdrop-filter: blur(14px) !important;
-    -webkit-backdrop-filter: blur(14px) !important;
+    background: rgba(5, 7, 12, 0.74) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 
   .mobile-menu-surface {
     border-color: rgba(255, 255, 255, 0.1) !important;
-    background: transparent !important;
+    background: linear-gradient(180deg, rgba(10, 10, 15, 0.96) 0%, rgba(10, 10, 15, 0.94) 100%) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
   }
@@ -527,9 +543,9 @@
   }
 
   #site-header.header-scrolled {
-    background: rgba(10, 10, 15, 0.78) !important;
+    background: linear-gradient(180deg, rgba(10, 10, 15, 0.92) 0%, rgba(10, 10, 15, 0.84) 100%) !important;
     border-color: rgba(255, 255, 255, 0.1) !important;
-    backdrop-filter: blur(18px) !important;
-    -webkit-backdrop-filter: blur(18px) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 }

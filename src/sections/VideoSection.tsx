@@ -14,7 +14,7 @@ const VIDEO_SECTION_TEXT = {
 
 export default function VideoSection({ onOpenVideo }: VideoSectionProps) {
   return (
-    <section id="video" className="py-10 md:py-14 relative overflow-hidden scroll-mt-24">
+    <section id="video" className="deferred-section relative overflow-hidden py-10 scroll-mt-24 md:py-14">
       <div className="hero-glow-layer">
         <div className="hero-glow-top-right" />
         <div className="hero-glow-bottom-left" />
@@ -42,7 +42,7 @@ export default function VideoSection({ onOpenVideo }: VideoSectionProps) {
             >
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_30%,rgba(245,184,0,0.22),transparent_58%)]" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-black font-semibold transition-all lg:group-hover:scale-105 lg:group-hover:bg-[#F5B800]">
+                <span className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 font-semibold text-black transition-[transform,background-color,color] duration-300 lg:group-hover:scale-105 lg:group-hover:bg-[#F5B800]">
                   <Play className="w-4 h-4 fill-black" />
                   {VIDEO_SECTION_TEXT.cta}
                 </span>

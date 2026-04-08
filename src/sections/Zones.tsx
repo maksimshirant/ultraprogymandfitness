@@ -64,7 +64,7 @@ export default function Zones() {
   });
 
   return (
-    <section id="zones" className="py-20 relative overflow-hidden">
+    <section id="zones" className="deferred-section relative overflow-hidden py-20">
 
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#F5B800]/5 to-transparent" />
 
@@ -89,7 +89,7 @@ export default function Zones() {
                 return (
                 <div
                   key={zone.id}
-                  className={`absolute left-0 right-0 top-1/2 will-change-transform transition-all duration-700 ease-out ${
+                  className={`absolute left-0 right-0 top-1/2 will-change-transform transition-[transform,opacity] duration-700 ease-out ${
                     offset === 0
                       ? 'z-10 -translate-y-1/2 scale-100 opacity-100'
                       : offset === -1
@@ -142,7 +142,7 @@ export default function Zones() {
                   <button
                     key={index}
                     onClick={() => setCurrentIndex(index)}
-                    className={`w-2 h-2 rounded-full transition-all ${
+                    className={`h-2 w-2 rounded-full transition-[width,background-color,opacity] duration-300 ${
                       index === currentIndex
                         ? 'w-8 bg-gradient-to-r from-[#F5B800] to-[#D89B00]'
                         : 'bg-white/20'

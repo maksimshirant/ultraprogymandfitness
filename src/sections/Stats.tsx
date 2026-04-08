@@ -86,7 +86,7 @@ export default function Stats() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-20 relative overflow-hidden">
+    <section ref={sectionRef} className="deferred-section relative overflow-hidden py-20">
       <div className="hero-glow-layer">
         <div className="hero-glow-top-right" />
         <div className="hero-glow-bottom-left" />
@@ -125,7 +125,7 @@ export default function Stats() {
         </div>
 
         <div
-          className={`glass-card p-6 md:p-10 transition-all duration-700 ${
+          className={`glass-card p-6 md:p-10 transition-[transform,opacity] duration-700 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
@@ -159,7 +159,7 @@ export default function Stats() {
 
                     <div className="h-2 rounded-full bg-white/10 overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-[#F5B800] to-[#D89B00] transition-all duration-1000"
+                        className="h-full bg-gradient-to-r from-[#F5B800] to-[#D89B00] transition-[width] duration-1000"
                         style={{ width: isVisible ? `${item.reduction}%` : 0 }}
                       />
                     </div>

@@ -291,6 +291,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
               alt={trainer.name}
               loading="lazy"
               fetchPriority="low"
+              sizes="(max-width: 767px) 100vw, (max-width: 1023px) 70vw, 34vw"
               variantSuffix="preview"
               deferUntilVisible
               pictureClassName="absolute inset-0 block h-full w-full"
@@ -379,7 +380,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
                 aria-label={`${PERSONAL_TEXT.selectCategoryAria} ${category.label}`}
                 aria-pressed={isActive}
                 className={cn(
-                  'rounded-full border px-4 py-2 text-xs transition-all md:px-4.5 md:py-2.5 md:text-sm',
+                  'rounded-full border px-4 py-2 text-xs transition-[background-color,border-color,color] md:px-4.5 md:py-2.5 md:text-sm',
                   isActive
                     ? 'border-white/25 bg-white/10 text-white'
                     : 'border-white/8 bg-transparent text-gray-400 hover:border-white/18 hover:text-white'
@@ -442,7 +443,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
                 return (
                   <article
                     key={trainer.id}
-                    className={`trainer-slide-motion absolute left-1/2 top-8 w-[72%] max-w-[24rem] will-change-transform transition-all duration-700 ease-out ${
+                    className={`trainer-slide-motion absolute left-1/2 top-8 w-[72%] max-w-[24rem] will-change-transform transition-[transform,opacity] duration-700 ease-out ${
                       isActive
                         ? 'z-20 -translate-x-1/2 scale-100 opacity-100'
                         : offset === -1
@@ -477,7 +478,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
                 <button
                   key={trainer.id}
                   onClick={() => selectTrainerIndex(index)}
-                  className={`trainer-control-motion h-1 rounded-full transition-all ${
+                  className={`trainer-control-motion h-1 rounded-full transition-[width,background-color,opacity] duration-300 ${
                     index === activeTrainerIndex
                       ? 'w-16 bg-gradient-to-r from-[#F5B800] to-[#D89B00]'
                       : 'w-8 bg-white/20'
@@ -521,6 +522,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
                           alt={trainer.name}
                           loading="lazy"
                           fetchPriority="low"
+                          sizes="(max-width: 1279px) 34vw, 24rem"
                           variantSuffix="preview"
                           deferUntilVisible
                           pictureClassName="absolute inset-0 block h-full w-full"

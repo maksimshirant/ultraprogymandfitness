@@ -59,6 +59,7 @@ export default function PreviewCard({
             alt={title}
             loading="lazy"
             fetchPriority="low"
+            sizes="(max-width: 767px) 100vw, 50vw"
             variantSuffix="preview"
             deferUntilVisible
             pictureClassName="absolute inset-0 block h-full w-full"

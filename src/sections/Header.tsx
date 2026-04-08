@@ -1,4 +1,4 @@
-import { useState, useEffect, type MouseEvent } from 'react';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { Menu, Phone, X } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useViewportTier } from '@/hooks/useViewportTier';
@@ -30,8 +30,8 @@ const HEADER_NAV_ITEMS = [
 
 export default function Header({ onOpenModal }: HeaderProps) {
   const { pathname } = useLocation();
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLElement | null>(null);
   const viewportTier = useViewportTier();
   const isDesktopViewport = viewportTier === 'desktop';
 
@@ -72,13 +72,38 @@ export default function Header({ onOpenModal }: HeaderProps) {
   }, [isDesktopViewport, isMobileMenuOpen]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
+    let frameId: number | null = null;
+
+    const syncHeaderScrolledState = () => {
+      frameId = null;
+      const headerElement = headerRef.current;
+
+      if (!headerElement) {
+        return;
+      }
+
+      headerElement.classList.toggle('header-scrolled', isMobileMenuOpen || window.scrollY > 0);
     };
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+
+    const scheduleHeaderSync = () => {
+      if (frameId !== null) {
+        return;
+      }
+
+      frameId = requestAnimationFrame(syncHeaderScrolledState);
+    };
+
+    scheduleHeaderSync();
+    window.addEventListener('scroll', scheduleHeaderSync, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', scheduleHeaderSync);
+
+      if (frameId !== null) {
+        cancelAnimationFrame(frameId);
+      }
+    };
+  }, [isMobileMenuOpen]);
 
   return (
     <>
@@ -86,18 +111,17 @@ export default function Header({ onOpenModal }: HeaderProps) {
         <button
           type="button"
           aria-label="Закрыть мобильное меню"
-          className="mobile-menu-overlay fixed inset-0 z-40 bg-[#05070c]/58 backdrop-blur-md"
+          className="mobile-menu-overlay fixed inset-0 z-40 bg-[#05070c]/72"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       ) : null}
 
       <header
         id="site-header"
+        ref={headerRef}
         className={cn(
-          'site-header fixed top-0 left-0 right-0 z-50 transition-all duration-500',
-          isScrolled || isMobileMenuOpen
-            ? 'header-scrolled bg-black/72 backdrop-blur-xl border-b border-white/10'
-            : 'bg-transparent border-b border-transparent'
+          'site-header fixed top-0 left-0 right-0 z-50 border-b border-transparent bg-transparent transition-[background-color,border-color,backdrop-filter,opacity] duration-500',
+          isMobileMenuOpen && 'header-scrolled'
         )}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:max-lg:px-8 lg:px-5 xl:px-8">
@@ -127,7 +151,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
                     }
                   >
                     {item.label}
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#F5B800] to-[#D89B00] lg:group-hover:w-full group-[.active]:w-full transition-all duration-300" />
+                    <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-gradient-to-r from-[#F5B800] to-[#D89B00] transition-[width] duration-300 lg:group-hover:w-full group-[.active]:w-full" />
                   </NavLink>
                 ))}
               </nav>
@@ -137,7 +161,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
                 href={HEADER_TEXT.phoneHref}
                 aria-label={HEADER_TEXT.callAria}
                 title={HEADER_TEXT.phone}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full text-white transition-all duration-300 bg-[linear-gradient(135deg,#F5B800_0%,#E2A700_55%,#C98E00_100%)] shadow-[0_4px_20px_rgba(245,184,0,0.4)] sm:h-10 sm:w-10 md:max-lg:h-12 md:max-lg:w-12 lg:hover:-translate-y-0.5 lg:hover:shadow-[0_8px_30px_rgba(245,184,0,0.5)]"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[linear-gradient(135deg,#F5B800_0%,#E2A700_55%,#C98E00_100%)] text-white shadow-[0_4px_20px_rgba(245,184,0,0.4)] transition-[transform,box-shadow,background-color,color,opacity] duration-300 sm:h-10 sm:w-10 md:max-lg:h-12 md:max-lg:w-12 lg:hover:-translate-y-0.5 lg:hover:shadow-[0_8px_30px_rgba(245,184,0,0.5)]"
               >
                 <Phone className="h-4 w-4 md:max-lg:h-5 md:max-lg:w-5" />
               </a>
@@ -145,7 +169,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
                 <div>
                   <button
                     onClick={onOpenModal}
-                    className="rounded-full font-semibold text-white transition-all duration-300 bg-[linear-gradient(135deg,#F5B800_0%,#E2A700_55%,#C98E00_100%)] shadow-[0_4px_20px_rgba(245,184,0,0.4)] lg:hover:-translate-y-0.5 lg:hover:shadow-[0_8px_30px_rgba(245,184,0,0.5)] px-4 py-2 text-xs xl:px-6 xl:py-3 xl:text-sm"
+                    className="rounded-full bg-[linear-gradient(135deg,#F5B800_0%,#E2A700_55%,#C98E00_100%)] px-4 py-2 text-xs font-semibold text-white shadow-[0_4px_20px_rgba(245,184,0,0.4)] transition-[transform,box-shadow,background-color,color,opacity] duration-300 lg:hover:-translate-y-0.5 lg:hover:shadow-[0_8px_30px_rgba(245,184,0,0.5)] xl:px-6 xl:py-3 xl:text-sm"
                   >
                     {HEADER_TEXT.cta}
                   </button>
@@ -166,7 +190,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
           </div>
         </div>
         {!isDesktopViewport && isMobileMenuOpen ? (
-          <div className="mobile-menu-surface border-t border-white/10 backdrop-blur-xl">
+          <div className="mobile-menu-surface border-t border-white/10 bg-[linear-gradient(180deg,rgba(10,10,15,0.96)_0%,rgba(10,10,15,0.94)_100%)]">
             <nav className="flex flex-col gap-4 p-4 md:max-lg:gap-6 md:max-lg:px-8 md:max-lg:py-6">
               {HEADER_NAV_ITEMS.map((item) => (
                 <NavLink

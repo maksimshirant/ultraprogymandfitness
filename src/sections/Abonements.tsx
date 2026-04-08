@@ -231,7 +231,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
               return (
                 <article
                   key={abonement.id}
-                  className={`abonement-slide-motion absolute left-1/2 top-12 md:top-16 w-[88%] sm:w-[72%] md:w-[62%] max-w-[30rem] will-change-transform transition-all duration-700 ease-out ${
+                  className={`abonement-slide-motion absolute left-1/2 top-12 md:top-16 w-[88%] sm:w-[72%] md:w-[62%] max-w-[30rem] will-change-transform transition-[transform,opacity] duration-700 ease-out ${
                     isActive
                       ? 'z-20 -translate-x-1/2 scale-100 opacity-100'
                       : offset === -1
@@ -351,7 +351,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
                 <button
                   key={index}
                   onClick={() => selectAbonementIndex(index)}
-                  className={`abonement-control-motion h-1 rounded-full transition-all ${
+                  className={`abonement-control-motion h-1 rounded-full transition-[width,background-color,opacity] duration-300 ${
                     index === currentIndex
                       ? 'w-16 bg-gradient-to-r from-[#F5B800] to-[#D89B00]'
                       : 'w-8 bg-white/20'

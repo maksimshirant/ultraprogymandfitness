@@ -168,7 +168,7 @@ export default function Flors() {
   };
 
   return (
-    <section id="flors" className="relative py-16 md:py-20">
+    <section id="flors" className="deferred-section relative py-16 md:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10 md:mb-12">
           <BalancedHeading as="h2" className="section-title text-white">
@@ -188,7 +188,7 @@ export default function Flors() {
                 aria-label={`${FLORS_TEXT.chooseFloorAria} ${floor.label}`}
                 aria-pressed={isActive}
                 className={cn(
-                  'min-w-[154px] rounded-full border px-5 py-3 text-sm transition-all md:text-base',
+                  'min-w-[154px] rounded-full border px-5 py-3 text-sm transition-[background-color,border-color,color] md:text-base',
                   isActive
                     ? 'border-white/35 bg-white/10 text-white'
                     : 'border-white/10 bg-white/[0.03] text-gray-300 hover:border-white/20 hover:text-white'
@@ -215,7 +215,7 @@ export default function Flors() {
                 aria-label={`${FLORS_TEXT.chooseZoneAria} ${zone.title}`}
                 aria-pressed={isActive}
                 className={cn(
-                  'rounded-full border px-4 py-2 text-xs transition-all md:px-4.5 md:py-2.5 md:text-sm',
+                  'rounded-full border px-4 py-2 text-xs transition-[background-color,border-color,color] md:px-4.5 md:py-2.5 md:text-sm',
                   isActive
                     ? 'border-white/25 bg-white/10 text-white'
                     : 'border-white/8 bg-transparent text-gray-400 hover:border-white/18 hover:text-white'
@@ -261,6 +261,7 @@ export default function Flors() {
                           alt={`${activeZone.title} — фото ${index + 1}`}
                           loading="lazy"
                           fetchPriority="low"
+                          sizes="(max-width: 767px) 50vw, (max-width: 1279px) 33vw, 25vw"
                           variantSuffix="thumb"
                           deferUntilVisible
                           observerRootMargin="120px 0px"
@@ -320,6 +321,8 @@ export default function Flors() {
                 src={activeZone.slides[currentViewerSlide]}
                 alt={`${activeZone.title} — фото ${currentViewerSlide + 1}`}
                 loading="lazy"
+                sizes="100vw"
+                showPlaceholder={false}
                 pictureClassName="block h-full w-full"
                 className="h-full w-full object-contain"
               />

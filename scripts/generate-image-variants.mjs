@@ -6,14 +6,17 @@ let sharp;
 try {
   ({ default: sharp } = await import('sharp'));
 } catch {
-  console.error('The script requires the "sharp" package in node_modules to generate AVIF/WebP variants.');
+  console.error('The script requires the "sharp" package in node_modules to generate image variants.');
   console.error('Install it locally and rerun: npm install --save-dev sharp');
   process.exit(1);
 }
 
 const PROJECT_ROOT = process.cwd();
 const TARGET_DIRECTORIES = ['public/trainers', 'public/floors'];
+const TARGET_INPUT_FILES = ['public/фон.png', 'public/фонмороз.png', 'public/card.png'];
 const INPUT_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp']);
+const GENERATED_STEM_PATTERN = /(?:-preview|-thumb|-placeholder)(?:-w\d+)?$|-w\d+$/i;
+
 const BASE_OUTPUT_FORMATS = [
   {
     extension: '.avif',
@@ -25,11 +28,22 @@ const BASE_OUTPUT_FORMATS = [
   },
 ];
 
-const DERIVED_VARIANTS = [
+const RESPONSIVE_VARIANTS = [
   {
-    suffix: 'preview',
-    resizeTo: 1200,
-    outputFormats: [
+    key: 'default',
+    masterWidth: null,
+    masterSuffix: '',
+    widthCandidates: [480, 768, 1024, 1280, 1536],
+    masterOutputFormats: BASE_OUTPUT_FORMATS,
+    responsiveOutputFormats: BASE_OUTPUT_FORMATS,
+    qualityOverrides: {},
+  },
+  {
+    key: 'preview',
+    masterWidth: 1200,
+    masterSuffix: 'preview',
+    widthCandidates: [320, 480, 640, 768, 960],
+    masterOutputFormats: [
       {
         extension: 'source',
         encode: (image, inputExtension) => encodeForExtension(image, inputExtension, 72),
@@ -43,11 +57,24 @@ const DERIVED_VARIANTS = [
         encode: (image) => image.webp({ quality: 64, effort: 6 }),
       },
     ],
+    responsiveOutputFormats: [
+      {
+        extension: '.avif',
+        encode: (image) => image.avif({ quality: 44, effort: 7 }),
+      },
+      {
+        extension: '.webp',
+        encode: (image) => image.webp({ quality: 60, effort: 6 }),
+      },
+    ],
+    qualityOverrides: {},
   },
   {
-    suffix: 'thumb',
-    resizeTo: 640,
-    outputFormats: [
+    key: 'thumb',
+    masterWidth: 640,
+    masterSuffix: 'thumb',
+    widthCandidates: [160, 240, 320, 480],
+    masterOutputFormats: [
       {
         extension: 'source',
         encode: (image, inputExtension) => encodeForExtension(image, inputExtension, 58),
@@ -61,6 +88,40 @@ const DERIVED_VARIANTS = [
         encode: (image) => image.webp({ quality: 52, effort: 6 }),
       },
     ],
+    responsiveOutputFormats: [
+      {
+        extension: '.avif',
+        encode: (image) => image.avif({ quality: 34, effort: 7 }),
+      },
+      {
+        extension: '.webp',
+        encode: (image) => image.webp({ quality: 46, effort: 6 }),
+      },
+    ],
+    qualityOverrides: {},
+  },
+  {
+    key: 'placeholder',
+    masterWidth: 48,
+    masterSuffix: 'placeholder',
+    widthCandidates: [],
+    masterOutputFormats: [
+      {
+        extension: 'source',
+        encode: (image, inputExtension) => encodeForExtension(image, inputExtension, 40),
+      },
+      {
+        extension: '.avif',
+        encode: (image) => image.avif({ quality: 28, effort: 7 }),
+      },
+      {
+        extension: '.webp',
+        encode: (image) => image.webp({ quality: 34, effort: 6 }),
+      },
+    ],
+    responsiveOutputFormats: [],
+    blurSigma: 0.8,
+    qualityOverrides: {},
   },
 ];
 
@@ -76,6 +137,14 @@ function encodeForExtension(image, extension, quality) {
     default:
       return image;
   }
+}
+
+function getOutputStem(assetStem, suffix) {
+  return suffix ? `${assetStem}-${suffix}` : assetStem;
+}
+
+function formatRelativePath(filePath) {
+  return path.relative(PROJECT_ROOT, filePath).split(path.sep).join('/');
 }
 
 async function collectImageFiles(directoryPath) {
@@ -96,7 +165,7 @@ async function collectImageFiles(directoryPath) {
       const extension = path.extname(entry.name).toLowerCase();
       const fileStem = entry.name.slice(0, -path.extname(entry.name).length);
 
-      if (!INPUT_EXTENSIONS.has(extension) || fileStem.endsWith('-preview') || fileStem.endsWith('-thumb')) {
+      if (!INPUT_EXTENSIONS.has(extension) || GENERATED_STEM_PATTERN.test(fileStem)) {
         return [];
       }
 
@@ -107,69 +176,132 @@ async function collectImageFiles(directoryPath) {
   return nestedFiles.flat();
 }
 
-function formatRelativePath(filePath) {
-  return path.relative(PROJECT_ROOT, filePath);
+function createPipeline(inputPath, width, blurSigma) {
+  let image = sharp(inputPath, { animated: false }).rotate();
+
+  if (typeof width === 'number') {
+    image = image.resize({
+      width,
+      height: width,
+      fit: 'inside',
+      withoutEnlargement: true,
+    });
+  }
+
+  if (typeof blurSigma === 'number') {
+    image = image.blur(blurSigma);
+  }
+
+  return image;
+}
+
+async function ensureEncodedAsset({
+  inputPath,
+  outputPath,
+  width,
+  blurSigma,
+  encode,
+  inputExtension,
+}) {
+  let created = false;
+
+  try {
+    await fs.access(outputPath);
+  } catch {
+    created = true;
+    await fs.mkdir(path.dirname(outputPath), { recursive: true });
+    await encode(createPipeline(inputPath, width, blurSigma), inputExtension).toFile(outputPath);
+  }
+
+  const metadata = await sharp(outputPath, { animated: false }).metadata();
+
+  return {
+    created,
+    path: formatRelativePath(outputPath).replace(/^public\//, ''),
+    width: metadata.width ?? 0,
+    height: metadata.height ?? 0,
+  };
 }
 
 async function ensureVariantsForFile(relativeInputPath) {
   const absoluteInputPath = path.join(PROJECT_ROOT, relativeInputPath);
   const inputExtension = path.extname(relativeInputPath).toLowerCase();
-  const assetStem = absoluteInputPath.slice(0, -inputExtension.length);
+  const normalizedInputPath = formatRelativePath(absoluteInputPath);
+  const absoluteAssetStem = absoluteInputPath.slice(0, -inputExtension.length);
+  const inputMetadata = await sharp(absoluteInputPath, { animated: false }).metadata();
+  const originalWidth = inputMetadata.width ?? 0;
   const generatedFiles = [];
 
   for (const outputFormat of BASE_OUTPUT_FORMATS) {
-    if (outputFormat.extension === inputExtension) {
-      continue;
+    const outputPath = `${absoluteAssetStem}${outputFormat.extension}`;
+    const encodedAsset = await ensureEncodedAsset({
+      inputPath: absoluteInputPath,
+      outputPath,
+      width: null,
+      encode: outputFormat.encode,
+      inputExtension,
+    });
+
+    if (encodedAsset.created && encodedAsset.path !== normalizedInputPath.replace(/^public\//, '')) {
+      generatedFiles.push(encodedAsset.path);
     }
-
-    const absoluteOutputPath = `${assetStem}${outputFormat.extension}`;
-
-    try {
-      await fs.access(absoluteOutputPath);
-      continue;
-    } catch {
-      // File does not exist yet.
-    }
-
-    const pipeline = sharp(absoluteInputPath, { animated: false }).rotate();
-    await outputFormat.encode(pipeline).toFile(absoluteOutputPath);
-    generatedFiles.push(formatRelativePath(absoluteOutputPath));
   }
 
-  for (const derivedVariant of DERIVED_VARIANTS) {
-    const resizedPipeline = sharp(absoluteInputPath, { animated: false })
-      .rotate()
-      .resize({
-        width: derivedVariant.resizeTo,
-        height: derivedVariant.resizeTo,
-        fit: 'inside',
-        withoutEnlargement: true,
-      });
+  for (const variant of RESPONSIVE_VARIANTS) {
+    const effectiveMasterWidth =
+      typeof variant.masterWidth === 'number'
+        ? Math.min(variant.masterWidth, originalWidth || variant.masterWidth)
+        : originalWidth;
+    const absoluteOutputStem = getOutputStem(absoluteAssetStem, variant.masterSuffix);
 
-    for (const outputFormat of derivedVariant.outputFormats) {
-      const outputExtension = outputFormat.extension === 'source' ? inputExtension : outputFormat.extension;
-      const absoluteOutputPath = `${assetStem}-${derivedVariant.suffix}${outputExtension}`;
+    if (variant.key !== 'default') {
+      for (const outputFormat of variant.masterOutputFormats) {
+        const outputExtension = outputFormat.extension === 'source' ? inputExtension : outputFormat.extension;
+        const outputPath = `${absoluteOutputStem}${outputExtension}`;
+        const encodedAsset = await ensureEncodedAsset({
+          inputPath: absoluteInputPath,
+          outputPath,
+          width: effectiveMasterWidth || undefined,
+          blurSigma: variant.blurSigma,
+          encode: outputFormat.encode,
+          inputExtension,
+        });
 
-      try {
-        await fs.access(absoluteOutputPath);
+        if (encodedAsset.created) {
+          generatedFiles.push(encodedAsset.path);
+        }
+      }
+    }
+
+    for (const widthCandidate of variant.widthCandidates) {
+      if (!effectiveMasterWidth || widthCandidate >= effectiveMasterWidth) {
         continue;
-      } catch {
-        // File does not exist yet.
       }
 
-      await outputFormat.encode(resizedPipeline.clone(), inputExtension).toFile(absoluteOutputPath);
-      generatedFiles.push(formatRelativePath(absoluteOutputPath));
+      for (const outputFormat of variant.responsiveOutputFormats) {
+        const outputPath = `${absoluteOutputStem}-w${widthCandidate}${outputFormat.extension}`;
+        const encodedAsset = await ensureEncodedAsset({
+          inputPath: absoluteInputPath,
+          outputPath,
+          width: widthCandidate,
+          blurSigma: variant.blurSigma,
+          encode: outputFormat.encode,
+          inputExtension,
+        });
+        if (encodedAsset.created) {
+          generatedFiles.push(encodedAsset.path);
+        }
+      }
     }
   }
-
-  return generatedFiles;
+  return [...new Set(generatedFiles)];
 }
 
 async function main() {
-  const relativeInputPaths = (
+  const discoveredFiles = (
     await Promise.all(TARGET_DIRECTORIES.map((directoryPath) => collectImageFiles(directoryPath)))
   ).flat();
-
+  const relativeInputPaths = [...new Set([...discoveredFiles, ...TARGET_INPUT_FILES])].sort();
   const generatedFiles = [];
 
   for (const relativeInputPath of relativeInputPaths) {
@@ -182,8 +314,8 @@ async function main() {
     return;
   }
 
-  console.log(`Generated ${generatedFiles.length} files:`);
-  for (const generatedFile of generatedFiles) {
+  console.log(`Generated ${generatedFiles.length} responsive files:`);
+  for (const generatedFile of [...new Set(generatedFiles)].sort()) {
     console.log(generatedFile);
   }
 }

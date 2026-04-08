@@ -32,7 +32,7 @@ const profit = [
 
 export default function Profit() {
   return (
-    <section className="py-14 relative overflow-hidden">
+    <section className="deferred-section relative overflow-hidden py-14">
       <div className="hero-glow-layer">
         <div className="hero-glow-top-right" />
         <div className="hero-glow-bottom-left" />

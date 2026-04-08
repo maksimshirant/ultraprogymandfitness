@@ -57,7 +57,7 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
     <>
       <Seo {...pageSeo.home} />
       <Hero onOpenModal={onOpenModal} />
-      <section id="home-previews" className="py-16 md:py-20 lg:py-24 relative overflow-hidden">
+      <section id="home-previews" className="deferred-section relative overflow-hidden py-16 md:py-20 lg:py-24">
         <div className="hero-glow-layer">
           <div className="hero-glow-top-right" />
           <div className="hero-glow-bottom-left" />

@@ -12,7 +12,7 @@ export default function FAQ() {
   const [openValue, setOpenValue] = useState('');
 
   return (
-    <section id="faq" className="py-14 md:py-24 relative overflow-hidden">
+    <section id="faq" className="deferred-section relative overflow-hidden py-14 md:py-24">
       <div className="hero-glow-layer">
         <div className="hero-glow-top-right" />
         <div className="hero-glow-bottom-left" />
@@ -42,7 +42,7 @@ export default function FAQ() {
                     {faq.question}
                   </span>
                   <div
-                    className={`w-8 h-8 rounded-full border border-white/20 flex items-center justify-center flex-shrink-0 transition-all ${
+                    className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-white/20 transition-[background-color,border-color,color,transform] ${
                       openValue === `faq-${index}` ? 'bg-white/10 border-[#F5B800]' : ''
                     }`}
                   >

@@ -121,7 +121,7 @@ export default function ContactsSection() {
   }, [isMapOpen]);
 
   return (
-    <section id="contacts" className="py-14 md:py-16 relative overflow-hidden">
+    <section id="contacts" className="deferred-section relative overflow-hidden py-14 md:py-16">
       <div className="hero-glow-layer">
         <div className="hero-glow-top-right" />
         <div className="hero-glow-bottom-left" />
