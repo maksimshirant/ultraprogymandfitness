@@ -32,7 +32,7 @@ export interface PublicAssetImageProps extends Omit<ImgHTMLAttributes<HTMLImageE
 
 const IMAGE_EXTENSIONS = new Set<VariantExtension>(['avif', 'webp', 'png', 'jpg', 'jpeg']);
 const BASE_URL = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
-const PUBLIC_IMAGE_FILES = Object.keys(import.meta.glob('/public/**/*'));
+const PUBLIC_IMAGE_FILES = Object.keys(import.meta.glob('/public/{trainers,floors}/**/*'));
 const MASTER_WIDTH_BY_VARIANT: Partial<Record<Exclude<AssetVariantKey, 'default'>, number>> = {
   preview: 1200,
   thumb: 640,

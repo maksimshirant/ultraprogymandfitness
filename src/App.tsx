@@ -1,6 +1,5 @@
 import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import PublicAssetImage from '@/components/PublicAssetImage';
 import Announcement from './sections/Announcement';
 import AppRoutes from '@/router/AppRoutes';
 import { syncStructuredData } from '@/seo/structuredData';
@@ -23,7 +22,25 @@ const ALLOWED_MODAL_TOPICS = new Set([
 
 const Modal = lazy(() => import('./sections/Modal'));
 
-const FROST_BACKGROUND = `${import.meta.env.BASE_URL}фонмороз.png`;
+const FROST_BACKGROUND = {
+  avif: `${import.meta.env.BASE_URL}фонмороз.avif`,
+  webp: `${import.meta.env.BASE_URL}фонмороз.webp`,
+  png: `${import.meta.env.BASE_URL}фонмороз.png`,
+  avifSrcSet: [
+    `${import.meta.env.BASE_URL}фонмороз-w480.avif 480w`,
+    `${import.meta.env.BASE_URL}фонмороз-w768.avif 768w`,
+    `${import.meta.env.BASE_URL}фонмороз-w1024.avif 1024w`,
+    `${import.meta.env.BASE_URL}фонмороз-w1280.avif 1280w`,
+    `${import.meta.env.BASE_URL}фонмороз.avif 1881w`,
+  ].join(', '),
+  webpSrcSet: [
+    `${import.meta.env.BASE_URL}фонмороз-w480.webp 480w`,
+    `${import.meta.env.BASE_URL}фонмороз-w768.webp 768w`,
+    `${import.meta.env.BASE_URL}фонмороз-w1024.webp 1024w`,
+    `${import.meta.env.BASE_URL}фонмороз-w1280.webp 1280w`,
+    `${import.meta.env.BASE_URL}фонмороз.webp 1881w`,
+  ].join(', '),
+} as const;
 
 function App() {
   const { pathname } = useLocation();
@@ -192,15 +209,26 @@ function App() {
             className="absolute inset-0 transition-opacity duration-700 ease-out"
             style={{ opacity: initialFrostOpacity }}
           >
-            <PublicAssetImage
-              src={FROST_BACKGROUND}
-              alt=""
-              aria-hidden="true"
-              loading="eager"
-              sizes="100vw"
-              pictureClassName="block h-full w-full"
-              className="h-full w-full object-cover object-center"
-            />
+            <picture className="block h-full w-full">
+              <source
+                type="image/avif"
+                srcSet={FROST_BACKGROUND.avifSrcSet}
+                sizes="100vw"
+              />
+              <source
+                type="image/webp"
+                srcSet={FROST_BACKGROUND.webpSrcSet}
+                sizes="100vw"
+              />
+              <img
+                src={FROST_BACKGROUND.png}
+                alt=""
+                aria-hidden="true"
+                loading="eager"
+                decoding="async"
+                className="h-full w-full object-cover object-center"
+              />
+            </picture>
           </div>
         ) : null}
         <div

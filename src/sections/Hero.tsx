@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight, X } from 'lucide-react';
-import PublicAssetImage from '@/components/PublicAssetImage';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 import { useViewportTier } from '@/hooks/useViewportTier';
 
@@ -9,8 +8,42 @@ interface HeroProps {
 }
 
 const HERO_ASSETS = {
-  background: `${import.meta.env.BASE_URL}фон.png`,
-  card: `${import.meta.env.BASE_URL}card.png`,
+  background: {
+    avif: `${import.meta.env.BASE_URL}фон.avif`,
+    webp: `${import.meta.env.BASE_URL}фон.webp`,
+    png: `${import.meta.env.BASE_URL}фон.png`,
+    avifSrcSet: [
+      `${import.meta.env.BASE_URL}фон-w480.avif 480w`,
+      `${import.meta.env.BASE_URL}фон-w768.avif 768w`,
+      `${import.meta.env.BASE_URL}фон-w1024.avif 1024w`,
+      `${import.meta.env.BASE_URL}фон-w1280.avif 1280w`,
+      `${import.meta.env.BASE_URL}фон.avif 1536w`,
+    ].join(', '),
+    webpSrcSet: [
+      `${import.meta.env.BASE_URL}фон-w480.webp 480w`,
+      `${import.meta.env.BASE_URL}фон-w768.webp 768w`,
+      `${import.meta.env.BASE_URL}фон-w1024.webp 1024w`,
+      `${import.meta.env.BASE_URL}фон-w1280.webp 1280w`,
+      `${import.meta.env.BASE_URL}фон.webp 1536w`,
+    ].join(', '),
+  },
+  card: {
+    avif: `${import.meta.env.BASE_URL}card.avif`,
+    webp: `${import.meta.env.BASE_URL}card.webp`,
+    png: `${import.meta.env.BASE_URL}card.png`,
+    avifSrcSet: [
+      `${import.meta.env.BASE_URL}card-w480.avif 480w`,
+      `${import.meta.env.BASE_URL}card-w768.avif 768w`,
+      `${import.meta.env.BASE_URL}card-w1024.avif 1024w`,
+      `${import.meta.env.BASE_URL}card.avif 1280w`,
+    ].join(', '),
+    webpSrcSet: [
+      `${import.meta.env.BASE_URL}card-w480.webp 480w`,
+      `${import.meta.env.BASE_URL}card-w768.webp 768w`,
+      `${import.meta.env.BASE_URL}card-w1024.webp 1024w`,
+      `${import.meta.env.BASE_URL}card.webp 1280w`,
+    ].join(', '),
+  },
   cardAlt: 'Клубная карта Ultra Pro',
 } as const;
 
@@ -57,16 +90,27 @@ export default function Hero({ onOpenModal }: HeroProps) {
   return (
     <>
       <section className="relative min-h-[100svh] flex items-center overflow-hidden gradient-bg-radial">
-        <PublicAssetImage
-          src={HERO_ASSETS.background}
-          alt=""
-          aria-hidden="true"
-          loading="eager"
-          fetchPriority="high"
-          sizes="100vw"
-          pictureClassName="hero-media-layer absolute inset-0 z-0"
-          className="h-full w-full object-cover object-center"
-        />
+        <picture className="hero-media-layer absolute inset-0 z-0">
+          <source
+            type="image/avif"
+            srcSet={HERO_ASSETS.background.avifSrcSet}
+            sizes="100vw"
+          />
+          <source
+            type="image/webp"
+            srcSet={HERO_ASSETS.background.webpSrcSet}
+            sizes="100vw"
+          />
+          <img
+            src={HERO_ASSETS.background.png}
+            alt=""
+            aria-hidden="true"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            className="h-full w-full object-cover object-center"
+          />
+        </picture>
         <div className="hero-overlay-layer absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(5,6,10,0.78)_0%,rgba(6,7,11,0.68)_42%,rgba(5,6,10,0.8)_100%)]" />
 
         <div className="relative z-30 max-w-7xl mx-auto px-4 pt-24 pb-14 sm:px-6 md:pt-28 md:pb-16 md:max-lg:px-8 md:max-lg:pt-28 md:max-lg:pb-16 lg:px-8 lg:pt-32 lg:pb-16">
@@ -103,15 +147,27 @@ export default function Hero({ onOpenModal }: HeroProps) {
                     aria-label={HERO_TEXT.openCardInfoAria}
                     className="group relative inline-flex w-[148%] max-w-none justify-center rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] md:max-lg:w-[170%]"
                   >
-                    <PublicAssetImage
-                      src={HERO_ASSETS.card}
-                      alt={HERO_ASSETS.cardAlt}
-                      loading="lazy"
-                      sizes="(min-width: 1024px) 54vw, 100vw"
-                      showPlaceholder={false}
-                      pictureClassName="block w-full"
-                      className="w-full h-auto object-contain drop-shadow-[0_18px_48px_rgba(0,0,0,0.55)]"
-                    />
+                    <picture className="block w-full">
+                      <source
+                        type="image/avif"
+                        srcSet={HERO_ASSETS.card.avifSrcSet}
+                        sizes="(min-width: 1024px) 54vw, 100vw"
+                      />
+                      <source
+                        type="image/webp"
+                        srcSet={HERO_ASSETS.card.webpSrcSet}
+                        sizes="(min-width: 1024px) 54vw, 100vw"
+                      />
+                      <img
+                        src={HERO_ASSETS.card.png}
+                        alt={HERO_ASSETS.cardAlt}
+                        width={1280}
+                        height={853}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-auto object-contain drop-shadow-[0_18px_48px_rgba(0,0,0,0.55)]"
+                      />
+                    </picture>
                   </button>
                 </div>
               </div>
@@ -144,15 +200,27 @@ export default function Hero({ onOpenModal }: HeroProps) {
               {HERO_TEXT.cardInfoTitle}
             </BalancedHeading>
             <div className="flex justify-center py-1 mt-2">
-              <PublicAssetImage
-                src={HERO_ASSETS.card}
-                alt={HERO_ASSETS.cardAlt}
-                loading="lazy"
-                sizes="(max-width: 639px) 70vw, 300px"
-                showPlaceholder={false}
-                pictureClassName="block w-full max-w-[260px] sm:max-w-[300px]"
-                className="w-full h-auto object-contain"
-              />
+              <picture className="block w-full max-w-[260px] sm:max-w-[300px]">
+                <source
+                  type="image/avif"
+                  srcSet={HERO_ASSETS.card.avifSrcSet}
+                  sizes="(max-width: 639px) 70vw, 300px"
+                />
+                <source
+                  type="image/webp"
+                  srcSet={HERO_ASSETS.card.webpSrcSet}
+                  sizes="(max-width: 639px) 70vw, 300px"
+                />
+                <img
+                  src={HERO_ASSETS.card.png}
+                  alt={HERO_ASSETS.cardAlt}
+                  width={1280}
+                  height={853}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-auto object-contain"
+                />
+              </picture>
             </div>
             <p className="text-sm text-gray-300 leading-relaxed">
               {HERO_TEXT.cardInfoDescription}
