@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Star, X } from 'lucide-react';
 import { SiVk, SiTelegram } from 'react-icons/si';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
-import { cn } from '@/lib/utils';
+import { useViewportTier } from '@/hooks/useViewportTier';
 
 const CONTACTS_ASSETS = {
   maxIcon: 'https://logo-teka.com/wp-content/uploads/2025/07/max-messenger-sign-logo.svg',
@@ -95,6 +95,10 @@ const CONTACTS_MAP_SRC = `https://yandex.ru/map-widget/v1/?mode=search&text=${en
 
 export default function ContactsSection() {
   const [isMapOpen, setIsMapOpen] = useState(false);
+  const viewportTier = useViewportTier();
+  const isMobileViewport = viewportTier === 'mobile';
+  const visibleReviewsCount = viewportTier === 'desktop' ? 6 : viewportTier === 'tablet' ? 4 : 2;
+  const visibleReviews = CONTACTS_REVIEWS.slice(0, visibleReviewsCount);
 
   useEffect(() => {
     if (!isMapOpen) {
@@ -140,26 +144,24 @@ export default function ContactsSection() {
               </BalancedHeading>
             </div>
 
-            <a
-              href={CONTACTS_SOCIALS.reviews}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden h-12 items-center justify-center rounded-full border border-white/15 bg-white/5 px-5 text-sm font-semibold text-white transition-colors md:inline-flex lg:hover:border-white/25 lg:hover:bg-white/10"
-              aria-label={CONTACTS_TEXT.reviewsAria}
-            >
-              {CONTACTS_TEXT.reviewsCta}
-            </a>
+            {!isMobileViewport ? (
+              <a
+                href={CONTACTS_SOCIALS.reviews}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-white/15 bg-white/5 px-5 text-sm font-semibold text-white transition-colors lg:hover:border-white/25 lg:hover:bg-white/10"
+                aria-label={CONTACTS_TEXT.reviewsAria}
+              >
+                {CONTACTS_TEXT.reviewsCta}
+              </a>
+            ) : null}
           </div>
 
           <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {CONTACTS_REVIEWS.map((review, index) => (
+            {visibleReviews.map((review) => (
               <article
                 key={`${review.author}-${review.date}`}
-                className={cn(
-                  'rounded-[24px] border border-white/10 bg-white/[0.03] p-6',
-                  index >= 2 && 'hidden md:block',
-                  index >= 4 && 'md:hidden lg:block'
-                )}
+                className="rounded-[24px] border border-white/10 bg-white/[0.03] p-6"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
@@ -183,17 +185,19 @@ export default function ContactsSection() {
             ))}
           </div>
 
-          <div className="mt-6 flex justify-center md:hidden">
-            <a
-              href={CONTACTS_SOCIALS.reviews}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-12 items-center justify-center rounded-full border border-white/15 bg-white/5 px-5 text-sm font-semibold text-white transition-colors"
-              aria-label={CONTACTS_TEXT.reviewsAria}
-            >
-              {CONTACTS_TEXT.reviewsCta}
-            </a>
-          </div>
+          {isMobileViewport ? (
+            <div className="mt-6 flex justify-center">
+              <a
+                href={CONTACTS_SOCIALS.reviews}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-white/15 bg-white/5 px-5 text-sm font-semibold text-white transition-colors"
+                aria-label={CONTACTS_TEXT.reviewsAria}
+              >
+                {CONTACTS_TEXT.reviewsCta}
+              </a>
+            </div>
+          ) : null}
         </div>
 
         <div className="glass-card mt-8 border border-white/10 p-6 md:mt-10 md:p-8">

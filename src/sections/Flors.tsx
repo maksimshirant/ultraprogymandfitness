@@ -4,6 +4,7 @@ import PublicAssetImage from '@/components/PublicAssetImage';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 import { useSwipeNavigation } from '@/hooks/useSwipeNavigation';
+import { useViewportTier } from '@/hooks/useViewportTier';
 import { cn } from '@/lib/utils';
 
 type FloorId = 'floor1' | 'floor2';
@@ -122,6 +123,8 @@ export default function Flors() {
   const [viewerSlide, setViewerSlide] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [isMobileExpanded, setIsMobileExpanded] = useState(false);
+  const viewportTier = useViewportTier();
+  const isMobileViewport = viewportTier === 'mobile';
 
   const activeFloor = useMemo(
     () => floorConfigs.find((floor) => floor.id === activeFloorId) ?? defaultFloor,
@@ -192,7 +195,7 @@ export default function Flors() {
                 )}
               >
                 <span className="block font-semibold">{floor.label}</span>
-                <span className="mt-1 hidden text-xs text-gray-400 md:block">{floor.subtitle}</span>
+                {!isMobileViewport ? <span className="mt-1 block text-xs text-gray-400">{floor.subtitle}</span> : null}
               </button>
             );
           })}
@@ -257,6 +260,10 @@ export default function Flors() {
                           src={slide}
                           alt={`${activeZone.title} — фото ${index + 1}`}
                           loading="lazy"
+                          fetchPriority="low"
+                          variantSuffix="thumb"
+                          deferUntilVisible
+                          observerRootMargin="120px 0px"
                           pictureClassName="block h-full w-full"
                           className="h-full w-full object-cover object-center"
                         />
@@ -265,13 +272,13 @@ export default function Flors() {
                   ))}
                 </div>
 
-                {!isMobileExpanded && totalSlides > 2 ? (
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a0c11] via-[#0a0c11]/88 to-transparent md:hidden" />
+                {isMobileViewport && !isMobileExpanded && totalSlides > 2 ? (
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a0c11] via-[#0a0c11]/88 to-transparent" />
                 ) : null}
               </div>
 
-              {totalSlides > 2 ? (
-                <div className="mt-4 flex justify-center md:hidden">
+              {isMobileViewport && totalSlides > 2 ? (
+                <div className="mt-4 flex justify-center">
                   <button
                     type="button"
                     onClick={() => setIsMobileExpanded((prev) => !prev)}

@@ -42,7 +42,7 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
           observer.disconnect();
         }
       },
-      { rootMargin: '600px 0px' }
+      { rootMargin: '140px 0px' }
     );
 
     const anchor = florsAnchorRef.current;

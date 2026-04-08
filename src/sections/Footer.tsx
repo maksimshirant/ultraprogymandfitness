@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect, useState, type MouseEvent } from 'react';
 import { X } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { useViewportTier } from '@/hooks/useViewportTier';
 import { cn } from '@/lib/utils';
 import { siteConfig } from '@/seo/siteConfig';
 
@@ -47,6 +48,8 @@ export default function Footer() {
   const { pathname } = useLocation();
   const [isPolicyOpen, setIsPolicyOpen] = useState(false);
   const [isOfferOpen, setIsOfferOpen] = useState(false);
+  const viewportTier = useViewportTier();
+  const isMobileViewport = viewportTier === 'mobile';
 
   const handleHomeNavigation = (event: MouseEvent<HTMLAnchorElement>) => {
     if (pathname !== '/') {
@@ -142,26 +145,28 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="hidden text-center md:col-span-2 md:block md:border-t md:border-white/5 md:pt-6 lg:order-3 lg:col-span-1 lg:border-t-0 lg:pt-0 lg:justify-self-end lg:text-left">
-            <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 md:gap-x-8 lg:flex-col lg:items-start lg:justify-start lg:gap-4">
-              {FOOTER_NAV_ITEMS.map((item) => (
-                <NavLink
-                  key={item.label}
-                  to={item.to}
-                  end={item.to === '/'}
-                  onClick={item.to === '/' ? handleHomeNavigation : undefined}
-                  className={({ isActive }) =>
-                    cn(
-                      'relative whitespace-nowrap text-lg md:text-base lg:text-sm',
-                      isActive ? 'text-white' : 'text-gray-300 md:hover:text-white'
-                    )
-                  }
-                >
-                  {item.label}
-                </NavLink>
-              ))}
-            </nav>
-          </div>
+          {!isMobileViewport ? (
+            <div className="text-center md:col-span-2 md:border-t md:border-white/5 md:pt-6 lg:order-3 lg:col-span-1 lg:border-t-0 lg:pt-0 lg:justify-self-end lg:text-left">
+              <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 md:gap-x-8 lg:flex-col lg:items-start lg:justify-start lg:gap-4">
+                {FOOTER_NAV_ITEMS.map((item) => (
+                  <NavLink
+                    key={item.label}
+                    to={item.to}
+                    end={item.to === '/'}
+                    onClick={item.to === '/' ? handleHomeNavigation : undefined}
+                    className={({ isActive }) =>
+                      cn(
+                        'relative whitespace-nowrap text-lg md:text-base lg:text-sm',
+                        isActive ? 'text-white' : 'text-gray-300 md:hover:text-white'
+                      )
+                    }
+                  >
+                    {item.label}
+                  </NavLink>
+                ))}
+              </nav>
+            </div>
+          ) : null}
         </div>
       </div>
 

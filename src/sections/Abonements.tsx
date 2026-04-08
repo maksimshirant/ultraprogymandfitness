@@ -14,6 +14,7 @@ import {
 import type { LucideIcon } from 'lucide-react';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 import { useSwipeNavigation } from '@/hooks/useSwipeNavigation';
+import { useViewportTier } from '@/hooks/useViewportTier';
 import { cn } from '@/lib/utils';
 
 const ABONEMENTS_TEXT = {
@@ -135,6 +136,8 @@ interface AbonementsProps {
 export default function Abonements({ onOpenModal }: AbonementsProps) {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [expandedAbonementId, setExpandedAbonementId] = useState<number | null>(null);
+  const viewportTier = useViewportTier();
+  const isMobileViewport = viewportTier === 'mobile';
 
   const nextSlide = () => {
     setExpandedAbonementId(null);
@@ -189,21 +192,25 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
         </div>
 
         <div className="relative w-full">
-          <button
-            onClick={prevSlide}
-            className="abonement-control-motion absolute left-0 top-[21rem] z-30 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-[#111217]/90 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-colors hover:border-white/35 hover:bg-[#181a22] md:flex"
-            aria-label={ABONEMENTS_TEXT.prevAria}
-          >
-            <ChevronLeft className="w-6 h-6 text-white" />
-          </button>
+          {!isMobileViewport ? (
+            <>
+              <button
+                onClick={prevSlide}
+                className="abonement-control-motion absolute left-0 top-[21rem] z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-[#111217]/90 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-colors hover:border-white/35 hover:bg-[#181a22]"
+                aria-label={ABONEMENTS_TEXT.prevAria}
+              >
+                <ChevronLeft className="w-6 h-6 text-white" />
+              </button>
 
-          <button
-            onClick={nextSlide}
-            className="abonement-control-motion absolute right-0 top-[21rem] z-30 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-[#111217]/90 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-colors hover:border-white/35 hover:bg-[#181a22] md:flex"
-            aria-label={ABONEMENTS_TEXT.nextAria}
-          >
-            <ChevronRight className="w-6 h-6 text-white" />
-          </button>
+              <button
+                onClick={nextSlide}
+                className="abonement-control-motion absolute right-0 top-[21rem] z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-[#111217]/90 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-colors hover:border-white/35 hover:bg-[#181a22]"
+                aria-label={ABONEMENTS_TEXT.nextAria}
+              >
+                <ChevronRight className="w-6 h-6 text-white" />
+              </button>
+            </>
+          ) : null}
 
           <div
             className={cn(
@@ -329,13 +336,15 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
           </div>
 
           <div className="mt-[0.88125rem] md:mt-[2.0125rem] flex items-center justify-center gap-6 md:gap-3">
-            <button
-              onClick={prevSlide}
-              className="abonement-control-motion flex h-12 w-12 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10 md:hidden"
-              aria-label={ABONEMENTS_TEXT.prevAria}
-            >
-              <ChevronLeft className="w-6 h-6 text-gray-400" />
-            </button>
+            {isMobileViewport ? (
+              <button
+                onClick={prevSlide}
+                className="abonement-control-motion flex h-12 w-12 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10"
+                aria-label={ABONEMENTS_TEXT.prevAria}
+              >
+                <ChevronLeft className="w-6 h-6 text-gray-400" />
+              </button>
+            ) : null}
 
             <div className="flex gap-3 flex-wrap justify-center">
               {abonements.map((_, index) => (
@@ -352,13 +361,15 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
               ))}
             </div>
 
-            <button
-              onClick={nextSlide}
-              className="abonement-control-motion flex h-12 w-12 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10 md:hidden"
-              aria-label={ABONEMENTS_TEXT.nextAria}
-            >
-              <ChevronRight className="w-6 h-6 text-gray-400" />
-            </button>
+            {isMobileViewport ? (
+              <button
+                onClick={nextSlide}
+                className="abonement-control-motion flex h-12 w-12 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10"
+                aria-label={ABONEMENTS_TEXT.nextAria}
+              >
+                <ChevronRight className="w-6 h-6 text-gray-400" />
+              </button>
+            ) : null}
           </div>
         </div>
 

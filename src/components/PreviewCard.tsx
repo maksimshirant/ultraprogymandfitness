@@ -58,6 +58,9 @@ export default function PreviewCard({
             src={imageSrc}
             alt={title}
             loading="lazy"
+            fetchPriority="low"
+            variantSuffix="preview"
+            deferUntilVisible
             pictureClassName="absolute inset-0 block h-full w-full"
             className="h-full w-full object-cover object-center"
           />

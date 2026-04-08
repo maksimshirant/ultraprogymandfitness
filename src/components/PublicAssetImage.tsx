@@ -1,4 +1,4 @@
-import type { ImgHTMLAttributes } from 'react';
+import { useEffect, useRef, useState, type ImgHTMLAttributes } from 'react';
 
 type VariantExtension = 'avif' | 'webp' | 'png' | 'jpg' | 'jpeg';
 
@@ -7,6 +7,9 @@ type VariantRecord = Partial<Record<VariantExtension, string>>;
 export interface PublicAssetImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'src' | 'srcSet'> {
   src: string;
   pictureClassName?: string;
+  variantSuffix?: string;
+  deferUntilVisible?: boolean;
+  observerRootMargin?: string;
 }
 
 const IMAGE_EXTENSIONS = new Set<VariantExtension>(['avif', 'webp', 'png', 'jpg', 'jpeg']);
@@ -49,6 +52,7 @@ function normalizeAssetSrc(src: string) {
 
   return {
     assetStem: relativePath.slice(0, extensionSeparatorIndex),
+    extension: relativePath.slice(extensionSeparatorIndex + 1).toLowerCase() as VariantExtension,
     relativePath,
     search: parsedUrl.search,
   };
@@ -58,26 +62,36 @@ function toPublicAssetUrl(relativePath: string, search: string) {
   return `${BASE_URL}${relativePath}${search}`;
 }
 
-function getVariantSources(src: string) {
+function getResolvedAssetPaths(src: string, variantSuffix?: string) {
   const normalizedSrc = normalizeAssetSrc(src);
 
   if (!normalizedSrc) {
-    return [];
+    return null;
   }
 
-  const availableVariants = PUBLIC_ASSET_VARIANTS.get(normalizedSrc.assetStem);
+  const preferredAssetStem = variantSuffix ? `${normalizedSrc.assetStem}-${variantSuffix}` : normalizedSrc.assetStem;
+  const preferredVariants = PUBLIC_ASSET_VARIANTS.get(preferredAssetStem);
+  const baseVariants = PUBLIC_ASSET_VARIANTS.get(normalizedSrc.assetStem);
+  const activeAssetStem = preferredVariants ? preferredAssetStem : normalizedSrc.assetStem;
+  const activeVariants = preferredVariants ?? baseVariants;
 
-  if (!availableVariants) {
-    return [];
+  if (!activeVariants) {
+    return {
+      fallbackSrc: src,
+      sources: [],
+    };
   }
 
-  return [
+  const fallbackRelativePath =
+    activeVariants[normalizedSrc.extension] ?? activeVariants.webp ?? activeVariants.jpg ?? activeVariants.jpeg ?? normalizedSrc.relativePath;
+
+  const sources = [
     { extension: 'avif' as const, type: 'image/avif' },
     { extension: 'webp' as const, type: 'image/webp' },
   ].flatMap(({ extension, type }) => {
-    const variantPath = availableVariants[extension];
+    const variantPath = activeVariants[extension];
 
-    if (!variantPath || variantPath === normalizedSrc.relativePath) {
+    if (!variantPath) {
       return [];
     }
 
@@ -88,6 +102,12 @@ function getVariantSources(src: string) {
       },
     ];
   });
+
+  return {
+    fallbackSrc: toPublicAssetUrl(fallbackRelativePath, normalizedSrc.search),
+    sources,
+    activeAssetStem,
+  };
 }
 
 export default function PublicAssetImage({
@@ -97,16 +117,64 @@ export default function PublicAssetImage({
   className,
   decoding = 'async',
   sizes,
+  variantSuffix,
+  deferUntilVisible = false,
+  observerRootMargin = '180px 0px',
   ...imgProps
 }: PublicAssetImageProps) {
-  const variantSources = getVariantSources(src);
+  const [isVisible, setIsVisible] = useState(!deferUntilVisible);
+  const placeholderRef = useRef<HTMLSpanElement | null>(null);
+  const resolvedAssetPaths = getResolvedAssetPaths(src, variantSuffix);
+
+  useEffect(() => {
+    if (!deferUntilVisible || isVisible) {
+      return;
+    }
+
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      const frameId = requestAnimationFrame(() => {
+        setIsVisible(true);
+      });
+
+      return () => cancelAnimationFrame(frameId);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: observerRootMargin }
+    );
+
+    const placeholder = placeholderRef.current;
+
+    if (placeholder) {
+      observer.observe(placeholder);
+    }
+
+    return () => observer.disconnect();
+  }, [deferUntilVisible, isVisible, observerRootMargin]);
+
+  if (!isVisible) {
+    return <span ref={placeholderRef} aria-hidden="true" className={pictureClassName} />;
+  }
 
   return (
     <picture className={pictureClassName}>
-      {variantSources.map((source) => (
+      {resolvedAssetPaths?.sources.map((source) => (
         <source key={source.type} srcSet={source.srcSet} type={source.type} sizes={sizes} />
       ))}
-      <img {...imgProps} src={src} alt={alt} sizes={sizes} decoding={decoding} className={className} />
+      <img
+        {...imgProps}
+        src={resolvedAssetPaths?.fallbackSrc ?? src}
+        alt={alt}
+        sizes={sizes}
+        decoding={decoding}
+        className={className}
+      />
     </picture>
   );
 }

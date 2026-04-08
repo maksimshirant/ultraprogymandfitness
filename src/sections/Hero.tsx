@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight, X } from 'lucide-react';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
+import { useViewportTier } from '@/hooks/useViewportTier';
 
 interface HeroProps {
   onOpenModal: () => void;
@@ -37,6 +38,8 @@ const HERO_TEXT = {
 
 export default function Hero({ onOpenModal }: HeroProps) {
   const [isCardInfoOpen, setIsCardInfoOpen] = useState(false);
+  const viewportTier = useViewportTier();
+  const isDesktopViewport = viewportTier === 'desktop';
 
   useEffect(() => {
     if (!isCardInfoOpen) {
@@ -101,30 +104,32 @@ export default function Hero({ onOpenModal }: HeroProps) {
                 </button>
               </div>
             </div>
-            <div className="relative hidden pb-10 lg:block lg:pb-14">
-              <div className="relative z-10 float-animation flex justify-center">
-                <button
-                  type="button"
-                  onClick={() => setIsCardInfoOpen(true)}
-                  aria-label={HERO_TEXT.openCardInfoAria}
-                  className="group relative inline-flex w-[148%] max-w-none justify-center rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] md:max-lg:w-[170%]"
-                >
-                  <picture>
-                    <source srcSet={HERO_ASSETS.card.avif} type="image/avif" />
-                    <source srcSet={HERO_ASSETS.card.webp} type="image/webp" />
-                    <img
-                      src={HERO_ASSETS.card.png}
-                      width={1280}
-                      height={853}
-                      alt={HERO_ASSETS.cardAlt}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-auto object-contain drop-shadow-[0_18px_48px_rgba(0,0,0,0.55)]"
-                    />
-                  </picture>
-                </button>
+            {isDesktopViewport ? (
+              <div className="relative pb-10 lg:pb-14">
+                <div className="relative z-10 float-animation flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setIsCardInfoOpen(true)}
+                    aria-label={HERO_TEXT.openCardInfoAria}
+                    className="group relative inline-flex w-[148%] max-w-none justify-center rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] md:max-lg:w-[170%]"
+                  >
+                    <picture>
+                      <source srcSet={HERO_ASSETS.card.avif} type="image/avif" />
+                      <source srcSet={HERO_ASSETS.card.webp} type="image/webp" />
+                      <img
+                        src={HERO_ASSETS.card.png}
+                        width={1280}
+                        height={853}
+                        alt={HERO_ASSETS.cardAlt}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-auto object-contain drop-shadow-[0_18px_48px_rgba(0,0,0,0.55)]"
+                      />
+                    </picture>
+                  </button>
+                </div>
               </div>
-            </div>
+            ) : null}
           </div>
         </div>
       </section>
