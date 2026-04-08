@@ -1,4 +1,4 @@
-import{j as e}from"./vendor-_OBlFfL9.js";import{B as o}from"./BalancedHeading-ClS98HST.js";import{c as t}from"./index-BbHrvc_n.js";import"./vendor-ui-BVHTRVtr.js";const a="Политика конфиденциальности",n=`Настоящая Политика конфиденциальности персональных данных (далее — Политика конфиденциальности) действует в отношении всей информации, которую сайт «УЛЬТРА ПРО ФИТНЕСС», расположенный на доменном имени ultraprofitness.ru
+import{j as e}from"./vendor-_OBlFfL9.js";import{B as o}from"./BalancedHeading-xf3kMQj5.js";import{c as t}from"./index-B5UIUF9t.js";import"./vendor-ui-BVHTRVtr.js";const a="Политика конфиденциальности",n=`Настоящая Политика конфиденциальности персональных данных (далее — Политика конфиденциальности) действует в отношении всей информации, которую сайт «УЛЬТРА ПРО ФИТНЕСС», расположенный на доменном имени ultraprofitness.ru
 может получить о Пользователе во время использования сайта, программ и продуктов.
 
 

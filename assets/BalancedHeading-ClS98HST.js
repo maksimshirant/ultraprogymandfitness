@@ -1,1 +1,0 @@
-import{j as s}from"./vendor-_OBlFfL9.js";import{o as r}from"./vendor-ui-BVHTRVtr.js";import{c as e}from"./index-BbHrvc_n.js";function m({as:a,className:n,children:c}){return s.jsx(a,{className:e("heading-balanced",n),children:s.jsx(r,{children:c})})}function d({className:a,children:n}){return s.jsx("span",{className:e("heading-accent",a),children:n})}export{m as B,d as H};
