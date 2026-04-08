@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import Hero from '@/sections/Hero';
 import { SectionFallback } from '@/components/SectionFallback';
 import PreviewCard from '@/components/PreviewCard';
@@ -15,9 +15,43 @@ interface HomePageProps {
 }
 
 export default function HomePage({ onOpenModal }: HomePageProps) {
+  const [shouldRenderFlors, setShouldRenderFlors] = useState(false);
+  const florsAnchorRef = useRef<HTMLDivElement>(null);
+
   const schedulePreviewImage = `${import.meta.env.BASE_URL}floors/floor2/group-workouts/4.jpeg`;
   const trainersPreviewImage = `${import.meta.env.BASE_URL}floors/floor2/crossfit-zone/5.jpg`;
   const membershipsPreviewImage = `${import.meta.env.BASE_URL}floors/floor1/RESEPTION/1.webp`;
+
+  useEffect(() => {
+    if (shouldRenderFlors) {
+      return;
+    }
+
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      const frameId = requestAnimationFrame(() => {
+        setShouldRenderFlors(true);
+      });
+
+      return () => cancelAnimationFrame(frameId);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldRenderFlors(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '600px 0px' }
+    );
+
+    const anchor = florsAnchorRef.current;
+    if (anchor) {
+      observer.observe(anchor);
+    }
+
+    return () => observer.disconnect();
+  }, [shouldRenderFlors]);
 
   return (
     <>
@@ -64,10 +98,14 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
         </div>
       </section>
 
-      <div className="mt-12 md:mt-16 lg:mt-20">
-        <Suspense fallback={<SectionFallback />}>
-          <Flors />
-        </Suspense>
+      <div ref={florsAnchorRef} className="mt-12 md:mt-16 lg:mt-20">
+        {shouldRenderFlors ? (
+          <Suspense fallback={<SectionFallback />}>
+            <Flors />
+          </Suspense>
+        ) : (
+          <SectionFallback />
+        )}
       </div>
 
       <Suspense fallback={<SectionFallback />}>

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import PublicAssetImage from '@/components/PublicAssetImage';
 import { BalancedHeading } from '@/components/typography/BalancedHeading';
 import { cn } from '@/lib/utils';
 
@@ -53,12 +54,12 @@ export default function PreviewCard({
             reverse ? 'md:order-1 md:border-r' : 'md:border-l',
           )}
         >
-          <img
+          <PublicAssetImage
             src={imageSrc}
             alt={title}
             loading="lazy"
-            decoding="async"
-            className="absolute inset-0 h-full w-full object-cover object-center"
+            pictureClassName="absolute inset-0 block h-full w-full"
+            className="h-full w-full object-cover object-center"
           />
           <div
             className={cn(

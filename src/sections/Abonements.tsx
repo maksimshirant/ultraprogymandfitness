@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
@@ -136,16 +136,19 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [expandedAbonementId, setExpandedAbonementId] = useState<number | null>(null);
 
-  useEffect(() => {
-    setExpandedAbonementId(null);
-  }, [currentIndex]);
-
   const nextSlide = () => {
+    setExpandedAbonementId(null);
     setCurrentIndex((prev) => (prev + 1) % abonements.length);
   };
 
   const prevSlide = () => {
+    setExpandedAbonementId(null);
     setCurrentIndex((prev) => (prev - 1 + abonements.length) % abonements.length);
+  };
+
+  const selectAbonementIndex = (index: number) => {
+    setCurrentIndex(index);
+    setExpandedAbonementId(null);
   };
 
   const getSlideOffset = (index: number) => {
@@ -338,7 +341,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
               {abonements.map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => setCurrentIndex(index)}
+                  onClick={() => selectAbonementIndex(index)}
                   className={`abonement-control-motion h-1 rounded-full transition-all ${
                     index === currentIndex
                       ? 'w-16 bg-gradient-to-r from-[#F5B800] to-[#D89B00]'

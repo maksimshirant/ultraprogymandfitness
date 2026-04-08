@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import PublicAssetImage from '@/components/PublicAssetImage';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 import { useSwipeNavigation } from '@/hooks/useSwipeNavigation';
@@ -252,11 +253,11 @@ export default function Flors() {
                       aria-label={`Открыть фото ${index + 1} зоны ${activeZone.title}`}
                     >
                       <div className="aspect-square">
-                        <img
+                        <PublicAssetImage
                           src={slide}
                           alt={`${activeZone.title} — фото ${index + 1}`}
                           loading="lazy"
-                          decoding="async"
+                          pictureClassName="block h-full w-full"
                           className="h-full w-full object-cover object-center"
                         />
                       </div>
@@ -307,12 +308,12 @@ export default function Flors() {
 
           <div className="relative h-screen">
             <div className="h-full overflow-hidden bg-black/50" {...viewerSwipeHandlers}>
-              <img
+              <PublicAssetImage
                 key={`${activeZone.id}-viewer-${currentViewerSlide}`}
                 src={activeZone.slides[currentViewerSlide]}
                 alt={`${activeZone.title} — фото ${currentViewerSlide + 1}`}
                 loading="lazy"
-                decoding="async"
+                pictureClassName="block h-full w-full"
                 className="h-full w-full object-contain"
               />
             </div>

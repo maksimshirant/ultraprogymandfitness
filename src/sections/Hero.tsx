@@ -17,11 +17,6 @@ const HERO_ASSETS = {
     webp: `${import.meta.env.BASE_URL}card.webp`,
     png: `${import.meta.env.BASE_URL}card.png`,
   },
-  cardMobile: {
-    avif: `${import.meta.env.BASE_URL}card-mobile.avif`,
-    webp: `${import.meta.env.BASE_URL}card-mobile.webp`,
-    png: `${import.meta.env.BASE_URL}card-mobile.png`,
-  },
   cardAlt: 'Клубная карта Ultra Pro',
 } as const;
 
@@ -115,25 +110,14 @@ export default function Hero({ onOpenModal }: HeroProps) {
                   className="group relative inline-flex w-[148%] max-w-none justify-center rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] md:max-lg:w-[170%]"
                 >
                   <picture>
-                    <source
-                      srcSet={`${HERO_ASSETS.cardMobile.avif} 720w, ${HERO_ASSETS.card.avif} 1280w`}
-                      sizes="(max-width: 768px) 88vw, (max-width: 1024px) 96vw, (max-width: 1280px) 52vw, 760px"
-                      type="image/avif"
-                    />
-                    <source
-                      srcSet={`${HERO_ASSETS.cardMobile.webp} 720w, ${HERO_ASSETS.card.webp} 1280w`}
-                      sizes="(max-width: 768px) 88vw, (max-width: 1024px) 96vw, (max-width: 1280px) 52vw, 760px"
-                      type="image/webp"
-                    />
+                    <source srcSet={HERO_ASSETS.card.avif} type="image/avif" />
+                    <source srcSet={HERO_ASSETS.card.webp} type="image/webp" />
                     <img
                       src={HERO_ASSETS.card.png}
-                      srcSet={`${HERO_ASSETS.cardMobile.png} 720w, ${HERO_ASSETS.card.png} 1280w`}
-                      sizes="(max-width: 768px) 88vw, (max-width: 1024px) 96vw, (max-width: 1280px) 52vw, 760px"
                       width={1280}
                       height={853}
                       alt={HERO_ASSETS.cardAlt}
-                      loading="eager"
-                      fetchPriority="high"
+                      loading="lazy"
                       decoding="async"
                       className="w-full h-auto object-contain drop-shadow-[0_18px_48px_rgba(0,0,0,0.55)]"
                     />
@@ -170,20 +154,10 @@ export default function Hero({ onOpenModal }: HeroProps) {
             </BalancedHeading>
             <div className="flex justify-center py-1 mt-2">
               <picture>
-                <source
-                  srcSet={`${HERO_ASSETS.cardMobile.avif} 720w, ${HERO_ASSETS.card.avif} 1280w`}
-                  sizes="(max-width: 640px) 70vw, 300px"
-                  type="image/avif"
-                />
-                <source
-                  srcSet={`${HERO_ASSETS.cardMobile.webp} 720w, ${HERO_ASSETS.card.webp} 1280w`}
-                  sizes="(max-width: 640px) 70vw, 300px"
-                  type="image/webp"
-                />
+                <source srcSet={HERO_ASSETS.card.avif} type="image/avif" />
+                <source srcSet={HERO_ASSETS.card.webp} type="image/webp" />
                 <img
                   src={HERO_ASSETS.card.png}
-                  srcSet={`${HERO_ASSETS.cardMobile.png} 720w, ${HERO_ASSETS.card.png} 1280w`}
-                  sizes="(max-width: 640px) 70vw, 300px"
                   width={1280}
                   height={853}
                   alt={HERO_ASSETS.cardAlt}

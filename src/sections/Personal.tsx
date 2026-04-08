@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Check, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import PublicAssetImage from '@/components/PublicAssetImage';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 import { useSwipeNavigation } from '@/hooks/useSwipeNavigation';
 import { cn } from '@/lib/utils';
@@ -229,21 +230,25 @@ export default function Personal({ onOpenModal }: PersonalProps) {
     [activeCategory]
   );
 
-  useEffect(() => {
-    setExpandedTrainerId(null);
-  }, [activeTrainerIndex]);
-
-  useEffect(() => {
-    setActiveTrainerIndex(0);
-    setExpandedTrainerId(null);
-  }, [activeCategory]);
-
   const nextSlide = () => {
+    setExpandedTrainerId(null);
     setActiveTrainerIndex((prev) => (prev + 1) % filteredTrainers.length);
   };
 
   const prevSlide = () => {
+    setExpandedTrainerId(null);
     setActiveTrainerIndex((prev) => (prev - 1 + filteredTrainers.length) % filteredTrainers.length);
+  };
+
+  const selectTrainerCategory = (category: TrainerCategory) => {
+    setActiveCategory(category);
+    setActiveTrainerIndex(0);
+    setExpandedTrainerId(null);
+  };
+
+  const selectTrainerIndex = (index: number) => {
+    setActiveTrainerIndex(index);
+    setExpandedTrainerId(null);
   };
 
   const swipeHandlers = useSwipeNavigation({
@@ -276,15 +281,12 @@ export default function Personal({ onOpenModal }: PersonalProps) {
       >
         <div className="relative aspect-[4/5] overflow-hidden border-b border-white/10 bg-black/40">
           {trainer.image ? (
-            <img
+            <PublicAssetImage
               src={trainer.image}
               alt={trainer.name}
               loading="lazy"
-              decoding="async"
-              className={cn(
-                'absolute inset-0 block h-full w-full object-cover object-center',
-                trainer.imageClassName
-              )}
+              pictureClassName="absolute inset-0 block h-full w-full"
+              className={cn('h-full w-full object-cover object-center', trainer.imageClassName)}
             />
           ) : (
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#1A1A27] via-[#111117] to-[#0A0A0F]">
@@ -365,7 +367,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
               <button
                 key={category.id}
                 type="button"
-                onClick={() => setActiveCategory(category.id)}
+                  onClick={() => selectTrainerCategory(category.id)}
                 aria-label={`${PERSONAL_TEXT.selectCategoryAria} ${category.label}`}
                 aria-pressed={isActive}
                 className={cn(
@@ -459,7 +461,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
             {filteredTrainers.map((trainer, index) => (
               <button
                 key={trainer.id}
-                onClick={() => setActiveTrainerIndex(index)}
+                onClick={() => selectTrainerIndex(index)}
                 className={`trainer-control-motion h-1 rounded-full transition-all ${
                   index === activeTrainerIndex
                     ? 'w-16 bg-gradient-to-r from-[#F5B800] to-[#D89B00]'
@@ -495,12 +497,12 @@ export default function Personal({ onOpenModal }: PersonalProps) {
                 >
                   <div className="relative h-full w-full max-w-[24rem] overflow-hidden rounded-l-[26px] rounded-r-none border border-white/10 bg-black/40 aspect-[4/5] sm:rounded-l-[28px] lg:rounded-l-[30px]">
                     {trainer.image ? (
-                      <img
+                      <PublicAssetImage
                         src={trainer.image}
                         alt={trainer.name}
                         loading="lazy"
-                        decoding="async"
-                        className={cn('absolute inset-0 block h-full w-full object-cover object-center', trainer.imageClassName)}
+                        pictureClassName="absolute inset-0 block h-full w-full"
+                        className={cn('h-full w-full object-cover object-center', trainer.imageClassName)}
                       />
                     ) : (
                       <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#1A1A27] via-[#111117] to-[#0A0A0F]">
