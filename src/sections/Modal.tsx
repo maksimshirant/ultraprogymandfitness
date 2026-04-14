@@ -9,11 +9,6 @@ const PrivacyPolicyContent = lazy(async () => {
   return { default: module.PrivacyPolicyContent };
 });
 
-const OfferAgreementContent = lazy(async () => {
-  const module = await import('@/components/OfferAgreementContent');
-  return { default: module.OfferAgreementContent };
-});
-
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -43,7 +38,6 @@ const MODAL_TEXT = {
   messagePlaceholder: 'Дополнительная информация',
   privacyPrefix: 'Я соглашаюсь с',
   privacyLink: 'Политикой конфиденциальности',
-  offerLink: 'Договором офферты',
   submitDefault: 'Отправить',
   submitLoading: 'Отправляем заявку...',
   success: 'Форма отправлена, с вами свяжутся.',
@@ -63,7 +57,6 @@ const MODAL_TEXT = {
   mailLabelMessage: 'Сообщение',
   closeModalAria: 'Закрыть',
   closePolicyAria: 'Закрыть политику',
-  closeOfferAria: 'Закрыть договор офферты',
 } as const;
 const TOPIC_OPTIONS = [
   { value: 'sub_1m', label: 'Хочу приобрести абонемент: 1 месяц' },
@@ -148,7 +141,6 @@ export default function Modal({
   );
   const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
-  const [isOfferOpen, setIsOfferOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [resultNotice, setResultNotice] = useState<ResultNotice | null>(null);
@@ -548,14 +540,6 @@ export default function Modal({
                       >
                         {MODAL_TEXT.privacyLink}
                       </button>
-                      {' и '}
-                      <button
-                        type="button"
-                        onClick={() => setIsOfferOpen(true)}
-                        className="text-white underline underline-offset-4 lg:hover:text-gray-200 transition-colors"
-                      >
-                        {MODAL_TEXT.offerLink}
-                      </button>
                     </span>
                   </label>
 
@@ -612,37 +596,6 @@ export default function Modal({
             <div className="document-modal-scroll min-h-0 flex-1 overflow-y-auto pr-2 pt-8 sm:pr-3 sm:pt-10">
               <Suspense fallback={<p className="text-sm text-gray-300">{DOCUMENT_FALLBACK_TEXT}</p>}>
                 <PrivacyPolicyContent
-                  titleClassName="text-xl font-semibold text-white pr-10 mb-4"
-                  textClassName="text-sm text-gray-300"
-                />
-              </Suspense>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {isOfferOpen && (
-        <div className="fixed inset-0 z-[111] flex items-center justify-center overflow-hidden p-4 sm:p-6">
-          <div
-            className="document-modal-overlay absolute inset-0 bg-black/80 backdrop-blur-md"
-            onClick={() => setIsOfferOpen(false)}
-          />
-
-          <div
-            className="glass-card modal-surface relative mx-auto my-auto flex w-full max-w-2xl flex-col overflow-hidden rounded-[30px] p-6 max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] sm:p-8"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <button
-              onClick={() => setIsOfferOpen(false)}
-              className="absolute top-4 right-4 z-10 p-2 text-gray-400 transition-colors lg:hover:text-white"
-              aria-label={MODAL_TEXT.closeOfferAria}
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="document-modal-scroll min-h-0 flex-1 overflow-y-auto pr-2 pt-8 sm:pr-3 sm:pt-10">
-              <Suspense fallback={<p className="text-sm text-gray-300">{DOCUMENT_FALLBACK_TEXT}</p>}>
-                <OfferAgreementContent
                   titleClassName="text-xl font-semibold text-white pr-10 mb-4"
                   textClassName="text-sm text-gray-300"
                 />
