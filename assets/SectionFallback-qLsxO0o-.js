@@ -1,1 +1,0 @@
-import{j as r}from"./vendor-_OBlFfL9.js";import{L as s}from"./index-BFQKNIjb.js";function i(){return r.jsx("section",{className:"py-14",children:r.jsx("div",{className:"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",children:r.jsx("div",{className:"rounded-2xl border border-white/10 bg-white/[0.03]",children:r.jsx(s,{})})})})}export{i as S};
