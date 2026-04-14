@@ -14,7 +14,7 @@ const TIMETABLE_TEXT = {
 } as const;
 
 const TIMETABLE_ASSETS = {
-  image: `${import.meta.env.BASE_URL}фонмороз.png`,
+  image: `${import.meta.env.BASE_URL}frost-bg.png`,
 } as const;
 
 export default function Timetable() {

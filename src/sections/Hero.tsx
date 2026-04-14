@@ -9,22 +9,22 @@ interface HeroProps {
 
 const HERO_ASSETS = {
   background: {
-    avif: `${import.meta.env.BASE_URL}фон.avif`,
-    webp: `${import.meta.env.BASE_URL}фон.webp`,
-    png: `${import.meta.env.BASE_URL}фон.png`,
+    avif: `${import.meta.env.BASE_URL}hero-bg.avif`,
+    webp: `${import.meta.env.BASE_URL}hero-bg.webp`,
+    png: `${import.meta.env.BASE_URL}hero-bg.png`,
     avifSrcSet: [
-      `${import.meta.env.BASE_URL}фон-w480.avif 480w`,
-      `${import.meta.env.BASE_URL}фон-w768.avif 768w`,
-      `${import.meta.env.BASE_URL}фон-w1024.avif 1024w`,
-      `${import.meta.env.BASE_URL}фон-w1280.avif 1280w`,
-      `${import.meta.env.BASE_URL}фон.avif 1536w`,
+      `${import.meta.env.BASE_URL}hero-bg-w480.avif 480w`,
+      `${import.meta.env.BASE_URL}hero-bg-w768.avif 768w`,
+      `${import.meta.env.BASE_URL}hero-bg-w1024.avif 1024w`,
+      `${import.meta.env.BASE_URL}hero-bg-w1280.avif 1280w`,
+      `${import.meta.env.BASE_URL}hero-bg.avif 1536w`,
     ].join(', '),
     webpSrcSet: [
-      `${import.meta.env.BASE_URL}фон-w480.webp 480w`,
-      `${import.meta.env.BASE_URL}фон-w768.webp 768w`,
-      `${import.meta.env.BASE_URL}фон-w1024.webp 1024w`,
-      `${import.meta.env.BASE_URL}фон-w1280.webp 1280w`,
-      `${import.meta.env.BASE_URL}фон.webp 1536w`,
+      `${import.meta.env.BASE_URL}hero-bg-w480.webp 480w`,
+      `${import.meta.env.BASE_URL}hero-bg-w768.webp 768w`,
+      `${import.meta.env.BASE_URL}hero-bg-w1024.webp 1024w`,
+      `${import.meta.env.BASE_URL}hero-bg-w1280.webp 1280w`,
+      `${import.meta.env.BASE_URL}hero-bg.webp 1536w`,
     ].join(', '),
   },
   card: {

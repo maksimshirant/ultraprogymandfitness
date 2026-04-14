@@ -23,22 +23,22 @@ const ALLOWED_MODAL_TOPICS = new Set([
 const Modal = lazy(() => import('./sections/Modal'));
 
 const FROST_BACKGROUND = {
-  avif: `${import.meta.env.BASE_URL}фонмороз.avif`,
-  webp: `${import.meta.env.BASE_URL}фонмороз.webp`,
-  png: `${import.meta.env.BASE_URL}фонмороз.png`,
+  avif: `${import.meta.env.BASE_URL}frost-bg.avif`,
+  webp: `${import.meta.env.BASE_URL}frost-bg.webp`,
+  png: `${import.meta.env.BASE_URL}frost-bg.png`,
   avifSrcSet: [
-    `${import.meta.env.BASE_URL}фонмороз-w480.avif 480w`,
-    `${import.meta.env.BASE_URL}фонмороз-w768.avif 768w`,
-    `${import.meta.env.BASE_URL}фонмороз-w1024.avif 1024w`,
-    `${import.meta.env.BASE_URL}фонмороз-w1280.avif 1280w`,
-    `${import.meta.env.BASE_URL}фонмороз.avif 1881w`,
+    `${import.meta.env.BASE_URL}frost-bg-w480.avif 480w`,
+    `${import.meta.env.BASE_URL}frost-bg-w768.avif 768w`,
+    `${import.meta.env.BASE_URL}frost-bg-w1024.avif 1024w`,
+    `${import.meta.env.BASE_URL}frost-bg-w1280.avif 1280w`,
+    `${import.meta.env.BASE_URL}frost-bg.avif 1881w`,
   ].join(', '),
   webpSrcSet: [
-    `${import.meta.env.BASE_URL}фонмороз-w480.webp 480w`,
-    `${import.meta.env.BASE_URL}фонмороз-w768.webp 768w`,
-    `${import.meta.env.BASE_URL}фонмороз-w1024.webp 1024w`,
-    `${import.meta.env.BASE_URL}фонмороз-w1280.webp 1280w`,
-    `${import.meta.env.BASE_URL}фонмороз.webp 1881w`,
+    `${import.meta.env.BASE_URL}frost-bg-w480.webp 480w`,
+    `${import.meta.env.BASE_URL}frost-bg-w768.webp 768w`,
+    `${import.meta.env.BASE_URL}frost-bg-w1024.webp 1024w`,
+    `${import.meta.env.BASE_URL}frost-bg-w1280.webp 1280w`,
+    `${import.meta.env.BASE_URL}frost-bg.webp 1881w`,
   ].join(', '),
 } as const;
 
