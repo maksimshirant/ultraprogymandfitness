@@ -123,32 +123,12 @@ const buildMessageText = (payload, event) => {
 
   const trainer = normalizeText(payload.trainer);
   const question = normalizeText(payload.question);
-  const pageUrl = normalizeText(payload.pageUrl);
-  const submittedAt = normalizeText(payload.submittedAt);
-  const source = normalizeText(payload.source);
-  const origin = normalizeText(event.headers?.origin || event.headers?.Origin);
 
   if (trainer) {
     lines.push(`Тренер: ${trainer}`);
   }
 
   lines.push(`Сообщение: ${question || 'Заявка без дополнительного комментария'}`);
-
-  if (pageUrl) {
-    lines.push(`Страница: ${pageUrl}`);
-  }
-
-  if (origin) {
-    lines.push(`Origin: ${origin}`);
-  }
-
-  if (submittedAt) {
-    lines.push(`Отправлено: ${submittedAt}`);
-  }
-
-  if (source) {
-    lines.push(`Источник: ${source}`);
-  }
 
   return lines.join('\n');
 };
