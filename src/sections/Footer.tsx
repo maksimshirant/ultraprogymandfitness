@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useState, type MouseEvent } from 'react';
-import { X } from 'lucide-react';
+import { LegalDocumentModal } from '@/components/LegalDocumentModal';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useViewportTier } from '@/hooks/useViewportTier';
 import { cn } from '@/lib/utils';
@@ -8,6 +8,11 @@ import { siteConfig } from '@/seo/siteConfig';
 const PrivacyPolicyContent = lazy(async () => {
   const module = await import('@/components/PrivacyPolicyContent');
   return { default: module.PrivacyPolicyContent };
+});
+
+const PersonalDataConsentContent = lazy(async () => {
+  const module = await import('@/components/PersonalDataConsentContent');
+  return { default: module.PersonalDataConsentContent };
 });
 
 const FOOTER_ASSETS = {
@@ -28,18 +33,20 @@ const FOOTER_TEXT = {
   scheduleTitle: 'График работы',
   phoneTitle: 'Телефон',
   emailTitle: 'E-mail',
-  policyButton: 'Политика конфиденциальности',
-  closePolicyAria: 'Закрыть политику конфиденциальности',
+  policyButton: 'Политика обработки персональных данных',
+  consentButton: 'Согласие на обработку персональных данных',
+  closeDocumentAria: 'Закрыть документ',
   inn: 'ИНН 343521265164',
   ogrnip: 'ОГРНИП 326344300004743',
   email: 'ultrapro.fitness34@yandex.ru',
 } as const;
 
 const FOOTER_DOCUMENT_FALLBACK = 'Загрузка документа...';
+type FooterDocument = 'privacy' | 'consent' | null;
 
 export default function Footer() {
   const { pathname } = useLocation();
-  const [isPolicyOpen, setIsPolicyOpen] = useState(false);
+  const [activeDocument, setActiveDocument] = useState<FooterDocument>(null);
   const viewportTier = useViewportTier();
   const isMobileViewport = viewportTier === 'mobile';
 
@@ -53,13 +60,13 @@ export default function Footer() {
   };
 
   useEffect(() => {
-    if (!isPolicyOpen) {
+    if (!activeDocument) {
       return;
     }
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        setIsPolicyOpen(false);
+        setActiveDocument(null);
       }
     };
 
@@ -70,7 +77,7 @@ export default function Footer() {
       document.removeEventListener('keydown', onKeyDown);
       document.body.style.overflow = '';
     };
-  }, [isPolicyOpen]);
+  }, [activeDocument]);
 
   return (
     <footer className="py-10 border-t border-white/5">
@@ -94,10 +101,17 @@ export default function Footer() {
             <div className="flex flex-col items-center gap-3 pt-2 md:items-start">
               <button
                 type="button"
-                onClick={() => setIsPolicyOpen(true)}
+                onClick={() => setActiveDocument('privacy')}
                 className="text-sm text-gray-400 transition-colors lg:hover:text-white"
               >
                 {FOOTER_TEXT.policyButton}
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveDocument('consent')}
+                className="text-sm text-gray-400 transition-colors lg:hover:text-white"
+              >
+                {FOOTER_TEXT.consentButton}
               </button>
             </div>
           </div>
@@ -154,33 +168,17 @@ export default function Footer() {
         </div>
       </div>
 
-      {isPolicyOpen && (
-        <div
-          className="fixed inset-0 z-[130] flex items-center justify-center overflow-hidden p-4 sm:p-6"
-          onClick={() => setIsPolicyOpen(false)}
-        >
-          <div className="document-modal-overlay absolute inset-0 bg-[#05070c]/82 backdrop-blur-md" />
-          <div
-            className="glass-card modal-surface relative mx-auto my-auto flex w-full max-w-3xl flex-col overflow-hidden rounded-[30px] border border-white/10 p-6 shadow-[0_28px_120px_rgba(0,0,0,0.45)] max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] sm:p-8"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={() => setIsPolicyOpen(false)}
-              className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-gray-300 transition-colors lg:hover:bg-white/10 lg:hover:text-white"
-              aria-label={FOOTER_TEXT.closePolicyAria}
-            >
-              <X className="h-5 w-5" />
-            </button>
-
-            <div className="document-modal-scroll min-h-0 flex-1 overflow-y-auto pr-2 pt-8 sm:pr-3 sm:pt-10">
-              <Suspense fallback={<p className="text-sm text-gray-300">{FOOTER_DOCUMENT_FALLBACK}</p>}>
-                <PrivacyPolicyContent />
-              </Suspense>
-            </div>
-          </div>
-        </div>
-      )}
+      <LegalDocumentModal
+        isOpen={activeDocument !== null}
+        onClose={() => setActiveDocument(null)}
+        closeAriaLabel={FOOTER_TEXT.closeDocumentAria}
+        zIndexClassName="z-[130]"
+      >
+        <Suspense fallback={<p className="text-sm text-gray-300">{FOOTER_DOCUMENT_FALLBACK}</p>}>
+          {activeDocument === 'privacy' ? <PrivacyPolicyContent /> : null}
+          {activeDocument === 'consent' ? <PersonalDataConsentContent /> : null}
+        </Suspense>
+      </LegalDocumentModal>
     </footer>
   );
 }

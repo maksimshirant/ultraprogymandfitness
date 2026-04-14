@@ -1,5 +1,6 @@
 import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { CircleCheck, Loader2, TriangleAlert, X } from 'lucide-react';
+import { LegalDocumentModal } from '@/components/LegalDocumentModal';
 import { sendForm } from '@/api/forms';
 import { BalancedHeading } from '@/components/typography/BalancedHeading';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -7,6 +8,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 const PrivacyPolicyContent = lazy(async () => {
   const module = await import('@/components/PrivacyPolicyContent');
   return { default: module.PrivacyPolicyContent };
+});
+
+const PersonalDataConsentContent = lazy(async () => {
+  const module = await import('@/components/PersonalDataConsentContent');
+  return { default: module.PersonalDataConsentContent };
 });
 
 interface ModalProps {
@@ -36,15 +42,17 @@ const MODAL_TEXT = {
   trainerPlaceholder: 'Выберите тренера',
   trainerAriaLabel: 'Выберите тренера',
   messagePlaceholder: 'Дополнительная информация',
-  privacyPrefix: 'Я соглашаюсь с',
-  privacyLink: 'Политикой конфиденциальности',
+  consentPrefix: 'Нажимая на кнопку "Отправить", я даю',
+  consentLink: 'согласие на обработку персональных данных',
+  consentMiddle: 'и принимаю',
+  privacyLink: 'Политику обработки персональных данных',
   submitDefault: 'Отправить',
   submitLoading: 'Отправляем заявку...',
   success: 'Форма отправлена, с вами свяжутся.',
   successHint: 'Окно закроется автоматически.',
   returnToForm: 'Вернуться к форме',
   errorFallback: 'Произошла ошибка, попробуйте позже.',
-  errorPrivacy: 'Подтвердите согласие с политикой конфиденциальности.',
+  errorPrivacy: 'Подтвердите согласие на обработку персональных данных.',
   errorPhone: 'Введите номер в формате +7 (999) 999-99-99.',
   errorTopic: 'Выберите тему обращения.',
   errorTrainer: 'Выберите тренера.',
@@ -56,7 +64,7 @@ const MODAL_TEXT = {
   mailLabelTrainer: 'Тренер',
   mailLabelMessage: 'Сообщение',
   closeModalAria: 'Закрыть',
-  closePolicyAria: 'Закрыть политику',
+  closeDocumentAria: 'Закрыть документ',
 } as const;
 const TOPIC_OPTIONS = [
   { value: 'sub_1m', label: 'Хочу приобрести абонемент: 1 месяц' },
@@ -116,6 +124,7 @@ type ResultNotice = {
   type: 'success' | 'error';
   text: string;
 };
+type ActiveDocument = 'privacy' | 'consent' | null;
 
 const DOCUMENT_FALLBACK_TEXT = 'Загрузка документа...';
 const createInitialFormData = (topic = '', trainer = '') => ({
@@ -139,8 +148,8 @@ export default function Modal({
   const [formData, setFormData] = useState(() =>
     createInitialFormData(prefilledTopic, prefilledTopic === 'personal' ? prefilledTrainer : '')
   );
-  const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false);
-  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
+  const [isConsentAccepted, setIsConsentAccepted] = useState(false);
+  const [activeDocument, setActiveDocument] = useState<ActiveDocument>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [resultNotice, setResultNotice] = useState<ResultNotice | null>(null);
@@ -156,7 +165,7 @@ export default function Modal({
 
   const resetForm = (clearResult = true) => {
     setFormData(createInitialFormData());
-    setIsPrivacyAccepted(false);
+    setIsConsentAccepted(false);
     setFormError(null);
     if (clearResult) setResultNotice(null);
   };
@@ -166,13 +175,14 @@ export default function Modal({
     setIsSubmitting(false);
     setFormError(null);
     setResultNotice(null);
+    setActiveDocument(null);
     onClose();
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!isPrivacyAccepted) {
+    if (!isConsentAccepted) {
       setFormError(MODAL_TEXT.errorPrivacy);
       return;
     }
@@ -268,7 +278,8 @@ export default function Modal({
     setIsSubmitting(false);
     setFormError(null);
     setResultNotice(null);
-    setIsPrivacyAccepted(false);
+    setIsConsentAccepted(false);
+    setActiveDocument(null);
     setFormData(createInitialFormData(prefilledTopic, prefilledTopic === 'personal' ? prefilledTrainer : ''));
   }, [isOpen, prefilledTopic, prefilledTrainer]);
 
@@ -524,22 +535,31 @@ export default function Modal({
                   <label className={`flex items-start gap-3 text-xs text-gray-300 sm:text-sm ${isPersonalTopic ? '' : ''}`}>
                     <input
                       type="checkbox"
-                      checked={isPrivacyAccepted}
+                      checked={isConsentAccepted}
                       onChange={(e) => {
-                        setIsPrivacyAccepted(e.target.checked);
+                        setIsConsentAccepted(e.target.checked);
                         if (formError) setFormError(null);
                       }}
                       className="mt-1 h-4 w-4 rounded border-white/30 bg-transparent accent-[#F5B800]"
                     />
                     <span>
-                      {MODAL_TEXT.privacyPrefix}{' '}
+                      {MODAL_TEXT.consentPrefix}{' '}
                       <button
                         type="button"
-                        onClick={() => setIsPrivacyOpen(true)}
-                        className="text-white underline underline-offset-4 lg:hover:text-gray-200 transition-colors"
+                        onClick={() => setActiveDocument('consent')}
+                        className="text-white underline underline-offset-4 transition-colors lg:hover:text-gray-200"
+                      >
+                        {MODAL_TEXT.consentLink}
+                      </button>{' '}
+                      {MODAL_TEXT.consentMiddle}{' '}
+                      <button
+                        type="button"
+                        onClick={() => setActiveDocument('privacy')}
+                        className="text-white underline underline-offset-4 transition-colors lg:hover:text-gray-200"
                       >
                         {MODAL_TEXT.privacyLink}
                       </button>
+                      .
                     </span>
                   </label>
 
@@ -574,36 +594,27 @@ export default function Modal({
         </div>
       </div>
 
-      {isPrivacyOpen && (
-        <div className="fixed inset-0 z-[110] flex items-center justify-center overflow-hidden p-4 sm:p-6">
-          <div
-            className="document-modal-overlay absolute inset-0 bg-black/80 backdrop-blur-md"
-            onClick={() => setIsPrivacyOpen(false)}
-          />
-
-          <div
-            className="glass-card modal-surface relative mx-auto my-auto flex w-full max-w-2xl flex-col overflow-hidden rounded-[30px] p-6 max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] sm:p-8"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <button
-              onClick={() => setIsPrivacyOpen(false)}
-              className="absolute top-4 right-4 z-10 p-2 text-gray-400 transition-colors lg:hover:text-white"
-              aria-label={MODAL_TEXT.closePolicyAria}
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="document-modal-scroll min-h-0 flex-1 overflow-y-auto pr-2 pt-8 sm:pr-3 sm:pt-10">
-              <Suspense fallback={<p className="text-sm text-gray-300">{DOCUMENT_FALLBACK_TEXT}</p>}>
-                <PrivacyPolicyContent
-                  titleClassName="text-xl font-semibold text-white pr-10 mb-4"
-                  textClassName="text-sm text-gray-300"
-                />
-              </Suspense>
-            </div>
-          </div>
-        </div>
-      )}
+      <LegalDocumentModal
+        isOpen={activeDocument !== null}
+        onClose={() => setActiveDocument(null)}
+        closeAriaLabel={MODAL_TEXT.closeDocumentAria}
+        maxWidthClassName="max-w-2xl"
+      >
+        <Suspense fallback={<p className="text-sm text-gray-300">{DOCUMENT_FALLBACK_TEXT}</p>}>
+          {activeDocument === 'privacy' ? (
+            <PrivacyPolicyContent
+              titleClassName="mb-4 pr-10 text-xl font-semibold text-white"
+              textClassName="text-sm text-gray-300"
+            />
+          ) : null}
+          {activeDocument === 'consent' ? (
+            <PersonalDataConsentContent
+              titleClassName="mb-4 pr-10 text-xl font-semibold text-white"
+              textClassName="text-sm text-gray-300"
+            />
+          ) : null}
+        </Suspense>
+      </LegalDocumentModal>
     </>
   );
 }
