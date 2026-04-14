@@ -216,8 +216,8 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
             className={cn(
               'relative overflow-hidden transition-[height] duration-300 ease-out',
               expandedAbonementId === null
-                ? 'h-[620px] sm:h-[610px] md:h-[590px]'
-                : 'h-[820px] sm:h-[800px] md:h-[760px]'
+                ? 'h-[620px] sm:h-[610px] md:h-[620px] lg:h-[660px] 2xl:h-[720px]'
+                : 'h-[820px] sm:h-[800px] md:h-[800px] lg:h-[860px] 2xl:h-[920px]'
             )}
             {...swipeHandlers}
           >
@@ -240,9 +240,9 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
                           ? 'z-10 translate-x-[22%] scale-92 opacity-35'
                           : 'z-0 -translate-x-1/2 scale-90 opacity-0 pointer-events-none'
                   }`}
-                >
+                  >
                   <div
-                    className={`glass-card p-5 md:p-6 flex flex-col transition-[height] duration-300 ${
+                    className={`glass-card h-full p-5 md:p-6 flex flex-col transition-[height] duration-300 ${
                       isActive
                         ? 'abonement-card-active border border-[#F5B800]/30'
                         : 'border border-white/5'
@@ -325,7 +325,8 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
                     <button
                       onClick={() => onOpenModal(abonement.topicValue)}
                       disabled={!isActive}
-                      className="btn-primary text-white w-full mt-4 disabled:opacity-55 disabled:cursor-not-allowed disabled:pointer-events-none"
+                      className="btn-primary text-white w-full mt-auto disabled:opacity-55 disabled:cursor-not-allowed disabled:pointer-events-none"
+                      style={{ marginTop: hasHiddenModes ? '1.5rem' : '1rem' }}
                     >
                       {ABONEMENTS_TEXT.cta}
                     </button>

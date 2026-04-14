@@ -308,7 +308,7 @@ export default function Modal({
 
   return (
     <>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto p-2 sm:p-6">
+      <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto p-2 sm:items-center sm:p-6">
         <div
           className="document-modal-overlay absolute inset-0 bg-[#05070c]/82 backdrop-blur-md"
           onClick={resultNotice ? undefined : handleModalClose}
@@ -321,7 +321,7 @@ export default function Modal({
             }`}
           >
             {isAnnouncementMode && announcement ? (
-              <>
+              <div className="modal-scroll min-h-0 overflow-y-auto pr-1 sm:pr-2">
                 <button
                   onClick={handleModalClose}
                   className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center text-gray-300 transition-colors lg:hover:text-white sm:top-4 sm:right-4"
@@ -353,7 +353,7 @@ export default function Modal({
                     {announcement.closeButtonLabel}
                   </button>
                 </div>
-              </>
+              </div>
             ) : resultNotice ? (
               <div className="flex h-[min(70vh,560px)] min-h-[320px] sm:min-h-[420px] w-full items-center justify-center px-8 py-10 text-center">
                 <div className="max-w-[22rem]">
@@ -383,7 +383,7 @@ export default function Modal({
                 </div>
               </div>
             ) : (
-              <>
+              <div className="modal-scroll min-h-0 overflow-y-auto pr-1 sm:pr-2">
                 <button
                   onClick={handleModalClose}
                   className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center text-gray-300 transition-colors lg:hover:text-white sm:top-4 sm:right-4"
@@ -588,7 +588,7 @@ export default function Modal({
                     )}
                   </button>
                 </form>
-              </>
+              </div>
             )}
           </div>
         </div>
