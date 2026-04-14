@@ -56,8 +56,6 @@ const MODAL_TEXT = {
   errorTrainer: 'Выберите тренера.',
   phoneTitle: 'Формат: +7 (999) 999-99-99',
   messageFallback: 'Заявка без дополнительного комментария',
-  mailSubject: 'Новая заявка с сайта Ultra Pro Gym & Fitness',
-  mailFromName: 'Ultra Pro Gym & Fitness',
   mailLabelName: 'Имя',
   mailLabelPhone: 'Телефон',
   mailLabelTopic: 'Тема',
@@ -207,29 +205,33 @@ export default function Modal({
     setResultNotice(null);
 
     try {
-      const payload = new FormData();
       const selectedTopic =
         TOPIC_OPTIONS.find((topic) => topic.value === formData.topic)?.label ?? formData.topic;
       const selectedTrainer =
         TRAINER_OPTIONS.find((trainer) => trainer.value === formData.trainer)?.label ?? formData.trainer;
+      const questionText = formData.question.trim();
       const messageText = [
         `${MODAL_TEXT.mailLabelName}: ${formData.name.trim()}`,
         `${MODAL_TEXT.mailLabelPhone}: ${formData.phone.trim()}`,
         `${MODAL_TEXT.mailLabelTopic}: ${selectedTopic}`,
         ...(selectedTrainer ? [`${MODAL_TEXT.mailLabelTrainer}: ${selectedTrainer}`] : []),
-        `${MODAL_TEXT.mailLabelMessage}: ${formData.question.trim() || MODAL_TEXT.messageFallback}`,
+        `${MODAL_TEXT.mailLabelMessage}: ${questionText || MODAL_TEXT.messageFallback}`,
       ].join('\n');
 
-      payload.append('name', formData.name.trim());
-      payload.append('phone', formData.phone.trim());
-      payload.append('topic', selectedTopic);
-      payload.append('trainer', selectedTrainer);
-      payload.append('message', messageText);
-      payload.append('subject', MODAL_TEXT.mailSubject);
-      payload.append('from_name', MODAL_TEXT.mailFromName);
-      payload.append('botcheck', '');
-
-      const result = await sendForm(payload);
+      const result = await sendForm({
+        name: formData.name.trim(),
+        phone: formData.phone.trim(),
+        topic: selectedTopic,
+        topicValue: formData.topic,
+        trainer: selectedTrainer || undefined,
+        trainerValue: formData.trainer || undefined,
+        question: questionText,
+        message: messageText,
+        consentToPrivacy: true,
+        pageUrl: window.location.href,
+        submittedAt: new Date().toISOString(),
+        source: 'site-modal',
+      });
 
       if (!result.ok) {
         setResultNotice({

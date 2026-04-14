@@ -1,8 +1,20 @@
-const DEFAULT_ENDPOINT = 'https://api.web3forms.com/submit';
+const resolveEndpoint = () =>
+  import.meta.env.VITE_CONTACT_FORM_ENDPOINT || import.meta.env.VITE_FORMS_ENDPOINT;
 
-const resolveEndpoint = () => import.meta.env.VITE_FORMS_ENDPOINT || DEFAULT_ENDPOINT;
-
-const resolveKey = () => import.meta.env.VITE_WEB3FORMS_KEY;
+export type ContactFormPayload = {
+  name: string;
+  phone: string;
+  topic: string;
+  topicValue: string;
+  trainer?: string;
+  trainerValue?: string;
+  question?: string;
+  message: string;
+  consentToPrivacy: boolean;
+  pageUrl?: string;
+  submittedAt: string;
+  source: string;
+};
 
 type SendFormResult = {
   ok: boolean;
@@ -12,45 +24,61 @@ type SendFormResult = {
   message?: string;
 };
 
-export const sendForm = async (formData: FormData): Promise<SendFormResult> => {
-  const accessKey = resolveKey();
+const extractResponseData = async (response: Response) => {
+  const contentType = response.headers.get('content-type') ?? '';
 
-  if (!accessKey) {
+  if (contentType.includes('application/json')) {
+    try {
+      return (await response.json()) as Record<string, unknown>;
+    } catch {
+      return {};
+    }
+  }
+
+  try {
+    const text = await response.text();
+    return text ? ({ message: text } as Record<string, unknown>) : {};
+  } catch {
+    return {};
+  }
+};
+
+export const sendForm = async (payload: ContactFormPayload): Promise<SendFormResult> => {
+  const endpoint = resolveEndpoint();
+
+  if (!endpoint) {
     return {
       ok: false,
-      error: 'missing_key',
-      message: 'VITE_WEB3FORMS_KEY не найден в .env (перезапустите dev-сервер)',
+      error: 'missing_endpoint',
+      message: 'VITE_CONTACT_FORM_ENDPOINT не найден в .env (перезапустите dev-сервер)',
     };
   }
 
-  if (!formData.has('access_key')) {
-    formData.append('access_key', accessKey);
-  }
-
-  const endpoint = resolveEndpoint();
-
   const response = await fetch(endpoint, {
     method: 'POST',
-    body: formData,
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify(payload),
   });
 
-  let data: Record<string, unknown> = {};
-  try {
-    data = (await response.json()) as Record<string, unknown>;
-  } catch {
-    data = {};
-  }
+  const data = await extractResponseData(response);
 
-  const success = response.ok && (data.success === true || data.ok === true);
+  const success =
+    response.ok &&
+    (data.success === true || data.ok === true || Object.keys(data).length === 0);
+
+  const message =
+    (data?.message as string | undefined) ??
+    (data?.error as string | undefined) ??
+    (success ? undefined : `HTTP ${response.status}`);
 
   return {
     ok: success,
     response,
     data,
-    error: success
-      ? undefined
-      : ((data?.message as string | undefined) ??
-          (data?.error as string | undefined) ??
-          `HTTP ${response.status}`),
+    message,
+    error: success ? undefined : message,
   };
 };

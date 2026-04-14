@@ -32,7 +32,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_WEB3FORMS_KEY: ${{ secrets.VITE_WEB3FORMS_KEY }}
+          VITE_CONTACT_FORM_ENDPOINT: ${{ vars.VITE_CONTACT_FORM_ENDPOINT || secrets.VITE_CONTACT_FORM_ENDPOINT }}
 
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
