@@ -12,8 +12,11 @@ try {
 }
 
 const PROJECT_ROOT = process.cwd();
-const TARGET_DIRECTORIES = ['public/trainers', 'public/floors'];
-const TARGET_INPUT_FILES = ['public/card.png'];
+const CONTENT_SOURCE_MAPPINGS = [
+  { inputDir: 'content/trainers', outputDir: 'public/trainers' },
+  { inputDir: 'content/floors', outputDir: 'public/floors' },
+];
+const TARGET_INPUT_FILES = [{ inputPath: 'public/card.png', outputPath: 'public/card.png' }];
 const INPUT_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp']);
 const GENERATED_STEM_PATTERN = /(?:-preview|-thumb|-placeholder)(?:-w\d+)?$|-w\d+$/i;
 
@@ -149,7 +152,17 @@ function formatRelativePath(filePath) {
 
 async function collectImageFiles(directoryPath) {
   const absoluteDirectoryPath = path.join(PROJECT_ROOT, directoryPath);
-  const directoryEntries = await fs.readdir(absoluteDirectoryPath, { withFileTypes: true });
+  let directoryEntries;
+
+  try {
+    directoryEntries = await fs.readdir(absoluteDirectoryPath, { withFileTypes: true });
+  } catch (error) {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
+      return [];
+    }
+
+    throw error;
+  }
   const nestedFiles = await Promise.all(
     directoryEntries.map(async (entry) => {
       const entryRelativePath = path.join(directoryPath, entry.name);
@@ -174,6 +187,27 @@ async function collectImageFiles(directoryPath) {
   );
 
   return nestedFiles.flat();
+}
+
+async function ensureOriginalAsset(inputPath, outputPath, inputExtension) {
+  if (inputPath === outputPath) {
+    const metadata = await sharp(outputPath, { animated: false }).metadata();
+
+    return {
+      created: false,
+      path: formatRelativePath(outputPath).replace(/^public\//, ''),
+      width: metadata.width ?? 0,
+      height: metadata.height ?? 0,
+    };
+  }
+
+  return ensureEncodedAsset({
+    inputPath,
+    outputPath,
+    width: null,
+    encode: (image) => encodeForExtension(image, inputExtension, 86),
+    inputExtension,
+  });
 }
 
 function createPipeline(inputPath, width, blurSigma) {
@@ -203,15 +237,32 @@ async function ensureEncodedAsset({
   encode,
   inputExtension,
 }) {
+  const inputStats = await fs.stat(inputPath);
   let created = false;
 
   try {
-    await fs.access(outputPath);
+    const outputStats = await fs.stat(outputPath);
+
+    if (outputStats.mtimeMs >= inputStats.mtimeMs) {
+      const metadata = await sharp(outputPath, { animated: false }).metadata();
+
+      return {
+        created: false,
+        path: formatRelativePath(outputPath).replace(/^public\//, ''),
+        width: metadata.width ?? 0,
+        height: metadata.height ?? 0,
+      };
+    }
   } catch {
     created = true;
-    await fs.mkdir(path.dirname(outputPath), { recursive: true });
-    await encode(createPipeline(inputPath, width, blurSigma), inputExtension).toFile(outputPath);
   }
+
+  if (!created) {
+    created = true;
+  }
+
+  await fs.mkdir(path.dirname(outputPath), { recursive: true });
+  await encode(createPipeline(inputPath, width, blurSigma), inputExtension).toFile(outputPath);
 
   const metadata = await sharp(outputPath, { animated: false }).metadata();
 
@@ -223,14 +274,21 @@ async function ensureEncodedAsset({
   };
 }
 
-async function ensureVariantsForFile(relativeInputPath) {
-  const absoluteInputPath = path.join(PROJECT_ROOT, relativeInputPath);
-  const inputExtension = path.extname(relativeInputPath).toLowerCase();
-  const normalizedInputPath = formatRelativePath(absoluteInputPath);
-  const absoluteAssetStem = absoluteInputPath.slice(0, -inputExtension.length);
+async function ensureVariantsForFile({ inputPath, outputPath }) {
+  const absoluteInputPath = path.join(PROJECT_ROOT, inputPath);
+  const absoluteOutputPath = path.join(PROJECT_ROOT, outputPath);
+  const inputExtension = path.extname(inputPath).toLowerCase();
+  const normalizedOutputPath = formatRelativePath(absoluteOutputPath);
+  const absoluteAssetStem = absoluteOutputPath.slice(0, -path.extname(outputPath).length);
   const inputMetadata = await sharp(absoluteInputPath, { animated: false }).metadata();
   const originalWidth = inputMetadata.width ?? 0;
   const generatedFiles = [];
+
+  const originalAsset = await ensureOriginalAsset(absoluteInputPath, absoluteOutputPath, inputExtension);
+
+  if (originalAsset.created && originalAsset.path !== normalizedOutputPath.replace(/^public\//, '')) {
+    generatedFiles.push(originalAsset.path);
+  }
 
   for (const outputFormat of BASE_OUTPUT_FORMATS) {
     const outputPath = `${absoluteAssetStem}${outputFormat.extension}`;
@@ -242,7 +300,7 @@ async function ensureVariantsForFile(relativeInputPath) {
       inputExtension,
     });
 
-    if (encodedAsset.created && encodedAsset.path !== normalizedInputPath.replace(/^public\//, '')) {
+    if (encodedAsset.created && encodedAsset.path !== normalizedOutputPath.replace(/^public\//, '')) {
       generatedFiles.push(encodedAsset.path);
     }
   }
@@ -299,9 +357,20 @@ async function ensureVariantsForFile(relativeInputPath) {
 
 async function main() {
   const discoveredFiles = (
-    await Promise.all(TARGET_DIRECTORIES.map((directoryPath) => collectImageFiles(directoryPath)))
+    await Promise.all(
+      CONTENT_SOURCE_MAPPINGS.map(async ({ inputDir, outputDir }) => {
+        const files = await collectImageFiles(inputDir);
+
+        return files.map((inputPath) => ({
+          inputPath,
+          outputPath: path.join(outputDir, path.relative(inputDir, inputPath)),
+        }));
+      })
+    )
   ).flat();
-  const relativeInputPaths = [...new Set([...discoveredFiles, ...TARGET_INPUT_FILES])].sort();
+  const relativeInputPaths = [...discoveredFiles, ...TARGET_INPUT_FILES].sort((left, right) =>
+    left.outputPath.localeCompare(right.outputPath)
+  );
   const generatedFiles = [];
 
   for (const relativeInputPath of relativeInputPaths) {

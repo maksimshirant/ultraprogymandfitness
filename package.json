@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build && node scripts/prerender.mjs",
+    "images:generate": "node scripts/generate-image-variants.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },
