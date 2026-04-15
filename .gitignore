@@ -1,6 +1,12 @@
 node_modules/
 dist/
 
+# accidental root assets / archives
+/contact-form-function.zip
+/card.avif
+/card.webp
+/фон*
+
 # macOS
 .DS_Store
 

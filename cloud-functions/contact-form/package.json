@@ -1,9 +1,0 @@
-{
-  "name": "ultrapro-contact-form-function",
-  "private": true,
-  "type": "commonjs",
-  "main": "index.js",
-  "dependencies": {
-    "nodemailer": "^6.10.1"
-  }
-}

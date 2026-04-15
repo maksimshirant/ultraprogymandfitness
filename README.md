@@ -26,5 +26,3 @@ VITE_CONTACT_FORM_ENDPOINT=https://<your-yandex-cloud-endpoint>
 ```
 
 Пример есть в [`.env.example`](./.env.example).
-
-Шаблон функции и инструкция по настройке SMTP лежат в [`cloud-functions/contact-form`](./cloud-functions/contact-form/README.md).

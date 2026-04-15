@@ -13,7 +13,7 @@ try {
 
 const PROJECT_ROOT = process.cwd();
 const TARGET_DIRECTORIES = ['public/trainers', 'public/floors'];
-const TARGET_INPUT_FILES = ['public/фон.png', 'public/фонмороз.png', 'public/card.png'];
+const TARGET_INPUT_FILES = ['public/card.png'];
 const INPUT_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp']);
 const GENERATED_STEM_PATTERN = /(?:-preview|-thumb|-placeholder)(?:-w\d+)?$|-w\d+$/i;
 
