@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 "use client"
 /* eslint-disable react-refresh/only-export-components */
 

@@ -1,7 +1,8 @@
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
+import type { OpenModalHandler } from '@/types/modal';
 
 interface TryFreeProps {
-  onOpenModal: (topic?: string) => void;
+  onOpenModal: OpenModalHandler;
 }
 
 const TRY_FREE_TEXT = {
@@ -23,7 +24,7 @@ export default function TryFree({ onOpenModal }: TryFreeProps) {
             {TRY_FREE_TEXT.subtitle}
           </p>
           <button
-            onClick={() => onOpenModal('free_trial')}
+            onClick={() => onOpenModal({ topic: 'free_trial' })}
             className="btn-primary text-white mt-6 w-full sm:w-auto sm:min-w-[22rem] text-base md:text-lg py-4 px-8"
           >
             {TRY_FREE_TEXT.cta}

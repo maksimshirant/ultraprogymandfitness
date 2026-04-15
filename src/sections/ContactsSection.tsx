@@ -9,7 +9,7 @@ const CONTACTS_ASSETS = {
 } as const;
 
 const CONTACTS_TEXT = {
-  title: 'О нас',
+  title: 'Отзывы и контакты',
   titleAccent: '',
   pageSubtitle: 'Отзывы гостей о клубе и все способы быстро связаться с нами.',
   reviewsTitle: 'Отзывы',

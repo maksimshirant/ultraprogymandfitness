@@ -2,11 +2,12 @@ import { Suspense, lazy } from 'react';
 import { SectionFallback } from '@/components/SectionFallback';
 import { Seo } from '@/seo/Seo';
 import { pageSeo } from '@/seo/pageSeo';
+import type { OpenModalHandler } from '@/types/modal';
 
 const Abonements = lazy(() => import('@/sections/Abonements'));
 
 interface MembershipsPageProps {
-  onOpenModal: (topic?: string | unknown, trainer?: string | unknown) => void;
+  onOpenModal: OpenModalHandler;
 }
 
 export default function MembershipsPage({ onOpenModal }: MembershipsPageProps) {

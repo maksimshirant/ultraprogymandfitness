@@ -2,15 +2,20 @@ import { Suspense, lazy } from 'react';
 import { SectionFallback } from '@/components/SectionFallback';
 import { Seo } from '@/seo/Seo';
 import { pageSeo } from '@/seo/pageSeo';
+import type { OpenModalHandler } from '@/types/modal';
 
-const Timetable = lazy(() => import('@/sections/Timetable'));
+const GroupTrainings = lazy(() => import('@/sections/GroupTrainings'));
 
-export default function SchedulePage() {
+interface SchedulePageProps {
+  onOpenModal: OpenModalHandler;
+}
+
+export default function SchedulePage({ onOpenModal }: SchedulePageProps) {
   return (
     <>
       <Seo {...pageSeo.schedule} />
       <Suspense fallback={<SectionFallback />}>
-        <Timetable />
+        <GroupTrainings onOpenModal={onOpenModal} />
       </Suspense>
     </>
   );

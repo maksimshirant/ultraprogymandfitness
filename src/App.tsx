@@ -3,8 +3,10 @@ import { useLocation } from 'react-router-dom';
 import Announcement from './sections/Announcement';
 import AppRoutes from '@/router/AppRoutes';
 import { syncStructuredData } from '@/seo/structuredData';
+import type { OpenModalRequest } from '@/types/modal';
 
 const ALLOWED_MODAL_TOPICS = new Set([
+  'membership',
   'sub_1m',
   'sub_3m',
   'sub_6m',
@@ -23,22 +25,22 @@ const ALLOWED_MODAL_TOPICS = new Set([
 const Modal = lazy(() => import('./sections/Modal'));
 
 const FROST_BACKGROUND = {
-  avif: `${import.meta.env.BASE_URL}frost-bg.avif`,
-  webp: `${import.meta.env.BASE_URL}frost-bg.webp`,
-  png: `${import.meta.env.BASE_URL}frost-bg.png`,
+  avif: `${import.meta.env.BASE_URL}фонмороз.avif`,
+  webp: `${import.meta.env.BASE_URL}фонмороз.webp`,
+  png: `${import.meta.env.BASE_URL}фонмороз.png`,
   avifSrcSet: [
-    `${import.meta.env.BASE_URL}frost-bg-w480.avif 480w`,
-    `${import.meta.env.BASE_URL}frost-bg-w768.avif 768w`,
-    `${import.meta.env.BASE_URL}frost-bg-w1024.avif 1024w`,
-    `${import.meta.env.BASE_URL}frost-bg-w1280.avif 1280w`,
-    `${import.meta.env.BASE_URL}frost-bg.avif 1881w`,
+    `${import.meta.env.BASE_URL}фонмороз-w480.avif 480w`,
+    `${import.meta.env.BASE_URL}фонмороз-w768.avif 768w`,
+    `${import.meta.env.BASE_URL}фонмороз-w1024.avif 1024w`,
+    `${import.meta.env.BASE_URL}фонмороз-w1280.avif 1280w`,
+    `${import.meta.env.BASE_URL}фонмороз.avif 1881w`,
   ].join(', '),
   webpSrcSet: [
-    `${import.meta.env.BASE_URL}frost-bg-w480.webp 480w`,
-    `${import.meta.env.BASE_URL}frost-bg-w768.webp 768w`,
-    `${import.meta.env.BASE_URL}frost-bg-w1024.webp 1024w`,
-    `${import.meta.env.BASE_URL}frost-bg-w1280.webp 1280w`,
-    `${import.meta.env.BASE_URL}frost-bg.webp 1881w`,
+    `${import.meta.env.BASE_URL}фонмороз-w480.webp 480w`,
+    `${import.meta.env.BASE_URL}фонмороз-w768.webp 768w`,
+    `${import.meta.env.BASE_URL}фонмороз-w1024.webp 1024w`,
+    `${import.meta.env.BASE_URL}фонмороз-w1280.webp 1280w`,
+    `${import.meta.env.BASE_URL}фонмороз.webp 1881w`,
   ].join(', '),
 } as const;
 
@@ -46,6 +48,7 @@ function App() {
   const { pathname } = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPrefilledTopic, setModalPrefilledTopic] = useState('');
+  const [modalPrefilledMembershipId, setModalPrefilledMembershipId] = useState<number | undefined>(undefined);
   const [modalPrefilledTrainer, setModalPrefilledTrainer] = useState('');
   const [shouldRenderFrostBackground, setShouldRenderFrostBackground] = useState(pathname !== '/');
   const frostLayerRef = useRef<HTMLDivElement | null>(null);
@@ -56,7 +59,6 @@ function App() {
   const renderFrameRef = useRef<number | null>(null);
   const initialFrostOpacity = pathname !== '/' ? 1 : 0;
   const initialFrostTintOpacity = pathname !== '/' ? 0.3 : 0;
-
   useEffect(() => {
     syncStructuredData(pathname);
   }, [pathname]);
@@ -184,20 +186,39 @@ function App() {
     };
   }, [pathname]);
 
-  const openModal = (topic?: string | unknown, trainer?: string | unknown) => {
+  const openModal = (request: OpenModalRequest = {}) => {
     const normalizedTopic =
-      typeof topic === 'string' && ALLOWED_MODAL_TOPICS.has(topic) ? topic : '';
+      typeof request.topic === 'string' && ALLOWED_MODAL_TOPICS.has(request.topic)
+        ? request.topic
+        : '';
+    const normalizedMembershipId =
+      typeof request.membershipId === 'number' && Number.isFinite(request.membershipId)
+        ? request.membershipId
+        : undefined;
     const normalizedTrainer =
-      normalizedTopic === 'personal' && typeof trainer === 'string' ? trainer : '';
+      normalizedTopic === 'personal' && typeof request.trainer === 'string' ? request.trainer : '';
+    const normalizedGroupDirection =
+      normalizedTopic === 'group' && typeof request.groupDirection === 'string'
+        ? request.groupDirection
+        : '';
+    const normalizedGroupRecommendation =
+      normalizedTopic === 'group' && request.groupRecommendation === true && !normalizedGroupDirection;
+
     setModalPrefilledTopic(normalizedTopic);
+    setModalPrefilledMembershipId(normalizedMembershipId);
     setModalPrefilledTrainer(normalizedTrainer);
+    setModalPrefilledGroupDirection(normalizedGroupDirection);
+    setModalPrefilledGroupRecommendation(normalizedGroupRecommendation);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setModalPrefilledTopic('');
+    setModalPrefilledMembershipId(undefined);
     setModalPrefilledTrainer('');
+    setModalPrefilledGroupDirection('');
+    setModalPrefilledGroupRecommendation(false);
   };
 
   return (
@@ -246,11 +267,14 @@ function App() {
       {isModalOpen ? (
         <Suspense fallback={null}>
           <Modal
-            key={`${modalPrefilledTopic || 'default-modal-topic'}-${modalPrefilledTrainer || 'default-modal-trainer'}`}
+            key={`${modalPrefilledTopic || 'default-modal-topic'}-${modalPrefilledMembershipId ?? 'default-modal-membership'}-${modalPrefilledTrainer || 'default-modal-trainer'}-${modalPrefilledGroupDirection || 'default-modal-group-direction'}-${modalPrefilledGroupRecommendation ? 'group-recommendation' : 'default-group-recommendation'}`}
             isOpen={isModalOpen}
             onClose={closeModal}
             prefilledTopic={modalPrefilledTopic}
+            prefilledMembershipId={modalPrefilledMembershipId}
             prefilledTrainer={modalPrefilledTrainer}
+            prefilledGroupDirection={modalPrefilledGroupDirection}
+            prefilledGroupRecommendation={modalPrefilledGroupRecommendation}
           />
         </Suspense>
       ) : null}

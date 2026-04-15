@@ -21,11 +21,28 @@ export default function PreviewCard({
   reverse = false,
 }: PreviewCardProps) {
   return (
-    <article className="glass-card border border-white/10 p-0 overflow-hidden">
+    <article className="glass-card relative isolate overflow-hidden border border-white/10 p-0">
+      <div className="absolute inset-0 md:hidden">
+        <PublicAssetImage
+          src={imageSrc}
+          alt={title}
+          loading="lazy"
+          fetchPriority="low"
+          decoding="async"
+          sizes="100vw"
+          variantSuffix="preview"
+          deferUntilVisible
+          pictureClassName="absolute inset-0 block h-full w-full"
+          className="h-full w-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,7,12,0.34)_0%,rgba(5,7,12,0.58)_30%,rgba(5,7,12,0.82)_58%,rgba(5,7,12,0.94)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(245,184,0,0.26),transparent_42%)]" />
+      </div>
+
       <div className="grid md:grid-cols-2">
         <div
           className={cn(
-            'p-7 sm:p-10 lg:p-14 flex flex-col justify-center',
+            'relative z-10 flex min-h-[320px] flex-col justify-end p-7 sm:min-h-[360px] sm:p-10 md:min-h-0 md:justify-center lg:p-14',
             reverse && 'md:order-2',
           )}
         >
@@ -50,7 +67,7 @@ export default function PreviewCard({
 
         <div
           className={cn(
-            'relative min-h-[280px] sm:min-h-[360px] md:min-h-[460px] lg:min-h-[520px] bg-black/40 border-t md:border-t-0 border-white/10',
+            'relative hidden min-h-[280px] border-white/10 bg-black/40 md:block md:min-h-[460px] md:border-t-0 lg:min-h-[520px]',
             reverse ? 'md:order-1 md:border-r' : 'md:border-l',
           )}
         >

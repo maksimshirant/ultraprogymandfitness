@@ -22,15 +22,16 @@ const FOOTER_ASSETS = {
 
 const FOOTER_NAV_ITEMS = [
   { label: 'Главная', to: '/' },
-  { label: 'Расписание', to: '/schedule' },
+  { label: 'Групповые тренировки', to: '/schedule' },
   { label: 'Тренеры', to: '/trainers' },
   { label: 'Абонементы', to: '/memberships' },
-  { label: 'О нас', to: '/contacts' },
+  { label: 'Отзывы и контакты', to: '/contacts' },
 ] as const;
 
 const FOOTER_TEXT = {
   company: '© 2026 Ultra Pro Gym & Fitness. Все права защищены.',
   scheduleTitle: 'График работы',
+  addressTitle: 'Адрес',
   phoneTitle: 'Телефон',
   emailTitle: 'E-mail',
   policyButton: 'Политика обработки персональных данных',
@@ -42,7 +43,8 @@ const FOOTER_TEXT = {
 } as const;
 
 const FOOTER_DOCUMENT_FALLBACK = 'Загрузка документа...';
-type FooterDocument = 'privacy' | 'consent' | null;
+
+const FOOTER_OPENING_HOURS_COMPACT = 'Пн-Сб: 07:00–00:00, Вскр: 07:00–22:00';
 
 export default function Footer() {
   const { pathname } = useLocation();
@@ -120,7 +122,11 @@ export default function Footer() {
             <div className="space-y-4">
               <div className="space-y-1">
                 <p className="text-xs uppercase tracking-[0.18em] text-gray-500">{FOOTER_TEXT.scheduleTitle}</p>
-                <p className="text-sm text-gray-300">{siteConfig.business.openingHoursText}</p>
+                <p className="text-sm text-gray-300">{FOOTER_OPENING_HOURS_COMPACT}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs uppercase tracking-[0.18em] text-gray-500">{FOOTER_TEXT.addressTitle}</p>
+                <p className="text-sm text-gray-300">{siteConfig.business.addressText}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-xs uppercase tracking-[0.18em] text-gray-500">{FOOTER_TEXT.phoneTitle}</p>

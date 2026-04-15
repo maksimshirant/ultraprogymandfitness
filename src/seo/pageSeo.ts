@@ -16,9 +16,9 @@ export const pageSeo = {
     ogType: 'website',
   },
   schedule: {
-    title: 'Расписание групповых занятий | Ultra Pro Gym & Fitness',
+    title: 'Групповые тренировки | Ultra Pro Gym & Fitness',
     description:
-      'Актуальное расписание групповых занятий Ultra Pro Gym & Fitness в Волжском. Выберите направление и удобное время для тренировок.',
+      'Групповые тренировки Ultra Pro Gym & Fitness в Волжском: единоборства, ЛФК, АФК, стретчинг, функциональный тренинг и другие направления с тренерами клуба.',
     path: '/schedule',
     ogType: 'website',
   },

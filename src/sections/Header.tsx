@@ -3,9 +3,10 @@ import { Menu, Phone, X } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useViewportTier } from '@/hooks/useViewportTier';
 import { cn } from '@/lib/utils';
+import type { OpenModalHandler } from '@/types/modal';
 
 interface HeaderProps {
-  onOpenModal: () => void;
+  onOpenModal: OpenModalHandler;
 }
 
 const HEADER_ASSETS = {
@@ -22,10 +23,10 @@ const HEADER_TEXT = {
 
 const HEADER_NAV_ITEMS = [
   { label: 'Главная', to: '/' },
-  { label: 'Расписание', to: '/schedule' },
+  { label: 'Групповые тренировки', to: '/schedule' },
   { label: 'Тренеры', to: '/trainers' },
   { label: 'Абонементы', to: '/memberships' },
-  { label: 'О нас', to: '/contacts' },
+  { label: 'Отзывы и контакты', to: '/contacts' },
 ] as const;
 
 export default function Header({ onOpenModal }: HeaderProps) {
@@ -36,12 +37,13 @@ export default function Header({ onOpenModal }: HeaderProps) {
   const isDesktopViewport = viewportTier === 'desktop';
 
   const handleHomeNavigation = (event: MouseEvent<HTMLAnchorElement>) => {
+    setIsMobileMenuOpen(false);
+
     if (pathname !== '/') {
       return;
     }
 
     event.preventDefault();
-    setIsMobileMenuOpen(false);
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   };
 
@@ -168,7 +170,9 @@ export default function Header({ onOpenModal }: HeaderProps) {
               {isDesktopViewport ? (
                 <div>
                   <button
-                    onClick={onOpenModal}
+
+                    type="button"
+                    onClick={() => onOpenModal()}
                     className="rounded-full bg-[linear-gradient(135deg,#F5B800_0%,#E2A700_55%,#C98E00_100%)] px-4 py-2 text-xs font-semibold text-white shadow-[0_4px_20px_rgba(245,184,0,0.4)] transition-[transform,box-shadow,background-color,color,opacity] duration-300 lg:hover:-translate-y-0.5 lg:hover:shadow-[0_8px_30px_rgba(245,184,0,0.5)] xl:px-6 xl:py-3 xl:text-sm"
                   >
                     {HEADER_TEXT.cta}
@@ -176,6 +180,8 @@ export default function Header({ onOpenModal }: HeaderProps) {
                 </div>
               ) : (
                 <button
+
+                  type="button"
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                   className="p-2 text-white md:max-lg:p-3"
                 >

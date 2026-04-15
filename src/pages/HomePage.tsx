@@ -5,20 +5,22 @@ import PreviewCard from '@/components/PreviewCard';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 import { Seo } from '@/seo/Seo';
 import { pageSeo } from '@/seo/pageSeo';
+import type { OpenModalHandler } from '@/types/modal';
 
 const Flors = lazy(() => import('@/sections/Flors'));
 const TryFree = lazy(() => import('@/sections/TryFree'));
 const FAQ = lazy(() => import('@/sections/FAQ'));
 
 interface HomePageProps {
-  onOpenModal: (topic?: string | unknown, trainer?: string | unknown) => void;
+  onOpenModal: OpenModalHandler;
 }
 
 export default function HomePage({ onOpenModal }: HomePageProps) {
   const [shouldRenderFlors, setShouldRenderFlors] = useState(false);
   const florsAnchorRef = useRef<HTMLDivElement>(null);
 
-  const schedulePreviewImage = `${import.meta.env.BASE_URL}floors/floor2/group-workouts/4.jpeg`;
+
+  const groupTrainingsPreviewImage = `${import.meta.env.BASE_URL}floors/floor2/group-workouts/4.jpeg`;
   const trainersPreviewImage = `${import.meta.env.BASE_URL}floors/floor2/crossfit-zone/5.jpg`;
   const membershipsPreviewImage = `${import.meta.env.BASE_URL}floors/floor1/RESEPTION/1.webp`;
 
@@ -73,11 +75,11 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
 
           <div className="space-y-8 md:space-y-12 lg:space-y-14">
             <PreviewCard
-              imageSrc={schedulePreviewImage}
-              title="Групповые занятия"
-              buttonLabel="Открыть расписание"
+              imageSrc={groupTrainingsPreviewImage}
+              title="Групповые тренировки"
+              buttonLabel="Выбрать направление"
               route="/schedule"
-              description="Выберите направление под цель и график. На странице — актуальное расписание и формат занятий."
+              description="Все направления клуба на одной странице: кому подходит формат, кто ведет занятия и как быстро записаться."
             />
             <PreviewCard
               imageSrc={trainersPreviewImage}
@@ -98,7 +100,8 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
         </div>
       </section>
 
-      <div ref={florsAnchorRef} className="mt-12 md:mt-16 lg:mt-20">
+
+      <div id="flors-anchor" ref={florsAnchorRef} className="mt-12 scroll-mt-24 md:mt-16 lg:mt-20">
         {shouldRenderFlors ? (
           <Suspense fallback={<SectionFallback />}>
             <Flors />
