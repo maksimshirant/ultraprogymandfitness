@@ -55,38 +55,166 @@ type HeroScheduleGroup = {
 
 const HERO_SCHEDULE_GROUPS: HeroScheduleGroup[] = [
   {
-    id: 'mon-wed-fri',
-    day: 'Пн\nСр\nПт',
+    id: 'monday',
+    day: 'Пн',
     rows: [
-      { id: 'mwf-glute', time: '09:00 - 10:00', directionKey: 'glute_pump' },
-      { id: 'mwf-afk-nadezhda', time: '10:00 - 11:00', directionKey: 'afk', trainerName: 'Надежда' },
-      { id: 'mwf-afk-alexander-15', time: '15:00 - 16:00', directionKey: 'afk', trainerName: 'Александр' },
-      { id: 'mwf-crossfit', time: '16:00 - 17:00', directionKey: 'crossfit', trainerName: 'Александр' },
+      { id: 'mon-glute', time: '09:00 - 10:00', directionKey: 'glute_pump' },
       {
-        id: 'mwf-kids-martial',
+        id: 'mon-body-balance',
+        time: '10:00 - 11:00',
+        directionKey: 'smart_fitness',
+        directionText: 'ТЕЛО В БАЛАНСЕ',
+        trainerName: 'Надежда',
+      },
+      { id: 'mon-afk-15', time: '15:00 - 16:00', directionKey: 'afk', trainerName: 'Александр' },
+      { id: 'mon-crossfit-16', time: '16:00 - 17:00', directionKey: 'crossfit', trainerName: 'Александр' },
+      {
+        id: 'mon-kids-wrestling',
         time: '16:00 - 17:00',
         directionKey: 'kids_martial_arts',
-        directionText: 'Единоборства дети',
+        directionText: 'БОРЬБА для детей',
         trainerName: 'Антон',
       },
-      { id: 'mwf-afk-alexander-17', time: '17:00 - 18:00', directionKey: 'afk', trainerName: 'Александр' },
-      { id: 'mwf-cycle', time: '18:00 - 19:00', directionKey: 'cycle', trainerName: 'Александр' },
+      { id: 'mon-afk-17', time: '17:00 - 18:00', directionKey: 'afk', trainerName: 'Александр' },
+      { id: 'mon-cycle', time: '18:00 - 19:00', directionKey: 'cycle', trainerName: 'Александр' },
       {
-        id: 'mwf-functional',
+        id: 'mon-functional',
         time: '18:00 - 19:00',
         directionKey: 'functional_training',
+        directionText: 'ФУНКЦИОНАЛЬНА ТРЕНИРОВКА',
         trainerName: 'Виктория',
       },
-      { id: 'mwf-crossfit-alexander', time: '19:00 - 20:00', directionKey: 'crossfit', trainerName: 'Александр' },
-      { id: 'mwf-stretching', time: '19:00 - 20:00', directionKey: 'stretching', trainerName: 'Виктория' },
+      { id: 'mon-crossfit-19', time: '19:00 - 20:00', directionKey: 'crossfit', trainerName: 'Александр' },
+      { id: 'mon-stretching', time: '19:00 - 20:00', directionKey: 'stretching', trainerName: 'Виктория' },
     ],
   },
   {
-    id: 'tue-thu',
-    day: 'Вт\nЧт',
+    id: 'tuesday',
+    day: 'Вт',
     rows: [
-      { id: 'tt-circuit', time: '09:30 - 10:30', directionKey: 'circuit_strength', trainerName: 'Юлия' },
-      { id: 'tt-afk', time: '17:00 - 18:00', directionKey: 'afk', trainerName: 'Надежда' },
+      {
+        id: 'tue-tabata',
+        time: '09:00 - 10:00',
+        directionKey: 'circuit_strength',
+        directionText: 'ТАБАТА',
+        trainerName: 'Жанна',
+      },
+      {
+        id: 'tue-soft-strength',
+        time: '10:00 - 11:00',
+        directionKey: 'circuit_strength',
+        directionText: 'МЯГКАЯ СИЛА',
+        trainerName: 'Анна',
+      },
+      {
+        id: 'tue-step-cardio',
+        time: '18:00 - 19:00',
+        directionKey: 'cycle',
+        directionText: 'СТЕП-КАРДИО',
+        trainerName: 'Анастасия',
+      },
+      {
+        id: 'tue-body-balance',
+        time: '19:00 - 20:00',
+        directionKey: 'smart_fitness',
+        directionText: 'ТЕЛО В БАЛАНСЕ',
+        trainerName: 'Надежда',
+      },
+    ],
+  },
+  {
+    id: 'wednesday',
+    day: 'Ср',
+    rows: [
+      { id: 'wed-glute', time: '09:00 - 10:00', directionKey: 'glute_pump' },
+      {
+        id: 'wed-body-balance',
+        time: '10:00 - 11:00',
+        directionKey: 'smart_fitness',
+        directionText: 'ТЕЛО В БАЛАНСЕ',
+        trainerName: 'Надежда',
+      },
+      { id: 'wed-afk-15', time: '15:00 - 16:00', directionKey: 'afk', trainerName: 'Александр' },
+      { id: 'wed-crossfit-16', time: '16:00 - 17:00', directionKey: 'crossfit', trainerName: 'Александр' },
+      {
+        id: 'wed-kids-wrestling',
+        time: '16:00 - 17:00',
+        directionKey: 'kids_martial_arts',
+        directionText: 'БОРЬБА для детей',
+        trainerName: 'Антон',
+      },
+      { id: 'wed-afk-17', time: '17:00 - 18:00', directionKey: 'afk', trainerName: 'Александр' },
+      { id: 'wed-cycle', time: '18:00 - 19:00', directionKey: 'cycle', trainerName: 'Александр' },
+      {
+        id: 'wed-strong-core',
+        time: '18:00 - 19:00',
+        directionKey: 'functional_training',
+        directionText: 'СИЛЬНЫЙ КОР',
+        trainerName: 'Анна',
+      },
+      { id: 'wed-crossfit-19', time: '19:00 - 20:00', directionKey: 'crossfit', trainerName: 'Александр' },
+      { id: 'wed-stretching', time: '19:00 - 20:00', directionKey: 'stretching', trainerName: 'Виктория' },
+    ],
+  },
+  {
+    id: 'thursday',
+    day: 'Чт',
+    rows: [
+      {
+        id: 'thu-tabata',
+        time: '09:00 - 10:00',
+        directionKey: 'circuit_strength',
+        directionText: 'ТАБАТА',
+        trainerName: 'Жанна',
+      },
+      {
+        id: 'thu-strong-core',
+        time: '10:00 - 11:00',
+        directionKey: 'functional_training',
+        directionText: 'СИЛЬНЫЙ КОР',
+        trainerName: 'Анна',
+      },
+      {
+        id: 'thu-step-cardio',
+        time: '18:00 - 19:00',
+        directionKey: 'cycle',
+        directionText: 'СТЕП-КАРДИО',
+        trainerName: 'Анастасия',
+      },
+    ],
+  },
+  {
+    id: 'friday',
+    day: 'Пт',
+    rows: [
+      { id: 'fri-glute', time: '09:00 - 10:00', directionKey: 'glute_pump' },
+      {
+        id: 'fri-body-balance',
+        time: '10:00 - 11:00',
+        directionKey: 'smart_fitness',
+        directionText: 'ТЕЛО В БАЛАНСЕ',
+        trainerName: 'Надежда',
+      },
+      { id: 'fri-afk-15', time: '15:00 - 16:00', directionKey: 'afk', trainerName: 'Александр' },
+      { id: 'fri-crossfit-16', time: '16:00 - 17:00', directionKey: 'crossfit', trainerName: 'Александр' },
+      {
+        id: 'fri-kids-wrestling',
+        time: '16:00 - 17:00',
+        directionKey: 'kids_martial_arts',
+        directionText: 'БОРЬБА для детей',
+        trainerName: 'Антон',
+      },
+      { id: 'fri-afk-17', time: '17:00 - 18:00', directionKey: 'afk', trainerName: 'Александр' },
+      { id: 'fri-cycle', time: '18:00 - 19:00', directionKey: 'cycle', trainerName: 'Александр' },
+      {
+        id: 'fri-functional',
+        time: '18:00 - 19:00',
+        directionKey: 'functional_training',
+        directionText: 'ФУНКЦИОНАЛЬНА ТРЕНИРОВКА',
+        trainerName: 'Виктория',
+      },
+      { id: 'fri-crossfit-19', time: '19:00 - 20:00', directionKey: 'crossfit', trainerName: 'Александр' },
+      { id: 'fri-stretching', time: '19:00 - 20:00', directionKey: 'stretching', trainerName: 'Виктория' },
     ],
   },
   {
@@ -94,7 +222,7 @@ const HERO_SCHEDULE_GROUPS: HeroScheduleGroup[] = [
     day: 'Вс',
     rows: [
       { id: 'sun-glute', time: '11:00 - 12:00', directionKey: 'glute_pump' },
-      { id: 'sun-smart-fitness', time: '12:00 - 13:00', directionKey: 'smart_fitness' },
+      { id: 'sun-smart-fitness', time: '12:00 - 13:00', directionKey: 'smart_fitness', trainerName: 'Анжелика' },
     ],
   },
 ];
@@ -192,12 +320,19 @@ function DirectionDetails({ direction }: { direction: GroupDirection }) {
 
 export default function GroupTrainings({ onOpenModal }: GroupTrainingsProps) {
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
+  const [expandedScheduleDays, setExpandedScheduleDays] = useState<string[]>([]);
   const viewportTier = useViewportTier();
   const isDesktopViewport = viewportTier === 'desktop';
 
   const toggleExpanded = (key: string) => {
     setExpandedKeys((prev) =>
       prev.includes(key) ? prev.filter((expandedKey) => expandedKey !== key) : [...prev, key]
+    );
+  };
+
+  const toggleScheduleDay = (dayId: string) => {
+    setExpandedScheduleDays((prev) =>
+      prev.includes(dayId) ? prev.filter((id) => id !== dayId) : [...prev, dayId]
     );
   };
 
@@ -236,35 +371,59 @@ export default function GroupTrainings({ onOpenModal }: GroupTrainingsProps) {
                 key={group.id}
                 className="grid grid-cols-[4.75rem_minmax(0,1fr)] sm:grid-cols-[5.5rem_minmax(0,1fr)] lg:grid-cols-[6.5rem_minmax(0,1fr)]"
               >
-                <div className="flex flex-col items-center justify-center border-r border-white/8 bg-white/[0.03] px-2 py-3 text-center sm:px-3 sm:py-4">
-                  <span className="whitespace-pre-line text-[11px] font-semibold leading-[1.15] text-white sm:text-sm">
-                    {group.day}
-                  </span>
-                  {group.date ? (
-                    <span className="mt-1 text-[11px] text-gray-400 sm:text-xs">{group.date}</span>
-                  ) : null}
-                </div>
+                {(() => {
+                  const isDayExpanded = expandedScheduleDays.includes(group.id);
 
-                <div className="divide-y divide-white/8">
-                  {group.rows.map((row) => (
-                    <div
-                      key={row.id}
-                      className="grid grid-cols-[5.25rem_minmax(0,1fr)] gap-2 px-3 py-3 sm:grid-cols-[6.5rem_minmax(0,1fr)] sm:gap-3 sm:px-4 sm:py-3 lg:grid-cols-[8.75rem_minmax(0,1fr)] lg:px-5 lg:py-3.5"
-                    >
-                      <span className="text-xs text-gray-300 sm:text-sm">{row.time}</span>
-                      <div className="min-w-0">
-                        <p className="text-xs font-semibold text-white sm:text-sm lg:text-[0.95rem]">
-                          {row.displayText}
-                        </p>
-                        {row.displayTrainer ? (
-                          <p className="mt-1 text-[11px] text-gray-400 sm:text-xs lg:text-[0.85rem]">
-                            {row.displayTrainer}
-                          </p>
+                  return (
+                    <>
+                      <button
+                        type="button"
+                        aria-expanded={isDayExpanded}
+                        onClick={() => toggleScheduleDay(group.id)}
+                        className="flex flex-col items-center justify-center gap-1 border-r border-white/8 bg-white/[0.03] px-2 py-3 text-center transition-colors sm:px-3 sm:py-4 lg:hover:bg-white/[0.06]"
+                      >
+                        <span className="whitespace-pre-line text-[11px] font-semibold leading-[1.15] text-white sm:text-sm">
+                          {group.day}
+                        </span>
+                        <ChevronDown className={cn('h-4 w-4 text-gray-300 transition-transform duration-300', isDayExpanded && 'rotate-180')} />
+                        {group.date ? (
+                          <span className="text-[11px] text-gray-400 sm:text-xs">{group.date}</span>
                         ) : null}
+                      </button>
+
+                      <div className="divide-y divide-white/8">
+                        {isDayExpanded ? (
+                          group.rows.map((row) => (
+                            <div
+                              key={row.id}
+                              className="grid grid-cols-[5.25rem_minmax(0,1fr)] gap-2 px-3 py-3 sm:grid-cols-[6.5rem_minmax(0,1fr)] sm:gap-3 sm:px-4 sm:py-3 lg:grid-cols-[8.75rem_minmax(0,1fr)] lg:px-5 lg:py-3.5"
+                            >
+                              <span className="text-xs text-gray-300 sm:text-sm">{row.time}</span>
+                              <div className="min-w-0">
+                                <p className="text-xs font-semibold text-white sm:text-sm lg:text-[0.95rem]">
+                                  {row.displayText}
+                                </p>
+                                {row.displayTrainer ? (
+                                  <p className="mt-1 text-[11px] text-gray-400 sm:text-xs lg:text-[0.85rem]">
+                                    {row.displayTrainer}
+                                  </p>
+                                ) : null}
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => toggleScheduleDay(group.id)}
+                            className="w-full px-3 py-3 text-left text-xs text-gray-400 transition-colors sm:px-4 sm:py-3 sm:text-sm lg:px-5 lg:py-3.5 lg:hover:text-gray-200"
+                          >
+                            Нажмите, чтобы раскрыть
+                          </button>
+                        )}
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    </>
+                  );
+                })()}
               </div>
             ))}
           </div>
@@ -319,7 +478,7 @@ export default function GroupTrainings({ onOpenModal }: GroupTrainingsProps) {
         </div>
       </section>
 
-      <section id="group-schedule" className="relative overflow-hidden scroll-mt-24 py-8 sm:py-10 lg:py-12">
+      <section id="group-schedule" className="relative overflow-hidden scroll-mt-24 pt-2 pb-8 sm:pt-4 sm:pb-10 lg:pt-6 lg:pb-12">
         <div className="hero-glow-layer">
           <div className="hero-glow-top-right" />
           <div className="hero-glow-bottom-left" />
