@@ -43,6 +43,7 @@ const FOOTER_TEXT = {
 } as const;
 
 const FOOTER_DOCUMENT_FALLBACK = 'Загрузка документа...';
+type FooterDocument = 'privacy' | 'consent' | null;
 
 const FOOTER_OPENING_HOURS_COMPACT = 'Пн-Сб: 07:00–00:00, Вскр: 07:00–22:00';
 

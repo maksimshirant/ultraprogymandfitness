@@ -262,7 +262,7 @@ export default function Flors() {
                           loading="lazy"
                           fetchPriority="low"
                           sizes="(max-width: 767px) 50vw, (max-width: 1279px) 33vw, 25vw"
-                          variantSuffix="thumb"
+                          variantSuffix={isMobileViewport ? 'thumb' : 'preview'}
                           deferUntilVisible
                           observerRootMargin="120px 0px"
                           pictureClassName="block h-full w-full"

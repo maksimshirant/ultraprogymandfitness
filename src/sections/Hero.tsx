@@ -12,23 +12,22 @@ interface HeroProps {
 
 const HERO_ASSETS = {
   background: {
-
-    avif: `${import.meta.env.BASE_URL}фон.avif`,
-    webp: `${import.meta.env.BASE_URL}фон.webp`,
-    png: `${import.meta.env.BASE_URL}фон.png`,
+    avif: `${import.meta.env.BASE_URL}hero-bg.avif`,
+    webp: `${import.meta.env.BASE_URL}hero-bg.webp`,
+    png: `${import.meta.env.BASE_URL}hero-bg.png`,
     avifSrcSet: [
-      `${import.meta.env.BASE_URL}фон-w480.avif 480w`,
-      `${import.meta.env.BASE_URL}фон-w768.avif 768w`,
-      `${import.meta.env.BASE_URL}фон-w1024.avif 1024w`,
-      `${import.meta.env.BASE_URL}фон-w1280.avif 1280w`,
-      `${import.meta.env.BASE_URL}фон.avif 1536w`,
+      `${import.meta.env.BASE_URL}hero-bg-w480.avif 480w`,
+      `${import.meta.env.BASE_URL}hero-bg-w768.avif 768w`,
+      `${import.meta.env.BASE_URL}hero-bg-w1024.avif 1024w`,
+      `${import.meta.env.BASE_URL}hero-bg-w1280.avif 1280w`,
+      `${import.meta.env.BASE_URL}hero-bg.avif 1536w`,
     ].join(', '),
     webpSrcSet: [
-      `${import.meta.env.BASE_URL}фон-w480.webp 480w`,
-      `${import.meta.env.BASE_URL}фон-w768.webp 768w`,
-      `${import.meta.env.BASE_URL}фон-w1024.webp 1024w`,
-      `${import.meta.env.BASE_URL}фон-w1280.webp 1280w`,
-      `${import.meta.env.BASE_URL}фон.webp 1536w`,
+      `${import.meta.env.BASE_URL}hero-bg-w480.webp 480w`,
+      `${import.meta.env.BASE_URL}hero-bg-w768.webp 768w`,
+      `${import.meta.env.BASE_URL}hero-bg-w1024.webp 1024w`,
+      `${import.meta.env.BASE_URL}hero-bg-w1280.webp 1280w`,
+      `${import.meta.env.BASE_URL}hero-bg.webp 1536w`,
     ].join(', '),
   },
   card: {
@@ -130,9 +129,8 @@ export default function Hero({ onOpenModal }: HeroProps) {
     <>
       <section className="relative flex min-h-[100svh] items-center overflow-hidden gradient-bg-radial">
         <picture className="hero-media-layer absolute inset-0 z-0">
-
-          <source type="image/avif" srcSet={HERO_ASSETS.background.avifSrcSet} sizes="100vw" />
-          <source type="image/webp" srcSet={HERO_ASSETS.background.webpSrcSet} sizes="100vw" />
+          {!isDesktopViewport ? <source type="image/avif" srcSet={HERO_ASSETS.background.avifSrcSet} sizes="100vw" /> : null}
+          {!isDesktopViewport ? <source type="image/webp" srcSet={HERO_ASSETS.background.webpSrcSet} sizes="100vw" /> : null}
           <img
             src={HERO_ASSETS.background.png}
             alt=""
@@ -151,11 +149,11 @@ export default function Hero({ onOpenModal }: HeroProps) {
         </div>
 
         <div className="relative z-30 mx-auto w-full max-w-7xl px-4 pt-24 pb-14 sm:px-6 md:max-lg:flex md:max-lg:min-h-[calc(100svh-13rem)] md:max-lg:flex-col md:max-lg:justify-between md:max-lg:px-10 md:max-lg:pt-32 md:max-lg:pb-20 lg:px-8 lg:pt-32 lg:pb-16">
-          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-24">
             <div className="space-y-8 slide-up max-md:w-full max-md:max-w-full max-md:space-y-7 md:max-lg:mx-auto md:max-lg:max-w-[min(94vw,860px)] md:max-lg:space-y-11 lg:max-w-[40rem]">
               <BalancedHeading
                 as="h1"
-                className="section-title text-white max-md:max-w-full max-md:text-[clamp(2.35rem,9vw,3.2rem)] max-md:leading-[0.96] md:max-lg:max-w-full md:max-lg:text-[clamp(4.4rem,9.4vw,6.2rem)] md:max-lg:leading-[0.9] lg:text-[clamp(4.7rem,5.8vw,6.1rem)] lg:leading-[0.9]"
+                className="section-title text-white max-md:max-w-full max-md:text-[clamp(2.35rem,9vw,3.2rem)] max-md:leading-[0.96] md:max-lg:max-w-full md:max-lg:text-[clamp(4.4rem,9.4vw,6.2rem)] md:max-lg:leading-[0.9] lg:text-[clamp(3.45rem,4.15vw,4.55rem)] lg:leading-[0.94]"
               >
                 <span className="block whitespace-nowrap">{HERO_TEXT.titleStart}</span>
                 <HeadingAccent className="inline-block whitespace-nowrap">{HERO_TEXT.titleAccent}</HeadingAccent>
@@ -188,24 +186,28 @@ export default function Hero({ onOpenModal }: HeroProps) {
 
             {isDesktopViewport ? (
               <div className="relative pb-10 lg:pb-14">
-                <div className="relative z-10 float-animation flex justify-center">
+                <div className="relative z-10 float-animation flex justify-end lg:pr-2">
                   <button
                     type="button"
                     onClick={() => setIsCardInfoOpen(true)}
                     aria-label={HERO_TEXT.openCardInfoAria}
-                    className="group relative inline-flex w-[148%] max-w-none justify-center rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800]"
+                    className="group relative inline-flex w-[116%] max-w-[42rem] justify-center rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800]"
                   >
                     <picture className="block w-full">
-                      <source
-                        type="image/avif"
-                        srcSet={HERO_ASSETS.card.avifSrcSet}
-                        sizes="(min-width: 1024px) 54vw, 100vw"
-                      />
-                      <source
-                        type="image/webp"
-                        srcSet={HERO_ASSETS.card.webpSrcSet}
-                        sizes="(min-width: 1024px) 54vw, 100vw"
-                      />
+                      {!isDesktopViewport ? (
+                        <source
+                          type="image/avif"
+                          srcSet={HERO_ASSETS.card.avifSrcSet}
+                          sizes="(min-width: 1024px) 54vw, 100vw"
+                        />
+                      ) : null}
+                      {!isDesktopViewport ? (
+                        <source
+                          type="image/webp"
+                          srcSet={HERO_ASSETS.card.webpSrcSet}
+                          sizes="(min-width: 1024px) 54vw, 100vw"
+                        />
+                      ) : null}
                       <img
                         src={HERO_ASSETS.card.png}
                         alt={HERO_ASSETS.cardAlt}

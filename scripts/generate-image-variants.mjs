@@ -43,9 +43,9 @@ const RESPONSIVE_VARIANTS = [
   },
   {
     key: 'preview',
-    masterWidth: 1200,
+    masterWidth: 1600,
     masterSuffix: 'preview',
-    widthCandidates: [320, 480, 640, 768, 960],
+    widthCandidates: [320, 480, 640, 768, 960, 1200, 1280],
     masterOutputFormats: [
       {
         extension: 'source',

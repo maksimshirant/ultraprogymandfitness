@@ -28,6 +28,7 @@ export interface PublicAssetImageProps extends Omit<ImgHTMLAttributes<HTMLImageE
   deferUntilVisible?: boolean;
   observerRootMargin?: string;
   showPlaceholder?: boolean;
+  useResponsiveSources?: boolean;
 }
 
 const IMAGE_EXTENSIONS = new Set<VariantExtension>(['avif', 'webp', 'png', 'jpg', 'jpeg']);
@@ -207,6 +208,7 @@ export default function PublicAssetImage({
   deferUntilVisible = false,
   observerRootMargin = '180px 0px',
   showPlaceholder = true,
+  useResponsiveSources = true,
   onLoad,
   ...imgProps
 }: PublicAssetImageProps) {
@@ -275,9 +277,11 @@ export default function PublicAssetImage({
           )}
         />
       ) : null}
-      {resolvedAssetPaths?.sources.map((source) => (
-        <source key={source.type} srcSet={source.srcSet} type={source.type} sizes={sizes} />
-      ))}
+      {useResponsiveSources
+        ? resolvedAssetPaths?.sources.map((source) => (
+            <source key={source.type} srcSet={source.srcSet} type={source.type} sizes={sizes} />
+          ))
+        : null}
       <img
         {...imgProps}
         src={resolvedAssetPaths?.fallbackSrc ?? src}

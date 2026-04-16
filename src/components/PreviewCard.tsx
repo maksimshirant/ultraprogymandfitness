@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import PublicAssetImage from '@/components/PublicAssetImage';
 import { BalancedHeading } from '@/components/typography/BalancedHeading';
+import { useViewportTier } from '@/hooks/useViewportTier';
 import { cn } from '@/lib/utils';
 
 interface PreviewCardProps {
@@ -20,6 +21,9 @@ export default function PreviewCard({
   route,
   reverse = false,
 }: PreviewCardProps) {
+  const viewportTier = useViewportTier();
+  const isDesktopViewport = viewportTier === 'desktop';
+
   return (
     <article className="glass-card relative isolate overflow-hidden border border-white/10 p-0">
       <div className="absolute inset-0 md:hidden">
@@ -30,7 +34,7 @@ export default function PreviewCard({
           fetchPriority="low"
           decoding="async"
           sizes="100vw"
-          variantSuffix="preview"
+          variantSuffix={isDesktopViewport ? undefined : 'preview'}
           deferUntilVisible
           pictureClassName="absolute inset-0 block h-full w-full"
           className="h-full w-full object-cover object-center"
@@ -77,7 +81,7 @@ export default function PreviewCard({
             loading="lazy"
             fetchPriority="low"
             sizes="(max-width: 767px) 100vw, 50vw"
-            variantSuffix="preview"
+            variantSuffix={isDesktopViewport ? undefined : 'preview'}
             deferUntilVisible
             pictureClassName="absolute inset-0 block h-full w-full"
             className="h-full w-full object-cover object-center"

@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Announcement from './sections/Announcement';
 import AppRoutes from '@/router/AppRoutes';
+import { useViewportTier } from '@/hooks/useViewportTier';
 import { syncStructuredData } from '@/seo/structuredData';
 import type { OpenModalRequest } from '@/types/modal';
 
@@ -25,31 +26,35 @@ const ALLOWED_MODAL_TOPICS = new Set([
 const Modal = lazy(() => import('./sections/Modal'));
 
 const FROST_BACKGROUND = {
-  avif: `${import.meta.env.BASE_URL}фонмороз.avif`,
-  webp: `${import.meta.env.BASE_URL}фонмороз.webp`,
-  png: `${import.meta.env.BASE_URL}фонмороз.png`,
+  avif: `${import.meta.env.BASE_URL}frost-bg.avif`,
+  webp: `${import.meta.env.BASE_URL}frost-bg.webp`,
+  png: `${import.meta.env.BASE_URL}frost-bg.png`,
   avifSrcSet: [
-    `${import.meta.env.BASE_URL}фонмороз-w480.avif 480w`,
-    `${import.meta.env.BASE_URL}фонмороз-w768.avif 768w`,
-    `${import.meta.env.BASE_URL}фонмороз-w1024.avif 1024w`,
-    `${import.meta.env.BASE_URL}фонмороз-w1280.avif 1280w`,
-    `${import.meta.env.BASE_URL}фонмороз.avif 1881w`,
+    `${import.meta.env.BASE_URL}frost-bg-w480.avif 480w`,
+    `${import.meta.env.BASE_URL}frost-bg-w768.avif 768w`,
+    `${import.meta.env.BASE_URL}frost-bg-w1024.avif 1024w`,
+    `${import.meta.env.BASE_URL}frost-bg-w1280.avif 1280w`,
+    `${import.meta.env.BASE_URL}frost-bg.avif 1881w`,
   ].join(', '),
   webpSrcSet: [
-    `${import.meta.env.BASE_URL}фонмороз-w480.webp 480w`,
-    `${import.meta.env.BASE_URL}фонмороз-w768.webp 768w`,
-    `${import.meta.env.BASE_URL}фонмороз-w1024.webp 1024w`,
-    `${import.meta.env.BASE_URL}фонмороз-w1280.webp 1280w`,
-    `${import.meta.env.BASE_URL}фонмороз.webp 1881w`,
+    `${import.meta.env.BASE_URL}frost-bg-w480.webp 480w`,
+    `${import.meta.env.BASE_URL}frost-bg-w768.webp 768w`,
+    `${import.meta.env.BASE_URL}frost-bg-w1024.webp 1024w`,
+    `${import.meta.env.BASE_URL}frost-bg-w1280.webp 1280w`,
+    `${import.meta.env.BASE_URL}frost-bg.webp 1881w`,
   ].join(', '),
 } as const;
 
 function App() {
   const { pathname } = useLocation();
+  const viewportTier = useViewportTier();
+  const isDesktopViewport = viewportTier === 'desktop';
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPrefilledTopic, setModalPrefilledTopic] = useState('');
   const [modalPrefilledMembershipId, setModalPrefilledMembershipId] = useState<number | undefined>(undefined);
   const [modalPrefilledTrainer, setModalPrefilledTrainer] = useState('');
+  const [modalPrefilledGroupDirection, setModalPrefilledGroupDirection] = useState('');
+  const [modalPrefilledGroupRecommendation, setModalPrefilledGroupRecommendation] = useState(false);
   const [shouldRenderFrostBackground, setShouldRenderFrostBackground] = useState(pathname !== '/');
   const frostLayerRef = useRef<HTMLDivElement | null>(null);
   const frostTintLayerRef = useRef<HTMLDivElement | null>(null);
@@ -231,16 +236,20 @@ function App() {
             style={{ opacity: initialFrostOpacity }}
           >
             <picture className="block h-full w-full">
-              <source
-                type="image/avif"
-                srcSet={FROST_BACKGROUND.avifSrcSet}
-                sizes="100vw"
-              />
-              <source
-                type="image/webp"
-                srcSet={FROST_BACKGROUND.webpSrcSet}
-                sizes="100vw"
-              />
+              {!isDesktopViewport ? (
+                <source
+                  type="image/avif"
+                  srcSet={FROST_BACKGROUND.avifSrcSet}
+                  sizes="100vw"
+                />
+              ) : null}
+              {!isDesktopViewport ? (
+                <source
+                  type="image/webp"
+                  srcSet={FROST_BACKGROUND.webpSrcSet}
+                  sizes="100vw"
+                />
+              ) : null}
               <img
                 src={FROST_BACKGROUND.png}
                 alt=""

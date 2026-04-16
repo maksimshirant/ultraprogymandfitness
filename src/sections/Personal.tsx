@@ -69,6 +69,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
   const [activeCategory, setActiveCategory] = useState<TrainerCategory>('gym');
   const [activeTrainerIndex, setActiveTrainerIndex] = useState(0);
   const [expandedTrainerId, setExpandedTrainerId] = useState<number | null>(null);
+  const [isTabletHeroScrollHintVisible, setIsTabletHeroScrollHintVisible] = useState(false);
 
   const viewportTier = useViewportTier();
   const isMobileViewport = viewportTier === 'mobile';
@@ -164,7 +165,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
               loading="lazy"
               fetchPriority="low"
               sizes="(max-width: 767px) 100vw, (max-width: 1023px) 70vw, 34vw"
-              variantSuffix="preview"
+              variantSuffix={isDesktopViewport ? undefined : 'preview'}
               deferUntilVisible
               pictureClassName="absolute inset-0 block h-full w-full"
               className={cn('h-full w-full object-cover object-center', trainer.imageClassName)}
@@ -456,7 +457,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
                             loading="lazy"
                             fetchPriority="low"
                             sizes="(max-width: 1279px) 34vw, 24rem"
-                            variantSuffix="preview"
+                            variantSuffix={isDesktopViewport ? undefined : 'preview'}
                             deferUntilVisible
                             pictureClassName="absolute inset-0 block h-full w-full"
                             className={cn('h-full w-full object-cover object-center', trainer.imageClassName)}

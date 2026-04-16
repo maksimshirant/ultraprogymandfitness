@@ -70,11 +70,6 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
     setCurrentIndex((prev) => (prev - 1 + memberships.length) % memberships.length);
   };
 
-  const selectAbonementIndex = (index: number) => {
-    setExpandedAbonementId(null);
-    setCurrentIndex(index);
-  };
-
   const scrollToSubscriptions = () => {
     document.getElementById('subscriptions')?.scrollIntoView({
       behavior: 'smooth',

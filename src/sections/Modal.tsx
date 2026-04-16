@@ -75,13 +75,14 @@ const MODAL_TEXT = {
 
   closeModalAria: 'Закрыть',
   closePolicyAria: 'Закрыть политику',
-  closeOfferAria: 'Закрыть договор офферты',
+  closeConsentAria: 'Закрыть согласие',
   namePlaceholder: 'Ваше имя',
   phoneTitle: 'Формат: +7 (999) 999-99-99',
   questionPlaceholder: 'Задайте вопрос',
-  privacyPrefix: 'Я соглашаюсь с',
-  privacyLink: 'Политикой конфиденциальности',
-  offerLink: 'Договором офферты',
+  consentPrefix: 'Нажимая на кнопку "Отправить", я даю',
+  consentLink: 'согласие на обработку персональных данных',
+  consentMiddle: 'и принимаю',
+  privacyLink: 'Политику обработки персональных данных',
   submitDefault: 'Отправить заявку',
   submitLoading: 'Отправляем заявку...',
   success: 'Форма отправлена, с вами свяжутся.',
@@ -204,8 +205,6 @@ const syncTextareaHeight = (textarea: HTMLTextAreaElement | null) => {
   textarea.style.height = '0px';
   textarea.style.height = `${textarea.scrollHeight}px`;
 };
-type ActiveDocument = 'privacy' | 'consent' | null;
-
 const createInitialFormData = () => ({
   name: '',
   phone: '',
@@ -448,7 +447,7 @@ export default function Modal({
   const [formData, setFormData] = useState(createInitialFormData);
   const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
-  const [isOfferOpen, setIsOfferOpen] = useState(false);
+  const [isConsentOpen, setIsConsentOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [resultNotice, setResultNotice] = useState<ResultNotice | null>(null);
@@ -477,7 +476,8 @@ export default function Modal({
     setIsSubmitting(false);
     setFormError(null);
     setResultNotice(null);
-    setActiveDocument(null);
+    setIsPrivacyOpen(false);
+    setIsConsentOpen(false);
     onClose();
   };
 
@@ -506,6 +506,8 @@ export default function Modal({
     setSelection(initialState.selection);
     setFormData(createInitialFormData());
     setIsPrivacyAccepted(false);
+    setIsPrivacyOpen(false);
+    setIsConsentOpen(false);
     setIsSubmitting(false);
     setFormError(null);
     setResultNotice(null);
@@ -780,7 +782,7 @@ export default function Modal({
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!isConsentAccepted) {
+    if (!isPrivacyAccepted) {
       setFormError(MODAL_TEXT.errorPrivacy);
       return;
     }
@@ -810,8 +812,6 @@ export default function Modal({
     setResultNotice(null);
 
     try {
-
-      const payload = new FormData();
       const questionText = formData.question.trim();
       const detailMessage = questionText || MODAL_TEXT.messageFallback;
       const messageText = [
@@ -827,17 +827,20 @@ export default function Modal({
         `${MODAL_TEXT.mailLabelMessage}: ${detailMessage}`,
       ].join('\n');
 
-      payload.append('name', formData.name.trim());
-      payload.append('phone', formData.phone.trim());
-      payload.append('topic', topicLabel);
-      payload.append('membership', selectedMembership?.title ?? '');
-      payload.append('trainer', selection.trainer);
-      payload.append('group_direction', selection.groupDirection);
-      payload.append('question', questionText);
-      payload.append('message', messageText);
-      payload.append('subject', MODAL_TEXT.mailSubject);
-      payload.append('from_name', MODAL_TEXT.mailFromName);
-      payload.append('botcheck', '');
+      const payload = {
+        name: formData.name.trim(),
+        phone: formData.phone.trim(),
+        topic: topicLabel,
+        topicValue: selection.topic,
+        trainer: selection.trainer || undefined,
+        trainerValue: selection.trainer || undefined,
+        question: questionText || undefined,
+        message: messageText,
+        consentToPrivacy: isPrivacyAccepted,
+        pageUrl: typeof window !== 'undefined' ? window.location.href : undefined,
+        submittedAt: new Date().toISOString(),
+        source: 'modal',
+      };
 
       const result = await sendForm(payload);
 
@@ -1168,7 +1171,15 @@ export default function Modal({
             className="mt-1 h-4 w-4 rounded border-white/30 bg-transparent accent-[#F5B800]"
           />
           <span>
-            {MODAL_TEXT.privacyPrefix}{' '}
+            {MODAL_TEXT.consentPrefix}{' '}
+            <button
+              type="button"
+              onClick={() => setIsConsentOpen(true)}
+              className="text-white underline underline-offset-4 transition-colors lg:hover:text-gray-200"
+            >
+              {MODAL_TEXT.consentLink}
+            </button>{' '}
+            {MODAL_TEXT.consentMiddle}{' '}
             <button
               type="button"
               onClick={() => setIsPrivacyOpen(true)}
@@ -1176,14 +1187,7 @@ export default function Modal({
             >
               {MODAL_TEXT.privacyLink}
             </button>
-            {' и '}
-            <button
-              type="button"
-              onClick={() => setIsOfferOpen(true)}
-              className="text-white underline underline-offset-4 transition-colors lg:hover:text-gray-200"
-            >
-              {MODAL_TEXT.offerLink}
-            </button>
+            .
           </span>
         </label>
 
@@ -1395,12 +1399,12 @@ export default function Modal({
         </DocumentModal>
       ) : null}
 
-      {isOfferOpen ? (
+      {isConsentOpen ? (
         <DocumentModal
-          closeAriaLabel={MODAL_TEXT.closeOfferAria}
-          onClose={() => setIsOfferOpen(false)}
+          closeAriaLabel={MODAL_TEXT.closeConsentAria}
+          onClose={() => setIsConsentOpen(false)}
         >
-          <OfferAgreementContent
+          <PersonalDataConsentContent
             titleClassName="mb-4 pr-10 text-xl font-semibold text-white"
             textClassName="text-sm text-gray-300"
           />
