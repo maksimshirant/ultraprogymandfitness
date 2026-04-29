@@ -16,7 +16,10 @@ const CONTENT_SOURCE_MAPPINGS = [
   { inputDir: 'content/trainers', outputDir: 'public/trainers' },
   { inputDir: 'content/floors', outputDir: 'public/floors' },
 ];
-const TARGET_INPUT_FILES = [{ inputPath: 'public/card.png', outputPath: 'public/card.png' }];
+const TARGET_INPUT_FILES = [
+  { inputPath: 'public/mainhero/card.png', outputPath: 'public/mainhero/card.png' },
+  { inputPath: 'public/mainhero/hbg.png', outputPath: 'public/mainhero/hbg.png' },
+];
 const INPUT_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp']);
 const GENERATED_STEM_PATTERN = /(?:-preview|-thumb|-placeholder)(?:-w\d+)?$|-w\d+$/i;
 
