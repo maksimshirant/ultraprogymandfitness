@@ -34,16 +34,18 @@ export function LegalDocumentModal({
         )}
         onClick={(event) => event.stopPropagation()}
       >
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-gray-300 transition-colors lg:hover:bg-white/10 lg:hover:text-white"
-          aria-label={closeAriaLabel}
-        >
-          <X className="h-5 w-5" />
-        </button>
+        <div className="mb-2 flex justify-end">
+          <button
+            type="button"
+            onClick={onClose}
+            className="z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-gray-300 transition-colors lg:hover:bg-white/10 lg:hover:text-white"
+            aria-label={closeAriaLabel}
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
 
-        <div className="document-modal-scroll min-h-0 flex-1 overflow-y-auto pr-2 pt-8 sm:pr-3 sm:pt-10">
+        <div className="document-modal-scroll min-h-0 flex-1 overflow-y-auto lg:overflow-y-scroll pr-2 sm:pr-3">
           {children}
         </div>
       </div>

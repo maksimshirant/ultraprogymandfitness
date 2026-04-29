@@ -354,14 +354,38 @@
 }
 
 .document-modal-scroll {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  overscroll-behavior: contain;
 }
 
 .document-modal-scroll::-webkit-scrollbar {
   width: 0;
   height: 0;
   display: none;
+}
+
+@media (min-width: 1024px) {
+  .document-modal-scroll {
+    -ms-overflow-style: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(245, 184, 0, 0.9) rgba(255, 255, 255, 0.08);
+    scrollbar-gutter: stable;
+  }
+
+  .document-modal-scroll::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    display: block;
+  }
+
+  .document-modal-scroll::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+  }
+
+  .document-modal-scroll::-webkit-scrollbar-thumb {
+    background: rgba(245, 184, 0, 0.9);
+    border-radius: 999px;
+  }
 }
 
 .modal-scroll {

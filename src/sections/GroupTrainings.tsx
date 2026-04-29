@@ -15,6 +15,8 @@ interface GroupTrainingsProps {
   onOpenModal: OpenModalHandler;
 }
 
+const CLUB_LOGO_SRC = `${import.meta.env.BASE_URL}logo.webp`;
+
 const GROUP_TRAININGS_TEXT = {
   heroTitle: 'Групповые тренировки',
   heroAccent: 'взрослых и детей',
@@ -217,6 +219,13 @@ const HERO_SCHEDULE_GROUPS: HeroScheduleGroup[] = [
       { id: 'fri-stretching', time: '19:00 - 20:00', directionKey: 'stretching', trainerName: 'Виктория' },
     ],
   },
+    {
+    id: 'saturday',
+    day: 'Сб',
+    rows: [
+      { id: 'pilates', time: '10:00 - 11:00', directionKey: 'pilates', trainerName: 'Анастасия' },
+    ],
+  },
   {
     id: 'sunday',
     day: 'Вс',
@@ -251,20 +260,14 @@ const HERO_SCHEDULE_ROWS = HERO_SCHEDULE_GROUPS.map((group) => ({
   }),
 }));
 
-function getTrainerInitials(name: string) {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((part) => part[0]?.toUpperCase() ?? '')
-    .slice(0, 2)
-    .join('');
-}
-
 function TrainerAvatar({ direction, isDesktopViewport }: { direction: GroupDirection; isDesktopViewport: boolean }) {
-  if (direction.trainerAvatar) {
+  const trainerAvatar = direction.trainerAvatar;
+  const isPlaceholderAvatar = Boolean(trainerAvatar?.includes('placeholder'));
+
+  if (trainerAvatar && !isPlaceholderAvatar) {
     return (
       <PublicAssetImage
-        src={direction.trainerAvatar}
+        src={trainerAvatar}
         alt={direction.trainer}
         loading="lazy"
         fetchPriority="low"
@@ -280,8 +283,14 @@ function TrainerAvatar({ direction, isDesktopViewport }: { direction: GroupDirec
   }
 
   return (
-    <div className="flex h-32 w-32 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-2xl font-bold uppercase tracking-[0.08em] text-[#F5B800] sm:h-36 sm:w-36">
-      {getTrainerInitials(direction.trainer)}
+    <div className="flex h-32 w-32 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] p-4 sm:h-36 sm:w-36 sm:p-5">
+      <img
+        src={CLUB_LOGO_SRC}
+        alt="Логотип Ultra Pro Gym & Fitness"
+        loading="lazy"
+        decoding="async"
+        className="h-full w-full object-contain brightness-0 invert opacity-85"
+      />
     </div>
   );
 }

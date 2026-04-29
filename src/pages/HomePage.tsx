@@ -20,7 +20,7 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
   const florsAnchorRef = useRef<HTMLDivElement>(null);
 
 
-  const groupTrainingsPreviewImage = `${import.meta.env.BASE_URL}floors/floor2/group-workouts/4.jpeg`;
+  const groupTrainingsPreviewImage = `${import.meta.env.BASE_URL}floors/floor2/group-workouts/5.jpg`;
   const trainersPreviewImage = `${import.meta.env.BASE_URL}floors/floor2/crossfit-zone/5.jpg`;
   const membershipsPreviewImage = `${import.meta.env.BASE_URL}floors/floor1/RESEPTION/1.webp`;
 

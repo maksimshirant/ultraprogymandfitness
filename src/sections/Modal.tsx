@@ -8,7 +8,6 @@ import {
   useState,
   type Dispatch,
   type FormEvent,
-  type ReactNode,
   type SetStateAction,
 } from 'react';
 import {
@@ -25,6 +24,7 @@ import {
   X,
 } from 'lucide-react';
 import { sendForm } from '@/api/forms';
+import { LegalDocumentModal } from '@/components/LegalDocumentModal';
 import { groupDirections } from '@/content/groupDirections';
 import { getMembershipById, getMembershipByTopic, memberships } from '@/content/memberships';
 import { trainers } from '@/content/trainers';
@@ -405,44 +405,6 @@ function CompactScenarioButton({
   );
 }
 
-function DocumentModal({
-  closeAriaLabel,
-  onClose,
-  children,
-}: {
-  closeAriaLabel: string;
-  onClose: () => void;
-  children: ReactNode;
-}) {
-  return (
-    <div className="fixed inset-0 z-[111] flex items-center justify-center overflow-hidden p-4 sm:p-6">
-      <div
-        className="document-modal-overlay absolute inset-0 bg-black/80 backdrop-blur-md"
-        onClick={onClose}
-      />
-
-      <div
-        className="glass-card modal-surface relative mx-auto my-auto flex w-full max-w-2xl flex-col overflow-hidden rounded-[30px] p-6 max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] sm:p-8"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 z-10 p-2 text-gray-400 transition-colors lg:hover:text-white"
-          aria-label={closeAriaLabel}
-        >
-          <X className="h-5 w-5" />
-        </button>
-
-        <div className="document-modal-scroll min-h-0 flex-1 overflow-y-auto pr-2 pt-8 sm:pr-3 sm:pt-10">
-          <Suspense fallback={<p className="text-sm text-gray-300">{DOCUMENT_FALLBACK_TEXT}</p>}>
-            {children}
-          </Suspense>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function Modal({
   isOpen,
   onClose,
@@ -480,6 +442,7 @@ export default function Modal({
     height: 36,
     visible: false,
   });
+  const isLegalDocumentOpen = isPrivacyOpen || isConsentOpen;
 
   const selectedMembership = useMemo(
     () =>
@@ -557,8 +520,6 @@ export default function Modal({
     syncTextareaHeight(questionTextareaRef.current);
   }, [formData.question, selection.topic]);
 
-  if (!isOpen) return null;
-
   const updateScrollIndicator = (
     element: HTMLDivElement | null,
     setState: Dispatch<SetStateAction<ScrollIndicatorState>>
@@ -596,6 +557,29 @@ export default function Modal({
 
     return () => window.cancelAnimationFrame(raf);
   }, [isMobile, isOpen, currentStep]);
+
+  useEffect(() => {
+    if (!isLegalDocumentOpen) {
+      return;
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsPrivacyOpen(false);
+        setIsConsentOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [isLegalDocumentOpen]);
+
+  if (!isOpen && !isLegalDocumentOpen) return null;
 
   const headerTitle = isAnnouncementMode
     ? announcement?.title ?? MODAL_TEXT.announcementTitle
@@ -1075,7 +1059,7 @@ export default function Modal({
                       alt={trainer.name}
                       loading="lazy"
                       decoding="async"
-                      className={cn('h-full w-full object-cover object-center', trainer.imageClassName)}
+                      className={cn('h-full w-full object-cover object-top', trainer.imageClassName)}
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-lg font-bold text-[#F5B800]">
@@ -1480,7 +1464,14 @@ export default function Modal({
 
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={(nextOpen) => !nextOpen && handleModalClose()}>
+      <Dialog
+        open={isOpen && !isLegalDocumentOpen}
+        onOpenChange={(nextOpen) => {
+          if (!nextOpen && !isLegalDocumentOpen) {
+            handleModalClose();
+          }
+        }}
+      >
         <DialogContent
           showCloseButton={false}
           className={cn(
@@ -1497,27 +1488,37 @@ export default function Modal({
       </Dialog>
 
       {isPrivacyOpen ? (
-        <DocumentModal
+        <LegalDocumentModal
+          isOpen={isPrivacyOpen}
           closeAriaLabel={MODAL_TEXT.closePolicyAria}
           onClose={() => setIsPrivacyOpen(false)}
+          zIndexClassName="z-[111]"
+          maxWidthClassName="max-w-2xl"
         >
-          <PrivacyPolicyContent
-            titleClassName="mb-4 pr-10 text-xl font-semibold text-white"
-            textClassName="text-sm text-gray-300"
-          />
-        </DocumentModal>
+          <Suspense fallback={<p className="text-sm text-gray-300">{DOCUMENT_FALLBACK_TEXT}</p>}>
+            <PrivacyPolicyContent
+              titleClassName="mb-4 pr-10 text-xl font-semibold text-white"
+              textClassName="text-sm text-gray-300"
+            />
+          </Suspense>
+        </LegalDocumentModal>
       ) : null}
 
       {isConsentOpen ? (
-        <DocumentModal
+        <LegalDocumentModal
+          isOpen={isConsentOpen}
           closeAriaLabel={MODAL_TEXT.closeConsentAria}
           onClose={() => setIsConsentOpen(false)}
+          zIndexClassName="z-[111]"
+          maxWidthClassName="max-w-2xl"
         >
-          <PersonalDataConsentContent
-            titleClassName="mb-4 pr-10 text-xl font-semibold text-white"
-            textClassName="text-sm text-gray-300"
-          />
-        </DocumentModal>
+          <Suspense fallback={<p className="text-sm text-gray-300">{DOCUMENT_FALLBACK_TEXT}</p>}>
+            <PersonalDataConsentContent
+              titleClassName="mb-4 pr-10 text-xl font-semibold text-white"
+              textClassName="text-sm text-gray-300"
+            />
+          </Suspense>
+        </LegalDocumentModal>
       ) : null}
     </>
   );
