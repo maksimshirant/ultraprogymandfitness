@@ -376,6 +376,52 @@
   display: none;
 }
 
+.modal-step-scroll-wrap {
+  position: relative;
+}
+
+.modal-step-scroll {
+  -ms-overflow-style: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(245, 184, 0, 0.9) rgba(255, 255, 255, 0.08);
+}
+
+.modal-step-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-step-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+}
+
+.modal-step-scroll::-webkit-scrollbar-thumb {
+  background: rgba(245, 184, 0, 0.9);
+  border-radius: 999px;
+}
+
+.modal-step-scroll-rail {
+  position: absolute;
+  right: 2px;
+  top: 6px;
+  bottom: 6px;
+  width: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  pointer-events: none;
+}
+
+.modal-step-scroll-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2.2rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffd247 0%, #f5b800 100%);
+  box-shadow: 0 0 10px rgba(245, 184, 0, 0.45);
+}
+
 /* Mobile performance mode: disable costly motion/effects */
 @media (max-width: 1023px) {
   html {

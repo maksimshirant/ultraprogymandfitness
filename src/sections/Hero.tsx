@@ -138,7 +138,7 @@ export default function Hero({ onOpenModal }: HeroProps) {
             loading="eager"
             fetchPriority="high"
             decoding="async"
-            className="h-full w-full object-cover object-center"
+            className={cn('h-full w-full object-cover', isDesktopViewport ? 'object-center' : 'object-right')}
           />
         </picture>
         <div className="hero-overlay-layer absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(5,6,10,0.78)_0%,rgba(6,7,11,0.68)_42%,rgba(5,6,10,0.8)_100%)]" />

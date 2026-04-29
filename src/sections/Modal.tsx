@@ -1,5 +1,16 @@
 
-import { Suspense, lazy, useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react';
+import {
+  Suspense,
+  lazy,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type Dispatch,
+  type FormEvent,
+  type ReactNode,
+  type SetStateAction,
+} from 'react';
 import {
   ArrowLeft,
   ChevronRight,
@@ -61,6 +72,12 @@ type FlowSelection = {
 type ResultNotice = {
   type: 'success' | 'error';
   text: string;
+};
+
+type ScrollIndicatorState = {
+  top: number;
+  height: number;
+  visible: boolean;
 };
 
 const RU_PHONE_MASK = '+7 (___) ___-__-__';
@@ -441,6 +458,8 @@ export default function Modal({
 
   const closeTimeoutRef = useRef<number | null>(null);
   const questionTextareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const personalScrollRef = useRef<HTMLDivElement | null>(null);
+  const groupScrollRef = useRef<HTMLDivElement | null>(null);
   const [currentStep, setCurrentStep] = useState<FlowStep>('root');
   const [entryStep, setEntryStep] = useState<FlowStep>('root');
   const [selection, setSelection] = useState<FlowSelection>(createEmptySelection());
@@ -451,6 +470,16 @@ export default function Modal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [resultNotice, setResultNotice] = useState<ResultNotice | null>(null);
+  const [personalScrollIndicator, setPersonalScrollIndicator] = useState<ScrollIndicatorState>({
+    top: 0,
+    height: 36,
+    visible: false,
+  });
+  const [groupScrollIndicator, setGroupScrollIndicator] = useState<ScrollIndicatorState>({
+    top: 0,
+    height: 36,
+    visible: false,
+  });
 
   const selectedMembership = useMemo(
     () =>
@@ -529,6 +558,44 @@ export default function Modal({
   }, [formData.question, selection.topic]);
 
   if (!isOpen) return null;
+
+  const updateScrollIndicator = (
+    element: HTMLDivElement | null,
+    setState: Dispatch<SetStateAction<ScrollIndicatorState>>
+  ) => {
+    if (!element) {
+      setState({ top: 0, height: 36, visible: false });
+      return;
+    }
+
+    const { scrollTop, scrollHeight, clientHeight } = element;
+    const canScroll = scrollHeight > clientHeight + 1;
+
+    if (!canScroll) {
+      setState({ top: 0, height: 36, visible: false });
+      return;
+    }
+
+    const railHeight = Math.max(clientHeight - 12, 1);
+    const ratio = clientHeight / scrollHeight;
+    const thumbHeight = Math.max(28, Math.round(railHeight * ratio));
+    const maxThumbTop = Math.max(railHeight - thumbHeight, 0);
+    const maxScrollTop = Math.max(scrollHeight - clientHeight, 1);
+    const thumbTop = Math.round((scrollTop / maxScrollTop) * maxThumbTop);
+
+    setState({ top: thumbTop, height: thumbHeight, visible: true });
+  };
+
+  useEffect(() => {
+    if (!isMobile || !isOpen) return;
+
+    const raf = window.requestAnimationFrame(() => {
+      updateScrollIndicator(personalScrollRef.current, setPersonalScrollIndicator);
+      updateScrollIndicator(groupScrollRef.current, setGroupScrollIndicator);
+    });
+
+    return () => window.cancelAnimationFrame(raf);
+  }, [isMobile, isOpen, currentStep]);
 
   const headerTitle = isAnnouncementMode
     ? announcement?.title ?? MODAL_TEXT.announcementTitle
@@ -975,7 +1042,15 @@ export default function Modal({
 
   const renderPersonalStep = () => (
     <div className="mx-auto w-full max-w-4xl">
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+      <div className={cn('relative', isMobile && 'modal-step-scroll-wrap')}>
+        <div
+          className={cn(
+            'grid grid-cols-1 gap-3 md:grid-cols-2',
+            isMobile && 'modal-step-scroll max-h-[58svh] overflow-y-auto pr-3'
+          )}
+          ref={isMobile ? personalScrollRef : undefined}
+          onScroll={isMobile ? () => updateScrollIndicator(personalScrollRef.current, setPersonalScrollIndicator) : undefined}
+        >
         {trainers.map((trainer) => {
           const isActive = selection.trainer === trainer.name;
 
@@ -1023,6 +1098,19 @@ export default function Modal({
             </button>
           );
         })}
+        </div>
+        {isMobile ? (
+          <span aria-hidden className="modal-step-scroll-rail">
+            <span
+              className="modal-step-scroll-thumb"
+              style={{
+                height: `${personalScrollIndicator.height}px`,
+                transform: `translateY(${personalScrollIndicator.top}px)`,
+                opacity: personalScrollIndicator.visible ? 1 : 0,
+              }}
+            />
+          </span>
+        ) : null}
       </div>
     </div>
   );
@@ -1030,7 +1118,15 @@ export default function Modal({
 
   const renderGroupStep = () => (
     <div className="mx-auto w-full max-w-4xl space-y-4">
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+      <div className={cn('relative', isMobile && 'modal-step-scroll-wrap')}>
+        <div
+          className={cn(
+            'grid grid-cols-1 gap-3 md:grid-cols-2',
+            isMobile && 'modal-step-scroll max-h-[58svh] overflow-y-auto pr-3'
+          )}
+          ref={isMobile ? groupScrollRef : undefined}
+          onScroll={isMobile ? () => updateScrollIndicator(groupScrollRef.current, setGroupScrollIndicator) : undefined}
+        >
         {groupDirections.map((direction) => {
           const isActive =
             !selection.wantsGroupRecommendation && selection.groupDirection === direction.text;
@@ -1066,6 +1162,19 @@ export default function Modal({
             </button>
           );
         })}
+        </div>
+        {isMobile ? (
+          <span aria-hidden className="modal-step-scroll-rail">
+            <span
+              className="modal-step-scroll-thumb"
+              style={{
+                height: `${groupScrollIndicator.height}px`,
+                transform: `translateY(${groupScrollIndicator.top}px)`,
+                opacity: groupScrollIndicator.visible ? 1 : 0,
+              }}
+            />
+          </span>
+        ) : null}
       </div>
 
 
