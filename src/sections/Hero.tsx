@@ -141,7 +141,7 @@ export default function Hero({ onOpenModal }: HeroProps) {
             className={cn('h-full w-full object-cover', isDesktopViewport ? 'object-center' : 'object-right')}
           />
         </picture>
-        <div className="hero-overlay-layer absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(5,6,10,0.78)_0%,rgba(6,7,11,0.68)_42%,rgba(5,6,10,0.8)_100%)]" />
+        <div className="hero-overlay-layer absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(5,6,10,0.62)_0%,rgba(6,7,11,0.52)_42%,rgba(5,6,10,0.66)_100%)]" />
         <div className="hero-glow-layer">
           <div className="hero-glow-top-right" />
           <div className="hero-glow-bottom-left" />
