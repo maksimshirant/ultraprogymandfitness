@@ -75,19 +75,19 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
 
           <div className="space-y-8 md:space-y-12 lg:space-y-14">
             <PreviewCard
-              imageSrc={groupTrainingsPreviewImage}
-              title="Групповые тренировки"
-              buttonLabel="Выбрать направление"
-              route="/schedule"
-              description="Все направления клуба на одной странице: кому подходит формат, кто ведет занятия и как быстро записаться."
-            />
-            <PreviewCard
               imageSrc={trainersPreviewImage}
               title="Тренеры"
               buttonLabel="Выбрать тренера"
               route="/trainers"
               description="Команда специалистов, которые помогут выстроить программу и держать стабильный прогресс."
               reverse
+            />
+            <PreviewCard
+              imageSrc={groupTrainingsPreviewImage}
+              title="Групповые тренировки"
+              buttonLabel="Выбрать направление"
+              route="/schedule"
+              description="Все направления клуба на одной странице: кому подходит формат, кто ведет занятия и как быстро записаться."
             />
             <PreviewCard
               imageSrc={membershipsPreviewImage}
