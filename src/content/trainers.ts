@@ -1,6 +1,6 @@
-const BASE_URL = import.meta.env.BASE_URL;
+﻿const BASE_URL = import.meta.env.BASE_URL;
 
-export type TrainerCategory = 'gym' | 'crossfit' | 'martial';
+export type TrainerCategory = 'personal' | 'group';
 
 export interface TrainerProfile {
   id: number;
@@ -15,9 +15,8 @@ export interface TrainerProfile {
 }
 
 export const trainerCategories = [
-  { id: 'gym', label: 'Тренажерный зал' },
-  { id: 'crossfit', label: 'Кросс-фит' },
-  { id: 'martial', label: 'Единоборства' },
+  { id: 'personal', label: 'Персональные тренировки' },
+  { id: 'group', label: 'Групповые тренировки' },
 ] as const satisfies ReadonlyArray<{ id: TrainerCategory; label: string }>;
 
 const TRAINER_ASSETS = {
@@ -34,11 +33,12 @@ const TRAINER_ASSETS = {
 } as const;
 
 export const trainers: TrainerProfile[] = [
+  // Personal
   {
     id: 1,
     name: 'Вилков Сергей',
     role: 'Старший тренер',
-    category: 'gym',
+    category: 'personal',
     experience: 'Опыт работы: более 12 лет',
     summary: 'Оздоровительный тренинг, работа с детьми, нутрициология',
     achievements: [
@@ -53,7 +53,7 @@ export const trainers: TrainerProfile[] = [
   {
     id: 2,
     name: 'Зарубина Юлия',
-    category: 'gym',
+    category: 'personal',
     experience: 'Опыт работы более 4 лет.',
     summary: 'Набор массы, снижение веса, МФР и растяжка',
     achievements: [
@@ -67,7 +67,7 @@ export const trainers: TrainerProfile[] = [
   {
     id: 3,
     name: 'Моисеев Александр',
-    category: 'gym',
+    category: 'personal',
     experience: 'Опыт работы: более 8 лет',
     summary: 'Силовой тренинг и сопровождение по нутрициологии',
     achievements: [
@@ -81,7 +81,7 @@ export const trainers: TrainerProfile[] = [
   {
     id: 4,
     name: 'Ляликов Павел',
-    category: 'gym',
+    category: 'personal',
     experience: 'Опыт работы: более 10 лет',
     summary: 'Функциональный тренинг и адаптивное питание',
     achievements: [
@@ -96,7 +96,7 @@ export const trainers: TrainerProfile[] = [
   {
     id: 5,
     name: 'Хлыновский Евгений',
-    category: 'gym',
+    category: 'personal',
     experience: 'Опыт работы: более 9 лет',
     summary: 'Бодибилдинг, спортивная медицина, диетология',
     achievements: [
@@ -106,22 +106,10 @@ export const trainers: TrainerProfile[] = [
     ],
     image: TRAINER_ASSETS.evgeniy,
   },
-  {
-    id: 6,
-    name: 'Осадчий Ярослав',
-    category: 'gym',
-    experience: 'Опыт работы: более 3 лет',
-    summary: 'Силовой тренинг, коррекция веса и ОФП',
-    achievements: [
-      'Сертифицированный тренер тренажерного зала',
-      'Специализации: силовой тренинг, коррекция веса, функциональный тренинг, ОФП',
-    ],
-    image: TRAINER_ASSETS.yaroslav,
-  },
-  {
+    {
     id: 7,
     name: 'Нешпор Анжелика',
-    category: 'gym',
+    category: 'personal',
     experience: 'Опыт работы: 8 лет',
     summary: 'Коррекция осанки и адаптивный фитнес',
     achievements: [
@@ -133,9 +121,32 @@ export const trainers: TrainerProfile[] = [
     image: TRAINER_ASSETS.angelina,
   },
   {
+    id: 6,
+    name: 'Осадчий Ярослав',
+    category: 'personal',
+    experience: 'Опыт работы: более 3 лет',
+    summary: 'Силовой тренинг, коррекция веса и ОФП',
+    achievements: [
+      'Сертифицированный тренер тренажерного зала',
+      'Специализации: силовой тренинг, коррекция веса, функциональный тренинг, ОФП',
+    ],
+    image: TRAINER_ASSETS.yaroslav,
+  },
+  {
+    id: 11,
+    name: 'Корнеева Валерия',
+    category: 'personal',
+    experience: 'Опыт работы: более 3 лет',
+    summary: 'Дипломированный тренер тренажерного зала',
+    achievements: [
+      'Дипломированный тренер тренажерного зала',
+      'Специализации: разбор питания, составление сбалансированного рациона, постановка техники, работа на похуджение и набор мышечной массы, силовой и функциональный тренинг',
+    ],
+  },
+  {
     id: 8,
     name: 'Вольвач Марк',
-    category: 'gym',
+    category: 'personal',
     experience: 'Опыт работы: более 2 лет',
     summary: 'Восстановление после травм, коррекция фигуры, бокс',
     achievements: [
@@ -146,25 +157,106 @@ export const trainers: TrainerProfile[] = [
     imageClassName: 'scale-[1.12]',
   },
   {
+    id: 10,
+    name: 'Сумцова Алиса',
+    category: 'personal',
+    experience: 'Опыт работы: более 2 лет',
+    summary: 'Сертифицированный тренер по фитнесу',
+    achievements: [
+      'Сертифицированный тренер по фитнесу',
+      'Специализации: коррекция фигуры, набор мышечной массы, cиловой тренинг, разбор питания, составление сбалансированного рациона',
+    ],
+  },
+  {
+    id: 15,
+    name: 'Белявский Антон',
+    category: 'personal',
+    experience: 'Опыт работы: 8 лет',
+    summary: 'Кикбоксинг и подготовка по единоборствам',
+    achievements: [
+      'Дипломированный тренер по единоборствам',
+      'Чемпион России по кикбоксингу',
+      'Победитель кубка России по кикбоксингу',
+      'Профессиональный боец',
+    ],
+    image: TRAINER_ASSETS.anton,
+  },
+
+  // Group
+    {
+    id: 12,
+    name: 'Лесник Анастасия',
+    category: 'group',
+    experience: 'Опыт работы: более 10 лет',
+    summary: 'Мастер спорта России, тренер по спортивной гимнастике, дипломированный специалист "Волгоградской академии физической культуры и спорта", дипломированный инеструктор групповых программ',
+    achievements: [
+      'Мастер спорта России, тренер по спортивной гимнастике',
+      'Дипломированный специалист "Волгоградской академии физической культуры и спорта"',
+      'Дипломированный инструктор групповых программ',
+      'Специализации: степ-аэробика, фит-бол-аэробика, силовые, функциональные, кардио тренировки',
+    ],
+  },
+    {
+    id: 14,
+    name: 'Пряжина Виктория',
+    category: 'group',
+    experience: 'Опыт работы: более 17 лет',
+    summary: 'Инструктор групповых программ',
+    achievements: [
+      'Инструктор групповых программ',
+      'Дипломированный специалист ВГАФК',
+      'Неоднократный победитель конкурса Antigravity Russia',
+      'КМС по художественной гимнастике',
+      'Специализации: функциональный тренинг, силовой тренинг, аэробика, степ аэробика, пилатес, стретчинг, антигравити'
+    ],
+  },
+    {
+    id: 13,
+    name: 'Вегера Надежда',
+    category: 'group',
+    experience: 'Опыт работы: более 12 лет',
+    summary: 'Дипломированный инструктор групповых и индивидуальных программ',
+    achievements: [
+      'Дипломированный инструктор групповых и индивидуальных программ',
+      'Адаптивная физическая культура с элементами силы',
+      'Суставная гимнастика',
+      'Функциональные упражнения и дыхательные техники',
+      'Работа с разновозрастными группами от 13 до 75 лет',
+    ],
+  },
+  {
     id: 9,
     name: 'Гузей Александр',
-    category: 'crossfit',
+    category: 'group',
     experience: 'Опыт работы: 10 лет',
     summary: 'Кроссфит, сайкл, пауэрлифтинг, адаптивная физкультура',
     achievements: [
       'Сертифицированный инструктор групповых программ',
-      'Тренер по адаптивной физической культуре',
-      'Тренер по кроссфиту, пауэрлифтингу',
-      'Тренер по сайкл',
       'Мастер спорта по АРБ',
       'Организатор сайкл-фестивалей',
+      'Специализации: адаптивная физическая культура, кроссфит, пауэрлифтинг, сайкл '
     ],
     image: TRAINER_ASSETS.saikl,
   },
+
   {
-    id: 10,
+    id: 16,
+    name: 'Нешпор Анжелика',
+    category: 'group',
+    experience: 'Опыт работы: 8 лет',
+    summary: 'Коррекция осанки и адаптивный фитнес',
+    achievements: [
+      'Дипломированный тренер тренажерного зала / инструктор групповых программ',
+      'Специалист по коррекции осанки',
+      'Специалист по адаптивному и функциональному фитнесу',
+      'Сертифицированный тренер специальных групп населения',
+    ],
+    image: TRAINER_ASSETS.angelina,
+  },
+  {
+    id: 17,
     name: 'Белявский Антон',
-    category: 'martial',
+    category: 'group',
     experience: 'Опыт работы: 8 лет',
     summary: 'Кикбоксинг и подготовка по единоборствам',
     achievements: [

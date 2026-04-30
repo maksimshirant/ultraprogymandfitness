@@ -107,6 +107,41 @@ export const groupDirections: GroupDirection[] = [
     action: 'group_direction:afk',
     bookingAction: 'group_booking_request:afk',
     confirmBookingAction: 'group_booking_confirm:afk',
+  }, {
+    key: 'kids_martial_arts',
+    text: 'Единоборства (дети)',
+    trainer: 'Антон',
+    shortDescription:
+      'Детские тренировки для дисциплины, координации, уверенности и общей физической подготовки.',
+    benefits: ['дисциплина', 'координация', 'уверенность'],
+    category: 'kids',
+    badge: GROUP_DIRECTION_BADGE,
+    status: 'Для детей',
+    trainerAvatar: getTrainerAvatar('Антон'),
+    trainerAvatarPosition: '50% 18%',
+    description:
+      'Детские занятия по единоборствам направлены на развитие силы, координации, дисциплины и уверенности в себе.\n\nТренировки помогают улучшить физическую подготовку ребёнка, развивают реакцию, внимание и умение работать в команде. Занятия проходят в безопасной и поддерживающей атмосфере.\n\nТренер Антон уделяет внимание каждому участнику и помогает детям развиваться физически и психологически через регулярные тренировки.',
+    action: 'group_direction:kids_martial_arts',
+    bookingAction: 'group_booking_request:kids_martial_arts',
+    confirmBookingAction: 'group_booking_confirm:kids_martial_arts',
+  },
+  {
+    key: 'afk_kids',
+    text: 'АФК (Дети)',
+    trainer: 'Александр',
+    shortDescription:
+      'Мягкие тренировки для восстановления подвижности, укрепления здоровья и улучшения самочувствия.',
+    benefits: ['мягкое укрепление', 'восстановление подвижности', 'улучшение самочувствия'],
+    category: 'kids',
+    badge: GROUP_DIRECTION_BADGE,
+    status: 'Восстановительный формат',
+    trainerAvatar: getTrainerAvatar('Александр'),
+    trainerAvatarPosition: '50% 14%',
+    description:
+      'АФК (адаптивная физическая культура) — это занятия, направленные на укрепление здоровья, восстановление подвижности и улучшение общего физического состояния в том числе после травм и операций.\n\nТренировки проходят в малых группах и подходят людям с разным уровнем подготовки, а также тем, кому важно мягкое и безопасное укрепление организма.\n\nЗанятия проводит тренер Александр — реабилитолог с профильным образованием, который подбирает нагрузку индивидуально с учётом особенностей участников и помогает вернуть подвижность и постепенно улучшать физическую форму и самочувствие.',
+    action: 'group_direction:afk_kids',
+    bookingAction: 'group_booking_request:afk_kids',
+    confirmBookingAction: 'group_booking_confirm:afk_kids',
   },
   {
     key: 'crossfit',
@@ -126,9 +161,27 @@ export const groupDirections: GroupDirection[] = [
     bookingAction: 'group_booking_request:crossfit',
     confirmBookingAction: 'group_booking_confirm:crossfit',
   },
+   {
+    key: 'crossfit_kids',
+    text: 'Кроссфит (Дети)',
+    trainer: 'Александр',
+    shortDescription:
+      'Высокоинтенсивный формат для силы, выносливости и комплексной проработки всего тела.',
+    benefits: ['силовая выносливость', 'мощность', 'развивает все группы мышц'],
+    category: 'kids',
+    badge: GROUP_DIRECTION_BADGE,
+    status: 'Высокая интенсивность',
+    trainerAvatar: getTrainerAvatar('Александр'),
+    trainerAvatarPosition: '50% 14%',
+    description:
+      'Кроссфит сочетает силовые упражнения, кардио-нагрузку и функциональные связки для развития силы, выносливости и общей физической формы.\n\nФормат подходит тем, кто стремится развить способности тела на максимум, любит динамику, хочет быстро прогрессировать и получать мощную тренировочную нагрузку в группе. Занятия подходят для подготовки к соревнованиям.\n\nЗанятия проводит тренер Александр, который следит за техникой, масштабирует нагрузку под уровень подготовки и помогает безопасно расти от тренировки к тренировке.',
+    action: 'group_direction:crossfit_kids',
+    bookingAction: 'group_booking_request:crossfit_kids',
+    confirmBookingAction: 'group_booking_confirm:crossfit_kids',
+  },
   {
     key: 'martial_arts_adults',
-    text: 'Единоборства взрослые',
+    text: 'Единоборства',
     trainer: 'Антон',
     shortDescription:
       'Силовой и скоростной формат для выносливости, координации, реакции и уверенности в себе.',
@@ -144,24 +197,7 @@ export const groupDirections: GroupDirection[] = [
     bookingAction: 'group_booking_request:martial_arts_adults',
     confirmBookingAction: 'group_booking_confirm:martial_arts_adults',
   },
-  {
-    key: 'kids_martial_arts',
-    text: 'Единоборства дети',
-    trainer: 'Антон',
-    shortDescription:
-      'Детские тренировки для дисциплины, координации, уверенности и общей физической подготовки.',
-    benefits: ['дисциплина', 'координация', 'уверенность'],
-    category: 'kids',
-    badge: GROUP_DIRECTION_BADGE,
-    status: 'Для детей',
-    trainerAvatar: getTrainerAvatar('Антон'),
-    trainerAvatarPosition: '50% 18%',
-    description:
-      'Детские занятия по единоборствам направлены на развитие силы, координации, дисциплины и уверенности в себе.\n\nТренировки помогают улучшить физическую подготовку ребёнка, развивают реакцию, внимание и умение работать в команде. Занятия проходят в безопасной и поддерживающей атмосфере.\n\nТренер Антон уделяет внимание каждому участнику и помогает детям развиваться физически и психологически через регулярные тренировки.',
-    action: 'group_direction:kids_martial_arts',
-    bookingAction: 'group_booking_request:kids_martial_arts',
-    confirmBookingAction: 'group_booking_confirm:kids_martial_arts',
-  },
+ 
   {
     key: 'cycle',
     text: 'Сайкл',

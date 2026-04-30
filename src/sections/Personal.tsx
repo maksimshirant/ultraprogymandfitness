@@ -1,4 +1,4 @@
-
+﻿
 import { useEffect, useMemo, useState } from 'react';
 import { ArrowRight, Check, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import PublicAssetImage from '@/components/PublicAssetImage';
@@ -24,7 +24,6 @@ const PERSONAL_TEXT = {
   sectionTitle: 'Наши',
   sectionTitleAccent: 'тренеры',
   sectionSubtitle: 'Выберите специалиста по направлению и запишитесь на персональную тренировку.',
-  placeholderPhoto: 'Фото тренера',
   showMore: 'Подробнее о тренере',
   showLess: 'Скрыть',
   cta: 'Записаться на тренировку',
@@ -33,6 +32,8 @@ const PERSONAL_TEXT = {
   selectAriaPrefix: 'Выбрать тренера',
   selectCategoryAria: 'Выбрать категорию тренеров',
 } as const;
+
+const CLUB_LOGO_SRC = `${import.meta.env.BASE_URL}logo.webp`;
 
 function renderAchievement(achievement: string, index: number) {
   const trimmedAchievement = achievement.trim();
@@ -66,7 +67,7 @@ function renderAchievement(achievement: string, index: number) {
 }
 
 export default function Personal({ onOpenModal }: PersonalProps) {
-  const [activeCategory, setActiveCategory] = useState<TrainerCategory>('gym');
+  const [activeCategory, setActiveCategory] = useState<TrainerCategory>('personal');
   const [activeTrainerIndex, setActiveTrainerIndex] = useState(0);
   const [expandedTrainerId, setExpandedTrainerId] = useState<number | null>(null);
   const [isTabletHeroScrollHintVisible, setIsTabletHeroScrollHintVisible] = useState(false);
@@ -172,12 +173,13 @@ export default function Personal({ onOpenModal }: PersonalProps) {
             />
           ) : (
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#1A1A27] via-[#111117] to-[#0A0A0F]">
-              <span className="text-6xl font-black leading-none text-[#F5B800] md:text-7xl">
-                {String(trainer.id).padStart(2, '0')}
-              </span>
-              <span className="mt-3 text-xs uppercase tracking-[0.2em] text-gray-300">
-                {PERSONAL_TEXT.placeholderPhoto}
-              </span>
+              <img
+                src={CLUB_LOGO_SRC}
+                alt="Р›РѕРіРѕС‚РёРї Ultra Pro Gym & Fitness"
+                loading="lazy"
+                decoding="async"
+                className="h-28 w-28 object-contain brightness-0 invert opacity-85 md:h-32 md:w-32"
+              />
             </div>
           )}
         </div>
@@ -315,7 +317,13 @@ export default function Personal({ onOpenModal }: PersonalProps) {
                       : 'border-white/8 bg-transparent text-gray-400 hover:border-white/18 hover:text-white'
                   )}
                 >
-                  <span className="block font-medium">{category.label}</span>
+                  <span className="block font-medium">
+                    {isMobileViewport
+                      ? category.id === 'personal'
+                        ? 'Персональные'
+                        : 'Групповые'
+                      : category.label}
+                  </span>
                 </button>
               );
             })}
@@ -464,12 +472,13 @@ export default function Personal({ onOpenModal }: PersonalProps) {
                           />
                         ) : (
                           <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#1A1A27] via-[#111117] to-[#0A0A0F]">
-                            <span className="text-6xl font-black leading-none text-[#F5B800] md:text-7xl">
-                              {String(trainer.id).padStart(2, '0')}
-                            </span>
-                            <span className="mt-3 text-xs uppercase tracking-[0.2em] text-gray-300">
-                              {PERSONAL_TEXT.placeholderPhoto}
-                            </span>
+                            <img
+                              src={CLUB_LOGO_SRC}
+                              alt="Р›РѕРіРѕС‚РёРї Ultra Pro Gym & Fitness"
+                              loading="lazy"
+                              decoding="async"
+                              className="h-28 w-28 object-contain brightness-0 invert opacity-85 md:h-32 md:w-32"
+                            />
                           </div>
                         )}
                       </div>
@@ -521,3 +530,4 @@ export default function Personal({ onOpenModal }: PersonalProps) {
     </div>
   );
 }
+
