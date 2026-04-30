@@ -1035,7 +1035,7 @@ export default function Modal({
           ref={isMobile ? personalScrollRef : undefined}
           onScroll={isMobile ? () => updateScrollIndicator(personalScrollRef.current, setPersonalScrollIndicator) : undefined}
         >
-        {trainers.map((trainer) => {
+        {trainers.filter((trainer) => trainer.category === 'personal').map((trainer) => {
           const isActive = selection.trainer === trainer.name;
 
           return (
