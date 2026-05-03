@@ -94,6 +94,7 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
               title="Абонементы"
               buttonLabel="Выбрать абонементы"
               route="/memberships"
+                   reverse
               description="Подберите формат посещения: от быстрого старта до годового плана — с понятными условиями."
             />
           </div>
