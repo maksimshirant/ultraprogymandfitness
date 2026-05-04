@@ -261,7 +261,7 @@ export default function Flors() {
                           alt={`${activeZone.title} — фото ${index + 1}`}
                           loading="lazy"
                           fetchPriority="low"
-                          sizes="(max-width: 767px) 50vw, (max-width: 1279px) 33vw, 25vw"
+                          sizes="(max-width: 767px) 50vw, (max-width: 1279px) 40vw, 33vw"
                           variantSuffix={isMobileViewport ? 'thumb' : 'preview'}
                           deferUntilVisible
                           observerRootMargin="120px 0px"

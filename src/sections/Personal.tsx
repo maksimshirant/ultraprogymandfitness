@@ -165,7 +165,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
               alt={trainer.name}
               loading="lazy"
               fetchPriority="low"
-              sizes="(max-width: 767px) 100vw, (max-width: 1023px) 70vw, 34vw"
+              sizes="(max-width: 767px) 100vw, (max-width: 1023px) 70vw, 42vw"
               variantSuffix={isDesktopViewport ? undefined : 'preview'}
               deferUntilVisible
               pictureClassName="absolute inset-0 block h-full w-full"
@@ -464,7 +464,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
                             alt={trainer.name}
                             loading="lazy"
                             fetchPriority="low"
-                            sizes="(max-width: 1279px) 34vw, 24rem"
+                            sizes="(max-width: 1279px) 34vw, 28rem"
                             variantSuffix={isDesktopViewport ? undefined : 'preview'}
                             deferUntilVisible
                             pictureClassName="absolute inset-0 block h-full w-full"

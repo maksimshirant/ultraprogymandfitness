@@ -272,7 +272,7 @@ function TrainerAvatar({ direction, isDesktopViewport }: { direction: GroupDirec
         loading="lazy"
         fetchPriority="low"
         decoding="async"
-        sizes="(max-width: 639px) 128px, 144px"
+        sizes="(max-width: 639px) 128px, 192px"
         variantSuffix={isDesktopViewport ? undefined : 'thumb'}
         deferUntilVisible
         pictureClassName="block h-32 w-32 overflow-hidden rounded-full border border-white/10 sm:h-36 sm:w-36"
