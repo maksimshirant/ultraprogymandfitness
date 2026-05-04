@@ -7,6 +7,7 @@ const TRAINER_AVATARS: Record<string, string> = {
   Анжелика: `${BASE_URL}trainers/angelina.jpg`,
   Антон: `${BASE_URL}trainers/anton.jpg`,
   Юлия: `${BASE_URL}trainers/yulia.jpg`,
+  Виктория: `${BASE_URL}trainers/viktoria.jpg`,
 };
 
 const getTrainerAvatar = (trainer?: string) => {

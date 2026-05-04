@@ -22,6 +22,8 @@ export const trainerCategories = [
 const TRAINER_ASSETS = {
   sergey: `${BASE_URL}trainers/sergey.jpg`,
   yulia: `${BASE_URL}trainers/yulia.jpg`,
+  valeria: `${BASE_URL}trainers/valeria.jpg`,
+  viktoria: `${BASE_URL}trainers/viktoria.jpg`,
   alexander: `${BASE_URL}trainers/alexander.jpg`,
   pavel: `${BASE_URL}trainers/pavel.jpg`,
   evgeniy: `${BASE_URL}trainers/evgeniy.jpg`,
@@ -142,6 +144,7 @@ export const trainers: TrainerProfile[] = [
       'Дипломированный тренер тренажерного зала',
       'Специализации: разбор питания, составление сбалансированного рациона, постановка техники, работа на похуджение и набор мышечной массы, силовой и функциональный тренинг',
     ],
+    image: TRAINER_ASSETS.valeria,
   },
   {
     id: 8,
@@ -209,6 +212,7 @@ export const trainers: TrainerProfile[] = [
       'КМС по художественной гимнастике',
       'Специализации: функциональный тренинг, силовой тренинг, аэробика, степ аэробика, пилатес, стретчинг, антигравити'
     ],
+    image: TRAINER_ASSETS.viktoria,
   },
     {
     id: 13,
