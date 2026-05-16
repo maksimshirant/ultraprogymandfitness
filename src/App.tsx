@@ -2,7 +2,6 @@ import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Announcement from './sections/Announcement';
 import AppRoutes from '@/router/AppRoutes';
-import { useViewportTier } from '@/hooks/useViewportTier';
 import { syncStructuredData } from '@/seo/structuredData';
 import type { OpenModalRequest } from '@/types/modal';
 
@@ -47,8 +46,6 @@ const FROST_BACKGROUND = {
 
 function App() {
   const { pathname } = useLocation();
-  const viewportTier = useViewportTier();
-  const isDesktopViewport = viewportTier === 'desktop';
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPrefilledTopic, setModalPrefilledTopic] = useState('');
   const [modalPrefilledMembershipId, setModalPrefilledMembershipId] = useState<number | undefined>(undefined);
@@ -236,20 +233,16 @@ function App() {
             style={{ opacity: initialFrostOpacity }}
           >
             <picture className="block h-full w-full">
-              {!isDesktopViewport ? (
-                <source
-                  type="image/avif"
-                  srcSet={FROST_BACKGROUND.avifSrcSet}
-                  sizes="100vw"
-                />
-              ) : null}
-              {!isDesktopViewport ? (
-                <source
-                  type="image/webp"
-                  srcSet={FROST_BACKGROUND.webpSrcSet}
-                  sizes="100vw"
-                />
-              ) : null}
+              <source
+                type="image/avif"
+                srcSet={FROST_BACKGROUND.avifSrcSet}
+                sizes="100vw"
+              />
+              <source
+                type="image/webp"
+                srcSet={FROST_BACKGROUND.webpSrcSet}
+                sizes="100vw"
+              />
               <img
                 src={FROST_BACKGROUND.png}
                 alt=""

@@ -7,7 +7,6 @@ import {
   groupDirections,
   type GroupDirection,
 } from '@/content/groupDirections';
-import { useViewportTier } from '@/hooks/useViewportTier';
 import { cn } from '@/lib/utils';
 import type { OpenModalHandler } from '@/types/modal';
 
@@ -260,7 +259,7 @@ const HERO_SCHEDULE_ROWS = HERO_SCHEDULE_GROUPS.map((group) => ({
   }),
 }));
 
-function TrainerAvatar({ direction, isDesktopViewport }: { direction: GroupDirection; isDesktopViewport: boolean }) {
+function TrainerAvatar({ direction }: { direction: GroupDirection }) {
   const trainerAvatar = direction.trainerAvatar;
   const isPlaceholderAvatar = Boolean(trainerAvatar?.includes('placeholder'));
 
@@ -273,7 +272,7 @@ function TrainerAvatar({ direction, isDesktopViewport }: { direction: GroupDirec
         fetchPriority="low"
         decoding="async"
         sizes="(max-width: 639px) 128px, 192px"
-        variantSuffix={isDesktopViewport ? undefined : 'thumb'}
+        variantSuffix="thumb"
         deferUntilVisible
         pictureClassName="block h-32 w-32 overflow-hidden rounded-full border border-white/10 sm:h-36 sm:w-36"
         className="h-full w-full object-cover object-top"
@@ -330,8 +329,6 @@ function DirectionDetails({ direction }: { direction: GroupDirection }) {
 export default function GroupTrainings({ onOpenModal }: GroupTrainingsProps) {
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   const [expandedScheduleDays, setExpandedScheduleDays] = useState<string[]>([]);
-  const viewportTier = useViewportTier();
-  const isDesktopViewport = viewportTier === 'desktop';
 
   const toggleExpanded = (key: string) => {
     setExpandedKeys((prev) =>
@@ -540,7 +537,7 @@ export default function GroupTrainings({ onOpenModal }: GroupTrainingsProps) {
                             <div className="space-y-5">
                               <div className="grid grid-cols-1 justify-items-center gap-y-2 sm:grid-cols-[9rem_minmax(0,1fr)] sm:items-center sm:justify-items-start sm:gap-x-5">
                                 <div className="flex justify-center sm:row-span-2 sm:justify-self-center">
-                                  <TrainerAvatar direction={direction} isDesktopViewport={isDesktopViewport} />
+                                  <TrainerAvatar direction={direction} />
                                 </div>
                                 <div className="min-w-0 text-center sm:self-center sm:text-left">
                                   <h3 className="text-lg font-bold leading-tight text-white [overflow-wrap:anywhere] sm:text-2xl lg:text-4xl">

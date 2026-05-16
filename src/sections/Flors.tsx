@@ -51,6 +51,11 @@ const floorConfigs: readonly FloorConfig[] = [
         ],
       },
       {
+        id: 'reseption',
+        title: 'Ресепшен',
+        slides: [`${BASE_URL}floors/floor1/RESEPTION/1.jpg?v=20260516`],
+      },
+      {
         id: 'sauna',
         title: 'Сауна',
         slides: [`${BASE_URL}floors/floor1/SAUNA/1.webp`],

@@ -129,8 +129,8 @@ export default function Hero({ onOpenModal }: HeroProps) {
     <>
       <section className="relative flex min-h-[100svh] items-center overflow-hidden gradient-bg-radial">
         <picture className="hero-media-layer absolute inset-0 z-0">
-          {!isDesktopViewport ? <source type="image/avif" srcSet={HERO_ASSETS.background.avifSrcSet} sizes="100vw" /> : null}
-          {!isDesktopViewport ? <source type="image/webp" srcSet={HERO_ASSETS.background.webpSrcSet} sizes="100vw" /> : null}
+          <source type="image/avif" srcSet={HERO_ASSETS.background.avifSrcSet} sizes="100vw" />
+          <source type="image/webp" srcSet={HERO_ASSETS.background.webpSrcSet} sizes="100vw" />
           <img
             src={HERO_ASSETS.background.png}
             alt=""
@@ -141,7 +141,7 @@ export default function Hero({ onOpenModal }: HeroProps) {
             className={cn('h-full w-full object-cover', isDesktopViewport ? 'object-center' : 'object-right')}
           />
         </picture>
-        <div className="hero-overlay-layer absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(5,6,10,0.62)_0%,rgba(6,7,11,0.52)_42%,rgba(5,6,10,0.66)_100%)]" />
+        <div className="hero-overlay-layer absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(5,6,10,0.43)_0%,rgba(6,7,11,0.36)_42%,rgba(5,6,10,0.46)_100%)] md:bg-[linear-gradient(180deg,rgba(5,6,10,0.62)_0%,rgba(6,7,11,0.52)_42%,rgba(5,6,10,0.66)_100%)]" />
         <div className="hero-glow-layer">
           <div className="hero-glow-top-right" />
           <div className="hero-glow-bottom-left" />
@@ -194,20 +194,16 @@ export default function Hero({ onOpenModal }: HeroProps) {
                     className="group relative inline-flex w-[116%] max-w-[42rem] justify-center rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800]"
                   >
                     <picture className="block w-full">
-                      {!isDesktopViewport ? (
-                        <source
-                          type="image/avif"
-                          srcSet={HERO_ASSETS.card.avifSrcSet}
-                          sizes="(min-width: 1024px) 54vw, 100vw"
-                        />
-                      ) : null}
-                      {!isDesktopViewport ? (
-                        <source
-                          type="image/webp"
-                          srcSet={HERO_ASSETS.card.webpSrcSet}
-                          sizes="(min-width: 1024px) 54vw, 100vw"
-                        />
-                      ) : null}
+                      <source
+                        type="image/avif"
+                        srcSet={HERO_ASSETS.card.avifSrcSet}
+                        sizes="(min-width: 1024px) 54vw, 100vw"
+                      />
+                      <source
+                        type="image/webp"
+                        srcSet={HERO_ASSETS.card.webpSrcSet}
+                        sizes="(min-width: 1024px) 54vw, 100vw"
+                      />
                       <img
                         src={HERO_ASSETS.card.png}
                         alt={HERO_ASSETS.cardAlt}

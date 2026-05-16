@@ -166,7 +166,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
               loading="lazy"
               fetchPriority="low"
               sizes="(max-width: 767px) 100vw, (max-width: 1023px) 70vw, 42vw"
-              variantSuffix={isDesktopViewport ? undefined : 'preview'}
+              variantSuffix="preview"
               deferUntilVisible
               pictureClassName="absolute inset-0 block h-full w-full"
               className={cn('h-full w-full object-cover object-center', trainer.imageClassName)}
@@ -465,7 +465,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
                             loading="lazy"
                             fetchPriority="low"
                             sizes="(max-width: 1279px) 34vw, 28rem"
-                            variantSuffix={isDesktopViewport ? undefined : 'preview'}
+                            variantSuffix="preview"
                             deferUntilVisible
                             pictureClassName="absolute inset-0 block h-full w-full"
                             className={cn('h-full w-full object-cover object-center', trainer.imageClassName)}
