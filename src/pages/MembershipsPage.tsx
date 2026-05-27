@@ -1,10 +1,10 @@
 import { Suspense, lazy } from 'react';
-import { SectionFallback } from '@/components/SectionFallback';
+import { SectionFallback } from '@/shared/ui/SectionFallback';
 import { Seo } from '@/seo/Seo';
 import { pageSeo } from '@/seo/pageSeo';
-import type { OpenModalHandler } from '@/types/modal';
+import type { OpenModalHandler } from '@/features/lead-request/model/types';
 
-const Abonements = lazy(() => import('@/sections/Abonements'));
+const Abonements = lazy(() => import('@/widgets/memberships/ui/Abonements'));
 
 interface MembershipsPageProps {
   onOpenModal: OpenModalHandler;

@@ -1,10 +1,10 @@
 import { Suspense, lazy } from 'react';
-import { SectionFallback } from '@/components/SectionFallback';
+import { SectionFallback } from '@/shared/ui/SectionFallback';
 import { Seo } from '@/seo/Seo';
 import { pageSeo } from '@/seo/pageSeo';
-import type { OpenModalHandler } from '@/types/modal';
+import type { OpenModalHandler } from '@/features/lead-request/model/types';
 
-const Personal = lazy(() => import('@/sections/Personal'));
+const Personal = lazy(() => import('@/widgets/trainers/ui/Personal'));
 
 interface TrainersPageProps {
   onOpenModal: OpenModalHandler;

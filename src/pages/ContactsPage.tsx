@@ -1,4 +1,4 @@
-import ContactsSection from '@/sections/ContactsSection';
+import ContactsSection from '@/widgets/contacts/ui/ContactsSection';
 import { Seo } from '@/seo/Seo';
 import { pageSeo } from '@/seo/pageSeo';
 
