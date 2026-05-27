@@ -1,6 +1,7 @@
 ﻿const BASE_URL = import.meta.env.BASE_URL;
 const GROUP_DIRECTION_BADGE = 'Групповое направление';
 const TRAINER_AVATAR_PLACEHOLDER = `${BASE_URL}trainers/alexander-placeholder.jpg`;
+const GLUTE_PUMP_CARD_BACKGROUND = new URL('../../content/ягодичный памп.png', import.meta.url).href;
 
 const TRAINER_AVATARS: Record<string, string> = {
   Александр: `${BASE_URL}trainers/saikl.jpg`,
@@ -28,6 +29,7 @@ export interface GroupDirection {
   status: string;
   trainerAvatar?: string;
   trainerAvatarPosition?: string;
+  cardBackgroundImage?: string;
   description: string;
   action: string;
   bookingAction: string;
@@ -68,6 +70,7 @@ export const groupDirections: GroupDirection[] = [
     status: 'Акцент на ягодицы',
     trainerAvatar: getTrainerAvatar('Анжелика'),
     trainerAvatarPosition: '50% 18%',
+    cardBackgroundImage: GLUTE_PUMP_CARD_BACKGROUND,
     description:
       'Ягодичный памп — это тренировка, направленная на укрепление мышц ног и ягодиц, улучшение тонуса и формирование красивого силуэта.\n\nЗанятия помогают повысить силу нижней части тела, улучшить выносливость и получить максимальный эффект от каждой тренировки за счёт правильно подобранных упражнений.\n\nТренер Анжелика внимательно контролирует технику выполнения и помогает добиться заметного результата.',
     action: 'group_direction:glute_pump',

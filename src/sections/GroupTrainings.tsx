@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight, Check, ChevronDown } from 'lucide-react';
+import { ArrowRight, Check, ChevronDown, Plus } from 'lucide-react';
 import PublicAssetImage from '@/components/PublicAssetImage';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 import {
@@ -526,33 +526,58 @@ export default function GroupTrainings({ onOpenModal }: GroupTrainingsProps) {
                   <div className="space-y-5">
                     {directions.map((direction) => {
                       const isExpanded = expandedKeys.includes(direction.key);
+                      const isGlutePump = direction.key === 'glute_pump';
 
                       return (
                         <article
                           key={direction.key}
                           id={direction.key}
-                          className="scroll-mt-28 rounded-[28px] border border-white/10 bg-[#101117]/90 px-5 pt-5 pb-4 lg:px-7 lg:pt-7 lg:pb-5"
+                          className={cn(
+                            'scroll-mt-28 rounded-[28px] bg-[#101117]/70 px-5 pt-2 pb-0.5 sm:pb-1.5 lg:px-7 lg:pt-4 lg:pb-2',
+                            isGlutePump && direction.cardBackgroundImage && 'bg-cover bg-center bg-no-repeat'
+                          )}
+                          style={
+                            isGlutePump && direction.cardBackgroundImage
+                              ? {
+                                  backgroundImage: `linear-gradient(180deg, rgba(16,17,23,0.62) 0%, rgba(16,17,23,0.78) 100%), url(${direction.cardBackgroundImage})`,
+                                }
+                              : undefined
+                          }
                         >
                           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-center lg:gap-8">
-                            <div className="space-y-5">
-                              <div className="grid grid-cols-1 justify-items-center gap-y-2 sm:grid-cols-[9rem_minmax(0,1fr)] sm:items-center sm:justify-items-start sm:gap-x-5">
-                                <div className="flex justify-center sm:row-span-2 sm:justify-self-center">
-                                  <TrainerAvatar direction={direction} />
-                                </div>
-                                <div className="min-w-0 text-center sm:self-center sm:text-left">
-                                  <h3 className="text-lg font-bold leading-tight text-white [overflow-wrap:anywhere] sm:text-2xl lg:text-4xl">
+                            <div className="space-y-1">
+                              <div
+                                className={cn(
+                                  'grid items-center gap-x-4 gap-y-1 pr-1 sm:gap-x-5 sm:pr-0',
+                                  isGlutePump ? 'grid-cols-1' : 'grid-cols-[8rem_minmax(0,1fr)] sm:grid-cols-[9rem_minmax(0,1fr)]'
+                                )}
+                              >
+                                {!isGlutePump ? (
+                                  <div className="flex justify-center sm:row-span-2 sm:justify-self-center">
+                                    <TrainerAvatar direction={direction} />
+                                  </div>
+                                ) : null}
+                                <div className="min-w-0 self-center text-left">
+                                  <h3 className="max-w-full whitespace-normal text-lg font-bold leading-tight text-white sm:text-2xl lg:text-4xl">
                                     {direction.text}
                                   </h3>
-                                  <p className="mt-2 text-sm text-gray-300 sm:text-lg">
-                                    Тренер: {direction.trainer}
+                                  <p className="mt-0.5 text-sm text-gray-300 sm:text-lg">
+                                    <span className="text-[#F5B800]">Тренер:</span> {direction.trainer}
                                   </p>
                                 </div>
-                                <div className="flex justify-center sm:col-start-2 sm:justify-self-start">
+                                <div
+                                  className={cn(
+                                    'flex justify-center sm:justify-self-start',
+                                    isGlutePump
+                                      ? 'col-start-1 col-end-2'
+                                      : 'col-start-1 col-end-3 sm:col-start-2 sm:col-end-auto'
+                                  )}
+                                >
                                   <button
                                     type="button"
                                     aria-expanded={isExpanded}
                                     onClick={() => toggleExpanded(direction.key)}
-                                    className="inline-flex items-center justify-center gap-2 text-sm font-medium text-[#F5B800] transition-colors lg:hover:text-[#FFD351]"
+                                    className="hidden items-center justify-center gap-2 text-sm font-medium text-[#F5B800] transition-colors sm:inline-flex lg:hover:text-[#FFD351]"
                                   >
                                     <span>{isExpanded ? GROUP_TRAININGS_TEXT.detailsCloseCta : GROUP_TRAININGS_TEXT.detailsCta}</span>
                                     <ChevronDown className={cn('h-4 w-4 transition-transform duration-300', isExpanded && 'rotate-180')} />
@@ -585,11 +610,41 @@ export default function GroupTrainings({ onOpenModal }: GroupTrainingsProps) {
                                     groupDirection: direction.text,
                                   })
                                 }
-                                className="btn-primary w-full px-6 py-3.5 text-white lg:w-auto lg:min-w-[15rem]"
+                                className="btn-primary hidden w-full px-6 py-3.5 text-white sm:inline-flex lg:w-auto lg:min-w-[15rem]"
                               >
                                 {GROUP_TRAININGS_TEXT.cardCta}
                               </button>
                             </div>
+                          </div>
+
+                          <div className="mt-0 flex items-center justify-between sm:hidden">
+                            <button
+                              type="button"
+                              data-action={direction.action}
+                              data-booking-action={direction.bookingAction}
+                              data-confirm-booking-action={direction.confirmBookingAction}
+                              data-group-direction={direction.key}
+                              onClick={() =>
+                                onOpenModal({
+                                  topic: 'group',
+                                  groupDirection: direction.text,
+                                })
+                              }
+                              aria-label={GROUP_TRAININGS_TEXT.cardCta}
+                              className="btn-primary inline-flex h-12 w-12 items-center justify-center rounded-full p-0 text-white"
+                            >
+                              <Plus className="h-5 w-5" />
+                            </button>
+
+                            <button
+                              type="button"
+                              aria-expanded={isExpanded}
+                              onClick={() => toggleExpanded(direction.key)}
+                              className="inline-flex items-center justify-center gap-2 text-sm font-medium text-[#F5B800] transition-colors"
+                            >
+                              <span>{isExpanded ? GROUP_TRAININGS_TEXT.detailsCloseCta : GROUP_TRAININGS_TEXT.detailsCta}</span>
+                              <ChevronDown className={cn('h-4 w-4 transition-transform duration-300', isExpanded && 'rotate-180')} />
+                            </button>
                           </div>
 
                           <div
@@ -635,3 +690,5 @@ export default function GroupTrainings({ onOpenModal }: GroupTrainingsProps) {
     </div>
   );
 }
+
+
