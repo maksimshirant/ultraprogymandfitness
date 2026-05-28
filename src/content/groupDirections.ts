@@ -2,6 +2,10 @@
 const GROUP_DIRECTION_BADGE = 'Групповое направление';
 const TRAINER_AVATAR_PLACEHOLDER = `${BASE_URL}trainers/alexander-placeholder.jpg`;
 const GLUTE_PUMP_CARD_BACKGROUND = new URL('../../content/ягодичный памп.png', import.meta.url).href;
+const MARTIAL_ARTS_CARD_BACKGROUND = new URL('../../content/единоборства.png', import.meta.url).href;
+const CYCLE_CARD_BACKGROUND = new URL('../../content/сайкл.png', import.meta.url).href;
+const STRETCHING_CARD_BACKGROUND = new URL('../../content/стрейчинг.png', import.meta.url).href;
+const FUNCTIONAL_TRAINING_CARD_BACKGROUND = new URL('../../content/функциональная тренировка.png', import.meta.url).href;
 
 const TRAINER_AVATARS: Record<string, string> = {
   Александр: `${BASE_URL}trainers/saikl.jpg`,
@@ -30,6 +34,7 @@ export interface GroupDirection {
   trainerAvatar?: string;
   trainerAvatarPosition?: string;
   cardBackgroundImage?: string;
+  cardBackgroundPosition?: string;
   description: string;
   action: string;
   bookingAction: string;
@@ -123,6 +128,8 @@ export const groupDirections: GroupDirection[] = [
     status: 'Для детей',
     trainerAvatar: getTrainerAvatar('Антон'),
     trainerAvatarPosition: '50% 18%',
+    cardBackgroundImage: MARTIAL_ARTS_CARD_BACKGROUND,
+    cardBackgroundPosition: 'center 20%',
     description:
       'Детские занятия по единоборствам направлены на развитие силы, координации, дисциплины и уверенности в себе.\n\nТренировки помогают улучшить физическую подготовку ребёнка, развивают реакцию, внимание и умение работать в команде. Занятия проходят в безопасной и поддерживающей атмосфере.\n\nТренер Антон уделяет внимание каждому участнику и помогает детям развиваться физически и психологически через регулярные тренировки.',
     action: 'group_direction:kids_martial_arts',
@@ -195,6 +202,8 @@ export const groupDirections: GroupDirection[] = [
     status: 'Интенсивный формат',
     trainerAvatar: getTrainerAvatar('Антон'),
     trainerAvatarPosition: '50% 18%',
+    cardBackgroundImage: MARTIAL_ARTS_CARD_BACKGROUND,
+    cardBackgroundPosition: 'center 20%',
     description:
       'Единоборства — это сила, скорость и уверенность в себе.\n\nТренировки проходят под руководством тренера Антона, чемпиона России. Занятия помогают развить выносливость, координацию, реакцию и укрепить всё тело. Подходят как начинающим, так и тем, кто хочет повысить уровень подготовки и улучшить физическую форму.',
     action: 'group_direction:martial_arts_adults',
@@ -214,6 +223,7 @@ export const groupDirections: GroupDirection[] = [
     status: 'Кардио-формат',
     trainerAvatar: getTrainerAvatar('Александр'),
     trainerAvatarPosition: '50% 14%',
+    cardBackgroundImage: CYCLE_CARD_BACKGROUND,
     description:
       'Сайкл — это энергичная групповая тренировка на велотренажёрах, которая помогает развить выносливость, укрепить ноги и получить интенсивную кардио-нагрузку.\n\nФормат подходит тем, кто любит ритм, хочет сжигать калории и работать в драйвовой атмосфере группы.\n\nТренер Александр задаёт темп, помогает распределять усилия и делает тренировку понятной как для новичков, так и для тех, кто уже любит интенсивное кардио.',
     action: 'group_direction:cycle',
@@ -231,6 +241,7 @@ export const groupDirections: GroupDirection[] = [
     badge: GROUP_DIRECTION_BADGE,
     status: 'Подходит новичкам',
     trainerAvatar: getTrainerAvatar('Виктория'),
+    cardBackgroundImage: FUNCTIONAL_TRAINING_CARD_BACKGROUND,
     description:
       'Функциональный тренинг — это комплексные упражнения для развития силы, выносливости, координации и общей физической подготовки.\n\nТренировки направлены на укрепление всего тела, улучшение подвижности суставов и повышение уровня ежедневной активности. Подходят как новичкам, так и тем, кто уже имеет опыт тренировок.\n\nЗанятия проводит тренер Виктория — внимательный специалист, который помогает безопасно освоить технику упражнений и добиться стабильного прогресса.',
     action: 'group_direction:functional_training',
@@ -248,6 +259,7 @@ export const groupDirections: GroupDirection[] = [
     badge: GROUP_DIRECTION_BADGE,
     status: 'Восстановительный формат',
     trainerAvatar: getTrainerAvatar('Виктория'),
+    cardBackgroundImage: STRETCHING_CARD_BACKGROUND,
     description:
       'Стретчинг — это тренировки, направленные на развитие гибкости, улучшение подвижности суставов и снятие мышечного напряжения.\n\nЗанятия помогают восстановиться после силовых нагрузок, улучшить осанку и общее самочувствие, а также снизить уровень стресса.\n\nТренер Виктория помогает выполнять упражнения правильно и безопасно, постепенно увеличивая гибкость и комфорт движения.',
     action: 'group_direction:stretching',
@@ -413,3 +425,4 @@ export const groupDirectionRecommendations = [
     directions: ['kids_martial_arts'],
   },
 ] as const;
+

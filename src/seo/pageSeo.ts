@@ -52,3 +52,4 @@ export const pageSeo = {
     ogType: 'website',
   },
 } satisfies Record<string, PageSeoConfig>;
+

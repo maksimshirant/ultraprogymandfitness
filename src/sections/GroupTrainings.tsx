@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight, Check, ChevronDown, Plus } from 'lucide-react';
-import PublicAssetImage from '@/components/PublicAssetImage';
+import { ArrowRight, ChevronDown, ChevronRight, Plus } from 'lucide-react';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 import {
   groupDirectionCategories,
@@ -14,7 +13,6 @@ interface GroupTrainingsProps {
   onOpenModal: OpenModalHandler;
 }
 
-const CLUB_LOGO_SRC = `${import.meta.env.BASE_URL}logo.webp`;
 
 const GROUP_TRAININGS_TEXT = {
   heroTitle: 'Групповые тренировки',
@@ -37,6 +35,13 @@ const GROUP_TRAININGS_TEXT = {
   finalTitle: 'Не знаете, какое направление подойдёт?',
   finalSubtitle: 'Оставьте заявку — менеджер поможет подобрать направление под ваши цели.',
   finalCta: 'Оставить заявку',
+} as const;
+const GROUP_TRAININGS_MODAL_TEXT = {
+  closeAria: '\u0417\u0430\u043a\u0440\u044b\u0442\u044c',
+  trainerLabel: '\u0422\u0440\u0435\u043d\u0435\u0440',
+  descriptionTitle: '\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435',
+  benefitsTitle: '\u0427\u0442\u043e \u0434\u0430\u0435\u0442 \u0444\u043e\u0440\u043c\u0430\u0442',
+  cta: '\u0417\u0430\u043f\u0438\u0441\u0430\u0442\u044c\u0441\u044f \u043d\u0430 \u0442\u0440\u0435\u043d\u0438\u0440\u043e\u0432\u043a\u0443',
 } as const;
 
 type HeroScheduleEntry = {
@@ -259,82 +264,9 @@ const HERO_SCHEDULE_ROWS = HERO_SCHEDULE_GROUPS.map((group) => ({
   }),
 }));
 
-function TrainerAvatar({ direction }: { direction: GroupDirection }) {
-  const trainerAvatar = direction.trainerAvatar;
-  const isPlaceholderAvatar = Boolean(trainerAvatar?.includes('placeholder'));
-
-  if (trainerAvatar && !isPlaceholderAvatar) {
-    return (
-      <PublicAssetImage
-        src={trainerAvatar}
-        alt={direction.trainer}
-        loading="lazy"
-        fetchPriority="low"
-        decoding="async"
-        sizes="(max-width: 639px) 128px, 192px"
-        variantSuffix="thumb"
-        deferUntilVisible
-        pictureClassName="block h-32 w-32 overflow-hidden rounded-full border border-white/10 sm:h-36 sm:w-36"
-        className="h-full w-full object-cover object-top"
-        style={{ objectPosition: direction.trainerAvatarPosition ?? '50% 0%' }}
-      />
-    );
-  }
-
-  return (
-    <div className="flex h-32 w-32 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] p-4 sm:h-36 sm:w-36 sm:p-5">
-      <img
-        src={CLUB_LOGO_SRC}
-        alt="Логотип Ultra Pro Gym & Fitness"
-        loading="lazy"
-        decoding="async"
-        className="h-full w-full object-contain brightness-0 invert opacity-85"
-      />
-    </div>
-  );
-}
-
-function DirectionDetails({ direction }: { direction: GroupDirection }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6">
-      <div className="grid gap-6 lg:grid-cols-[minmax(15rem,18rem)_minmax(0,1fr)] lg:gap-8">
-        <div>
-          <p className="text-xs uppercase tracking-[0.18em] text-gray-500">
-            {GROUP_TRAININGS_TEXT.benefitsTitle}
-          </p>
-          <ul className="mt-4 space-y-3">
-            {direction.benefits.map((benefit) => (
-              <li
-                key={benefit}
-                className="flex items-start gap-3 border-b border-white/8 pb-3 text-sm leading-relaxed text-gray-100 last:border-b-0 last:pb-0"
-              >
-                <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#F5B800]" />
-                <span>{benefit}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="lg:border-l lg:border-white/10 lg:pl-8">
-          <p className="text-xs uppercase tracking-[0.18em] text-gray-500">О направлении</p>
-          <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-gray-300 sm:text-base">
-            {direction.description}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function GroupTrainings({ onOpenModal }: GroupTrainingsProps) {
-  const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   const [expandedScheduleDays, setExpandedScheduleDays] = useState<string[]>([]);
-
-  const toggleExpanded = (key: string) => {
-    setExpandedKeys((prev) =>
-      prev.includes(key) ? prev.filter((expandedKey) => expandedKey !== key) : [...prev, key]
-    );
-  };
+  const [detailsDirection, setDetailsDirection] = useState<GroupDirection | null>(null);
 
   const toggleScheduleDay = (dayId: string) => {
     setExpandedScheduleDays((prev) =>
@@ -523,101 +455,43 @@ export default function GroupTrainings({ onOpenModal }: GroupTrainingsProps) {
                     </h2>
                   </div>
 
-                  <div className="space-y-5">
+                  <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
                     {directions.map((direction) => {
-                      const isExpanded = expandedKeys.includes(direction.key);
-                      const isGlutePump = direction.key === 'glute_pump';
+                      const cardBackgroundImage = direction.cardBackgroundImage;
+                      const cardBackgroundPosition = direction.cardBackgroundPosition;
+                      const hasCardBackground = Boolean(cardBackgroundImage);
 
                       return (
                         <article
                           key={direction.key}
                           id={direction.key}
                           className={cn(
-                            'scroll-mt-28 rounded-[28px] bg-[#101117]/70 px-5 pt-2 pb-0.5 sm:pb-1.5 lg:px-7 lg:pt-4 lg:pb-2',
-                            isGlutePump && direction.cardBackgroundImage && 'bg-cover bg-center bg-no-repeat'
+                            'relative flex h-[138px] flex-col overflow-hidden scroll-mt-28 rounded-[28px] bg-[#101117]/70 px-5 pt-2 pb-0.5 sm:h-[138px] md:h-[185px] lg:h-[230px] sm:pb-1.5 lg:px-6 lg:pt-3 lg:pb-1.5',
+                            hasCardBackground && 'bg-cover bg-center bg-no-repeat'
                           )}
                           style={
-                            isGlutePump && direction.cardBackgroundImage
+                            hasCardBackground
                               ? {
-                                  backgroundImage: `linear-gradient(180deg, rgba(16,17,23,0.62) 0%, rgba(16,17,23,0.78) 100%), url(${direction.cardBackgroundImage})`,
+                                  backgroundImage: `linear-gradient(180deg, rgba(16,17,23,0.62) 0%, rgba(16,17,23,0.78) 100%), url(${cardBackgroundImage})`,
+                                  backgroundPosition: cardBackgroundPosition,
                                 }
                               : undefined
                           }
                         >
-                          <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-center lg:gap-8">
-                            <div className="space-y-1">
-                              <div
-                                className={cn(
-                                  'grid items-center gap-x-4 gap-y-1 pr-1 sm:gap-x-5 sm:pr-0',
-                                  isGlutePump ? 'grid-cols-1' : 'grid-cols-[8rem_minmax(0,1fr)] sm:grid-cols-[9rem_minmax(0,1fr)]'
-                                )}
-                              >
-                                {!isGlutePump ? (
-                                  <div className="flex justify-center sm:row-span-2 sm:justify-self-center">
-                                    <TrainerAvatar direction={direction} />
-                                  </div>
-                                ) : null}
-                                <div className="min-w-0 self-center text-left">
-                                  <h3 className="max-w-full whitespace-normal text-lg font-bold leading-tight text-white sm:text-2xl lg:text-4xl">
-                                    {direction.text}
-                                  </h3>
-                                  <p className="mt-0.5 text-sm text-gray-300 sm:text-lg">
-                                    <span className="text-[#F5B800]">Тренер:</span> {direction.trainer}
-                                  </p>
-                                </div>
-                                <div
-                                  className={cn(
-                                    'flex justify-center sm:justify-self-start',
-                                    isGlutePump
-                                      ? 'col-start-1 col-end-2'
-                                      : 'col-start-1 col-end-3 sm:col-start-2 sm:col-end-auto'
-                                  )}
-                                >
-                                  <button
-                                    type="button"
-                                    aria-expanded={isExpanded}
-                                    onClick={() => toggleExpanded(direction.key)}
-                                    className="hidden items-center justify-center gap-2 text-sm font-medium text-[#F5B800] transition-colors sm:inline-flex lg:hover:text-[#FFD351]"
-                                  >
-                                    <span>{isExpanded ? GROUP_TRAININGS_TEXT.detailsCloseCta : GROUP_TRAININGS_TEXT.detailsCta}</span>
-                                    <ChevronDown className={cn('h-4 w-4 transition-transform duration-300', isExpanded && 'rotate-180')} />
-                                  </button>
-                                </div>
+                          <div className="flex-1 space-y-1">
+                            <div className="grid grid-cols-1 items-center gap-y-1 pr-1 sm:pr-0">
+                              <div className="min-w-0 self-center text-left">
+                                <h3 className="max-w-full whitespace-normal text-lg font-bold uppercase leading-tight text-white md:text-[1.75rem] lg:text-3xl">
+                                  {direction.text}
+                                </h3>
+                                <p className="mt-0.5 text-sm text-gray-300 md:text-lg lg:text-lg">
+                                  <span className="text-[#F5B800]">Тренер:</span> {direction.trainer}
+                                </p>
                               </div>
-
-                              <div
-                                className={cn(
-                                  'grid overflow-hidden transition-[grid-template-rows,opacity,margin] duration-300 ease-out lg:hidden',
-                                  isExpanded ? 'mt-2 grid-rows-[1fr] opacity-100' : 'mt-0 grid-rows-[0fr] opacity-0'
-                                )}
-                              >
-                                <div className="min-h-0">
-                                  <DirectionDetails direction={direction} />
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="order-2 flex flex-col justify-center lg:self-start lg:justify-start lg:items-center">
-                              <button
-                                type="button"
-                                data-action={direction.action}
-                                data-booking-action={direction.bookingAction}
-                                data-confirm-booking-action={direction.confirmBookingAction}
-                                data-group-direction={direction.key}
-                                onClick={() =>
-                                  onOpenModal({
-                                    topic: 'group',
-                                    groupDirection: direction.text,
-                                  })
-                                }
-                                className="btn-primary hidden w-full px-6 py-3.5 text-white sm:inline-flex lg:w-auto lg:min-w-[15rem]"
-                              >
-                                {GROUP_TRAININGS_TEXT.cardCta}
-                              </button>
                             </div>
                           </div>
 
-                          <div className="mt-0 flex items-center justify-between sm:hidden">
+                          <div className="relative z-30 mt-auto pb-1 flex items-center justify-between">
                             <button
                               type="button"
                               data-action={direction.action}
@@ -630,32 +504,18 @@ export default function GroupTrainings({ onOpenModal }: GroupTrainingsProps) {
                                   groupDirection: direction.text,
                                 })
                               }
-                              aria-label={GROUP_TRAININGS_TEXT.cardCta}
-                              className="btn-primary inline-flex h-12 w-12 items-center justify-center rounded-full p-0 text-white"
+                              aria-label="���������� �� ����������"
+                              className="btn-primary inline-flex h-10 w-10 items-center justify-center rounded-full !p-0 text-white leading-none md:h-12 md:w-12"
                             >
-                              <Plus className="h-5 w-5" />
+                              <Plus className="h-3.5 w-3.5 md:h-4.5 md:w-4.5" />
                             </button>
 
-                            <button
-                              type="button"
-                              aria-expanded={isExpanded}
-                              onClick={() => toggleExpanded(direction.key)}
-                              className="inline-flex items-center justify-center gap-2 text-sm font-medium text-[#F5B800] transition-colors"
+                            <button type="button" onClick={() => setDetailsDirection(direction)}
+                              className="inline-flex w-[120px] items-center justify-end gap-2 text-sm font-medium text-[#F5B800] transition-colors hover:text-[#FFD351] md:w-[145px] md:text-base"
                             >
-                              <span>{isExpanded ? GROUP_TRAININGS_TEXT.detailsCloseCta : GROUP_TRAININGS_TEXT.detailsCta}</span>
-                              <ChevronDown className={cn('h-4 w-4 transition-transform duration-300', isExpanded && 'rotate-180')} />
+                              <span>{GROUP_TRAININGS_TEXT.detailsCta}</span>
+                              <ChevronRight className="h-4 w-4" />
                             </button>
-                          </div>
-
-                          <div
-                            className={cn(
-                              'hidden overflow-hidden transition-[grid-template-rows,opacity,margin] duration-300 ease-out lg:grid',
-                              isExpanded ? 'mt-6 grid-rows-[1fr] opacity-100' : 'mt-0 grid-rows-[0fr] opacity-0'
-                            )}
-                          >
-                            <div className="min-h-0">
-                              <DirectionDetails direction={direction} />
-                            </div>
                           </div>
                         </article>
                       );
@@ -668,9 +528,67 @@ export default function GroupTrainings({ onOpenModal }: GroupTrainingsProps) {
         </div>
       </section>
 
+      {detailsDirection ? (
+        <div
+          className="fixed inset-0 z-[120] flex items-center justify-center p-4 sm:p-6"
+          role="dialog"
+          aria-modal="true"
+          aria-label={detailsDirection.text}
+        >
+          <button
+            type="button"
+            aria-label={GROUP_TRAININGS_MODAL_TEXT.closeAria}
+            onClick={() => setDetailsDirection(null)}
+            className="absolute inset-0 bg-black/70 backdrop-blur-[2px]"
+          />
+
+          <div className="relative z-10 w-full max-w-4xl overflow-hidden rounded-[26px] border border-white/10 bg-[#101117]/95 p-5 text-left shadow-[0_20px_80px_rgba(0,0,0,0.45)] transition-all duration-300 ease-out md:scale-100 md:p-7 md:[transform-origin:center] lg:p-8">
+            <div className="flex items-start justify-between gap-4">
+              <h3 className="text-xl font-bold uppercase leading-tight text-white sm:text-2xl md:text-3xl">
+                {detailsDirection.text}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setDetailsDirection(null)}
+                className="inline-flex h-9 w-9 min-h-9 min-w-9 max-h-9 max-w-9 shrink-0 aspect-square items-center justify-center rounded-full border border-white/15 p-0 text-white leading-none transition-colors hover:border-white/35 hover:bg-white/10"
+                aria-label={GROUP_TRAININGS_MODAL_TEXT.closeAria}
+              >
+                &times;
+              </button>
+            </div>
+
+            <p className="mt-2 text-sm text-gray-200 sm:text-base"><span className="text-[#F5B800]">{GROUP_TRAININGS_MODAL_TEXT.trainerLabel}:</span> {detailsDirection.trainer}</p>
+
+            <div className="mt-5 grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
+              <div>
+                <p className="text-xs uppercase tracking-[0.16em] text-gray-400">{GROUP_TRAININGS_MODAL_TEXT.descriptionTitle}</p>
+                <div className="mt-3 space-y-3">
+                  {detailsDirection.description.split('\n\n').map((paragraph, index) => (
+                    <p key={`${detailsDirection.key}-desc-${index}`} className="text-sm leading-relaxed text-gray-200 sm:text-base">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-xs uppercase tracking-[0.16em] text-gray-400">{GROUP_TRAININGS_MODAL_TEXT.benefitsTitle}</p>
+                <ul className="mt-3 space-y-2">
+                  {detailsDirection.benefits.map((benefit) => (
+                    <li key={benefit} className="text-sm leading-relaxed text-gray-200 sm:text-base">
+                      - {benefit}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       <section className="pb-12 sm:pb-14 lg:pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="glass-card border border-white/10 bg-white/[0.03] p-6 text-center sm:p-8 lg:p-10">
+          <div className="p-6 text-center sm:p-8 lg:p-10">
             <BalancedHeading as="h2" className="section-title text-white">
               {GROUP_TRAININGS_TEXT.finalTitle}
             </BalancedHeading>
@@ -690,5 +608,45 @@ export default function GroupTrainings({ onOpenModal }: GroupTrainingsProps) {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

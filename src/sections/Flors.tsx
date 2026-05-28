@@ -232,14 +232,7 @@ export default function Flors() {
           })}
         </div>
 
-        <div className="mt-8 rounded-[30px] border border-white/10 bg-[#0a0c11]/92 p-4 sm:p-5">
-          <div className="mx-auto mb-5 max-w-5xl">
-            <div>
-              <p className="text-xs uppercase tracking-[0.22em] text-gray-500">{activeFloor.label}</p>
-              <h3 className="mt-2 text-xl font-bold text-white md:text-2xl">{activeZone.title}</h3>
-            </div>
-          </div>
-
+        <div className="mt-8 rounded-[30px] bg-[#0a0c11]/92 p-4 sm:p-5">
           {totalSlides > 0 ? (
             <div className="mx-auto max-w-5xl">
               <div
