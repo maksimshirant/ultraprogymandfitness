@@ -250,6 +250,30 @@ function getDirectionByKey(directionKey: GroupDirection['key']) {
   return direction;
 }
 
+const DIRECTION_CARD_GRADIENTS: Record<string, string> = {
+  glute_pump: 'linear-gradient(145deg, rgba(70, 56, 50, 0.58) 0%, rgba(14, 15, 18, 0.96) 78%)',
+  body_balance: 'linear-gradient(145deg, rgba(46, 56, 66, 0.54) 0%, rgba(14, 15, 18, 0.96) 78%)',
+  afk: 'linear-gradient(145deg, rgba(50, 54, 62, 0.54) 0%, rgba(14, 15, 18, 0.96) 78%)',
+  kids_martial_arts: 'linear-gradient(145deg, rgba(74, 60, 50, 0.58) 0%, rgba(14, 15, 18, 0.96) 78%)',
+  afk_kids: 'linear-gradient(145deg, rgba(44, 56, 60, 0.54) 0%, rgba(14, 15, 18, 0.96) 78%)',
+  crossfit: 'linear-gradient(145deg, rgba(80, 54, 52, 0.6) 0%, rgba(14, 15, 18, 0.96) 78%)',
+  crossfit_kids: 'linear-gradient(145deg, rgba(72, 54, 50, 0.58) 0%, rgba(14, 15, 18, 0.96) 78%)',
+  martial_arts_adults: 'linear-gradient(145deg, rgba(84, 62, 50, 0.6) 0%, rgba(14, 15, 18, 0.96) 78%)',
+  cycle: 'linear-gradient(145deg, rgba(42, 58, 70, 0.58) 0%, rgba(14, 15, 18, 0.96) 78%)',
+  functional_training: 'linear-gradient(145deg, rgba(46, 62, 52, 0.54) 0%, rgba(14, 15, 18, 0.96) 78%)',
+  stretching: 'linear-gradient(145deg, rgba(54, 52, 70, 0.52) 0%, rgba(14, 15, 18, 0.96) 80%)',
+  step_cardio: 'linear-gradient(145deg, rgba(74, 62, 48, 0.58) 0%, rgba(14, 15, 18, 0.96) 78%)',
+  smart_fitness: 'linear-gradient(145deg, rgba(42, 58, 56, 0.54) 0%, rgba(14, 15, 18, 0.96) 78%)',
+  strong_core: 'linear-gradient(145deg, rgba(52, 52, 62, 0.54) 0%, rgba(14, 15, 18, 0.96) 78%)',
+  tabata: 'linear-gradient(145deg, rgba(80, 52, 52, 0.6) 0%, rgba(14, 15, 18, 0.96) 78%)',
+  soft_strength: 'linear-gradient(145deg, rgba(48, 58, 62, 0.54) 0%, rgba(14, 15, 18, 0.96) 78%)',
+  circuit_strength: 'linear-gradient(145deg, rgba(66, 50, 60, 0.58) 0%, rgba(14, 15, 18, 0.96) 78%)',
+  lfk: 'linear-gradient(145deg, rgba(48, 56, 64, 0.52) 0%, rgba(14, 15, 18, 0.96) 80%)',
+  pilates: 'linear-gradient(145deg, rgba(48, 54, 64, 0.52) 0%, rgba(14, 15, 18, 0.96) 80%)',
+};
+
+const DEFAULT_DIRECTION_CARD_GRADIENT = 'linear-gradient(145deg, rgba(50, 54, 60, 0.52) 0%, rgba(14, 15, 18, 0.96) 80%)';
+
 const HERO_SCHEDULE_ROWS = HERO_SCHEDULE_GROUPS.map((group) => ({
   ...group,
   rows: group.rows.map((entry) => {
@@ -457,9 +481,7 @@ export default function GroupTrainings({ onOpenModal }: GroupTrainingsProps) {
 
                   <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
                     {directions.map((direction) => {
-                      const cardBackgroundImage = direction.cardBackgroundImage;
-                      const cardBackgroundPosition = direction.cardBackgroundPosition;
-                      const hasCardBackground = Boolean(cardBackgroundImage);
+                      const cardBackgroundGradient = DIRECTION_CARD_GRADIENTS[direction.key] ?? DEFAULT_DIRECTION_CARD_GRADIENT;
 
                       return (
                         <article
@@ -467,16 +489,9 @@ export default function GroupTrainings({ onOpenModal }: GroupTrainingsProps) {
                           id={direction.key}
                           className={cn(
                             'relative flex h-[138px] flex-col overflow-hidden scroll-mt-28 rounded-[28px] bg-[#101117]/70 px-5 pt-2 pb-0.5 sm:h-[138px] md:h-[185px] lg:h-[230px] sm:pb-1.5 lg:px-6 lg:pt-3 lg:pb-1.5',
-                            hasCardBackground && 'bg-cover bg-center bg-no-repeat'
+                            'bg-[length:100%_100%]'
                           )}
-                          style={
-                            hasCardBackground
-                              ? {
-                                  backgroundImage: `linear-gradient(180deg, rgba(16,17,23,0.62) 0%, rgba(16,17,23,0.78) 100%), url(${cardBackgroundImage})`,
-                                  backgroundPosition: cardBackgroundPosition,
-                                }
-                              : undefined
-                          }
+                          style={{ backgroundImage: cardBackgroundGradient }}
                         >
                           <div className="flex-1 space-y-1">
                             <div className="grid grid-cols-1 items-center gap-y-1 pr-1 sm:pr-0">
