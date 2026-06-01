@@ -192,7 +192,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
               </>
             ) : null}
 
-            <div className="relative h-[760px] overflow-hidden sm:h-[700px] md:max-lg:h-[840px] lg:h-[860px]" {...swipeHandlers}>
+            <div className="relative h-[760px] overflow-hidden sm:h-[700px] md:max-lg:h-[840px] lg:h-[760px] 2xl:h-[860px]" {...swipeHandlers}>
               {memberships.map((abonement, index) => {
                 const offset = getSlideOffset(index);
                 const isActive = offset === 0;
@@ -284,7 +284,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
               })}
             </div>
 
-            <div className="relative z-40 mt-6 flex items-center justify-center gap-4 md:mt-8 md:gap-3 lg:mt-10">
+            <div className="relative z-40 -mt-[7rem] flex items-center justify-center gap-4 md:-mt-[8.5rem] md:gap-3 lg:-mt-[6.5rem] 2xl:mt-10">
               {isMobileViewport ? (
                 <button
                   type="button"
