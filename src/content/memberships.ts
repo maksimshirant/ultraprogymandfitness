@@ -1,4 +1,4 @@
-import {
+﻿import {
   CalendarClock,
   Crown,
   Rocket,
@@ -28,7 +28,7 @@ export interface MembershipPlan {
 }
 
 const commonModes = [
-  'Тренажерный зал (Площадь 1800м2, 2 этажа, 50+ тренажеров)',
+  'Двухэтажный тренажерный зал, площадь 1800м2, 50+ тренажеров',
   'Доступ к групповым тренировкам (Оплачиваются отдельно)',
   'Сауна, полотенце, вода',
   'Кроссфит-зона',
@@ -112,7 +112,7 @@ export const memberships: MembershipPlan[] = [
     note: 'Разовый вход для свободного графика и гибкого посещения.',
     icon: Ticket,
     topicValue: 'sub_once',
-    modes: ['Входит все, что и в обычный абонемент'],
+    modes: [],
   },
   {
     id: 7,
@@ -122,7 +122,7 @@ export const memberships: MembershipPlan[] = [
     note: 'Недельный абонемент, чтобы попробовать клуб, оборудование и атмосферу.',
     icon: Ticket,
     topicValue: 'sub_once',
-    modes: ['Входит все, что и в обычный абонемент'],
+    modes: [],
   },
 ];
 

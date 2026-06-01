@@ -1,6 +1,17 @@
-
-import { useEffect, useState } from 'react';
-import { ArrowRight, Check, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
+﻿import { useEffect, useState } from 'react';
+import {
+  ArrowRight,
+  CircleHelp,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Dumbbell,
+  Flame,
+  HeartPulse,
+  Snowflake,
+  Swords,
+  Users,
+} from 'lucide-react';
 import { memberships } from '@/content/memberships';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 import { useSwipeNavigation } from '@/hooks/useSwipeNavigation';
@@ -20,23 +31,29 @@ const ABONEMENTS_TEXT = {
   sectionTitleAccent: 'Абонементы',
   sectionSubtitle: 'Выберите формат посещения под ваш график, цель и темп тренировок.',
   cta: 'Приобрести абонемент',
-  showMore: 'Показать больше',
-  showLess: 'Скрыть',
   prevAria: 'Предыдущий абонемент',
   nextAria: 'Следующий абонемент',
   selectAriaPrefix: 'Выбрать абонемент',
 } as const;
 
-const PREVIEW_MODES_COUNT = 3;
-
 interface AbonementsProps {
   onOpenModal: OpenModalHandler;
 }
 
-export default function Abonements({ onOpenModal }: AbonementsProps) {
-  const [currentIndex, setCurrentIndex] = useState(1);
-  const [expandedAbonementId, setExpandedAbonementId] = useState<number | null>(null);
+function getModeIcon(mode: string) {
+  const value = mode.toLowerCase();
+  if (value.includes('тренажер')) return Dumbbell;
+  if (value.includes('группов')) return Users;
+  if (value.includes('сауна')) return Flame;
+  if (value.includes('кроссфит')) return Dumbbell;
+  if (value.includes('кардио')) return HeartPulse;
+  if (value.includes('единоборств')) return Swords;
+  if (value.includes('замороз')) return Snowflake;
+  return Dumbbell;
+}
 
+export default function Abonements({ onOpenModal }: AbonementsProps) {
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isTabletHeroScrollHintVisible, setIsTabletHeroScrollHintVisible] = useState(false);
   const viewportTier = useViewportTier();
   const isMobileViewport = viewportTier === 'mobile';
@@ -45,7 +62,6 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
     const syncTabletHeroScrollHintVisibility = () => {
       const isTabletViewport = window.innerWidth >= 768 && window.innerWidth < 1024;
       const nextVisibility = isTabletViewport && window.scrollY < 24;
-
       setIsTabletHeroScrollHintVisible((prev) => (prev === nextVisibility ? prev : nextVisibility));
     };
 
@@ -59,50 +75,27 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
     };
   }, []);
 
-  const nextSlide = () => {
-    setExpandedAbonementId(null);
-    setCurrentIndex((prev) => (prev + 1) % memberships.length);
-  };
-
-  const prevSlide = () => {
-    setExpandedAbonementId(null);
-
-    setCurrentIndex((prev) => (prev - 1 + memberships.length) % memberships.length);
-  };
+  const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % memberships.length);
+  const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + memberships.length) % memberships.length);
 
   const scrollToSubscriptions = () => {
-    document.getElementById('subscriptions')?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
+    document.getElementById('subscriptions')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const selectAbonementIndex = (index: number) => {
-    setCurrentIndex(index);
-    setExpandedAbonementId(null);
-  };
+  const selectAbonementIndex = (index: number) => setCurrentIndex(index);
 
   const getSlideOffset = (index: number) => {
     let offset = index - currentIndex;
     const half = Math.floor(memberships.length / 2);
-
-    if (offset > half) {
-      offset -= memberships.length;
-    }
-    if (offset < -half) {
-      offset += memberships.length;
-    }
-
+    if (offset > half) offset -= memberships.length;
+    if (offset < -half) offset += memberships.length;
     return offset;
   };
 
-  const swipeHandlers = useSwipeNavigation({
-    onNext: nextSlide,
-    onPrev: prevSlide,
-  });
+  const swipeHandlers = useSwipeNavigation({ onNext: nextSlide, onPrev: prevSlide });
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-x-clip overflow-y-hidden">
       <section className="relative flex min-h-[100svh] items-center overflow-hidden">
         <div className="hero-glow-layer">
           <div className="hero-glow-top-right" />
@@ -110,15 +103,15 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
           <div className="hero-glow-center" />
         </div>
 
-        <div className="relative z-30 mx-auto w-full max-w-7xl px-4 pt-24 pb-14 sm:px-6 md:max-lg:flex md:max-lg:min-h-[calc(100svh-13rem)] md:max-lg:flex-col md:max-lg:justify-between md:max-lg:px-10 md:max-lg:pt-32 md:max-lg:pb-20 lg:px-8 lg:pt-32 lg:pb-16">
+        <div className="relative z-30 mx-auto w-full max-w-7xl px-4 pb-14 pt-24 sm:px-6 md:max-lg:flex md:max-lg:min-h-[calc(100svh-13rem)] md:max-lg:flex-col md:max-lg:justify-between md:max-lg:px-10 md:max-lg:pb-20 md:max-lg:pt-32 lg:px-8 lg:pb-16 lg:pt-32">
           <div className="space-y-8 max-md:w-full max-md:max-w-full max-md:space-y-7 md:max-lg:mx-auto md:max-lg:max-w-[min(94vw,860px)] md:max-lg:space-y-11">
             <BalancedHeading
               as="h1"
-              className="section-title text-white max-md:text-[clamp(2.8rem,10vw,4rem)] max-md:leading-[0.94] md:max-lg:max-w-full md:max-lg:text-[clamp(4.4rem,9.4vw,6.2rem)] md:max-lg:leading-[0.9] lg:text-[clamp(4.6rem,6.6vw,6.8rem)] lg:leading-[0.9]"
+              className="section-title text-white max-md:text-[clamp(2.1rem,8.8vw,3.3rem)] max-md:leading-[0.98] md:max-lg:max-w-full md:max-lg:text-[clamp(4.4rem,9.4vw,6.2rem)] md:max-lg:leading-[0.9] lg:text-[clamp(4.6rem,6.6vw,6.8rem)] lg:leading-[0.9]"
             >
               {ABONEMENTS_TEXT.heroTitle} <HeadingAccent>{ABONEMENTS_TEXT.heroAccent}</HeadingAccent>
             </BalancedHeading>
-            <p className="max-w-2xl text-base leading-relaxed text-gray-200 sm:text-lg md:max-lg:max-w-[48rem] md:max-lg:text-[1.6rem] md:max-lg:leading-[1.34] lg:text-xl">
+            <p className="max-w-2xl text-sm leading-relaxed text-gray-200 sm:text-lg md:max-lg:max-w-[48rem] md:max-lg:text-[1.6rem] md:max-lg:leading-[1.34] lg:text-xl">
               {ABONEMENTS_TEXT.heroSubtitle}
             </p>
 
@@ -157,14 +150,14 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
         </div>
       </section>
 
-      <section id="subscriptions" className="relative overflow-hidden scroll-mt-24 py-10 md:py-14">
+      <section id="subscriptions" className="relative overflow-x-clip overflow-y-hidden scroll-mt-24 py-10 md:py-14">
         <div className="hero-glow-layer">
           <div className="hero-glow-top-right" />
           <div className="hero-glow-bottom-left" />
           <div className="hero-glow-center" />
         </div>
 
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="relative mx-auto max-w-7xl px-0 lg:px-8">
           <div className="text-center">
             <BalancedHeading as="h2" className="section-title text-white">
               {ABONEMENTS_TEXT.sectionTitle} <HeadingAccent>{ABONEMENTS_TEXT.sectionTitleAccent}</HeadingAccent>
@@ -172,13 +165,17 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
             <p className="section-subtitle mx-auto">{ABONEMENTS_TEXT.sectionSubtitle}</p>
           </div>
 
-          <div id="subscriptions-carousel" className="relative w-full scroll-mt-24">
+          <div
+            id="subscriptions-carousel"
+            className="relative w-full overflow-x-clip scroll-mt-24"
+            style={{ contain: 'layout paint', isolation: 'isolate' }}
+          >
             {!isMobileViewport ? (
               <>
                 <button
                   type="button"
                   onClick={prevSlide}
-                  className="abonement-control-motion absolute left-0 top-[21rem] z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-[#111217]/90 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-colors hover:border-white/35 hover:bg-[#181a22]"
+                  className="abonement-control-motion absolute left-3 top-[21rem] z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-[#111217]/90 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-colors hover:border-white/35 hover:bg-[#181a22] lg:left-0"
                   aria-label={ABONEMENTS_TEXT.prevAria}
                 >
                   <ChevronLeft className="h-6 w-6 text-white" />
@@ -187,7 +184,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
                 <button
                   type="button"
                   onClick={nextSlide}
-                  className="abonement-control-motion absolute right-0 top-[21rem] z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-[#111217]/90 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-colors hover:border-white/35 hover:bg-[#181a22]"
+                  className="abonement-control-motion absolute right-3 top-[21rem] z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-[#111217]/90 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-colors hover:border-white/35 hover:bg-[#181a22] lg:right-0"
                   aria-label={ABONEMENTS_TEXT.nextAria}
                 >
                   <ChevronRight className="h-6 w-6 text-white" />
@@ -195,54 +192,41 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
               </>
             ) : null}
 
-            <div
-              className={cn(
-                'relative overflow-hidden transition-[height] duration-300 ease-out',
-                expandedAbonementId === null
-                  ? 'h-[620px] sm:h-[610px] md:h-[590px]'
-                  : 'h-[820px] sm:h-[800px] md:h-[760px]'
-              )}
-              {...swipeHandlers}
-            >
+            <div className="relative h-[760px] overflow-hidden sm:h-[700px] md:max-lg:h-[840px] lg:h-[760px]" {...swipeHandlers}>
               {memberships.map((abonement, index) => {
                 const offset = getSlideOffset(index);
-                const Icon = abonement.icon;
                 const isActive = offset === 0;
-                const hasHiddenModes = abonement.modes.length > PREVIEW_MODES_COUNT;
-                const isExpanded = isActive && expandedAbonementId === abonement.id;
+                const standardBenefitsLabel = 'Все преимущества стандартного абонемента';
+                const standardModes = memberships[0]?.modes ?? [];
+                const standardModesSet = new Set(standardModes);
+                const additionalModes = index === 0 ? [] : abonement.modes.filter((mode) => !standardModesSet.has(mode));
+                const displayModes = index === 0 ? abonement.modes : [standardBenefitsLabel, ...additionalModes];
 
                 return (
                   <article
                     key={abonement.id}
-                    className={`abonement-slide-motion absolute left-1/2 top-12 md:top-16 w-[88%] max-w-[30rem] will-change-transform transition-[transform,opacity] duration-700 ease-out sm:w-[72%] md:w-[62%] ${
+                    className={`abonement-slide-motion absolute left-1/2 top-12 w-[88%] max-w-[30rem] will-change-transform transition-[transform,opacity] duration-700 ease-out sm:w-[72%] md:top-16 md:w-[56%] lg:w-[52%] ${
                       isActive
                         ? 'z-20 -translate-x-1/2 scale-100 opacity-100'
                         : offset === -1
-                          ? 'z-10 -translate-x-[122%] scale-92 opacity-35'
+                          ? 'z-10 -translate-x-[118%] scale-92 opacity-35'
                           : offset === 1
-                            ? 'z-10 translate-x-[22%] scale-92 opacity-35'
+                            ? 'z-10 translate-x-[14%] scale-92 opacity-35'
                             : 'pointer-events-none z-0 -translate-x-1/2 scale-90 opacity-0'
                     }`}
                   >
                     <div
-                      className={`glass-card flex flex-col p-5 transition-[height] duration-300 md:p-6 ${
+                      className={`glass-card flex flex-col p-4 md:p-6 ${
                         isActive
-                          ? 'abonement-card-active border border-[#F5B800]/30'
+                          ? 'abonement-card-active border border-[#F5B800]/70 shadow-[0_0_28px_rgba(245,184,0,0.26)]'
                           : 'border border-white/5'
                       }`}
                     >
-                      <div className="mb-4 flex items-center justify-between gap-3">
-                        <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
-                          <Icon className="h-4 w-4 text-[#F5B800]" />
-                          <span className="text-xs font-medium tracking-wide text-gray-200">{abonement.label}</span>
-                        </div>
-                      </div>
-
                       <BalancedHeading
                         as="h3"
                         className={cn(
                           'font-extrabold leading-tight text-white',
-                          abonement.id === 5 ? 'whitespace-nowrap text-[1.55rem] md:text-[1.9rem]' : 'text-3xl md:text-4xl'
+                          abonement.id === 5 ? 'whitespace-nowrap text-[1.3rem] md:text-[1.9rem]' : 'text-[2rem] md:text-4xl'
                         )}
                       >
                         {abonement.title}
@@ -250,98 +234,78 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
 
                       <div className="mt-3">
                         <span className="relative inline-flex items-end gap-2">
-                          <span className="relative z-10 text-4xl font-black text-[rgb(255,255,255,0.82)] md:text-5xl">
-                            {abonement.price}
-                          </span>
+                          <span className="relative z-10 text-[2.2rem] font-black text-[rgb(255,255,255,0.82)] md:text-5xl">{abonement.price}</span>
                           <span className="absolute bottom-1 left-0 right-0 z-0 h-1.5 bg-gradient-to-r from-[#F5B800] to-[#D89B00]" />
                         </span>
                       </div>
 
-                      <p className="mb-4 mt-4 text-sm text-gray-300">{abonement.note}</p>
+                      <p className="mb-3 mt-3 text-[0.95rem] text-gray-300 md:mb-4 md:mt-4 md:text-sm">{abonement.note}</p>
 
-                      <div className="relative">
-                        <ul
-                          className={cn(
-                            'space-y-2 overflow-hidden transition-[max-height] duration-300 ease-out',
-                            !isExpanded && hasHiddenModes && 'pointer-events-none'
-                          )}
-                          style={{
-                            maxHeight: isExpanded ? '32rem' : '9.5rem',
-                            WebkitMaskImage:
-                              !isExpanded && hasHiddenModes
-                                ? 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 72%, rgba(0, 0, 0, 0) 100%)'
-                                : undefined,
-                            maskImage:
-                              !isExpanded && hasHiddenModes
-                                ? 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 72%, rgba(0, 0, 0, 0) 100%)'
-                                : undefined,
-                          }}
-                        >
-                          {abonement.modes.map((mode, modeIndex) => (
-                            <li key={modeIndex} className="flex items-start gap-3">
-                              <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#F5B800] to-[#D89B00]">
-                                <Check className="h-3 w-3 text-white" />
-                              </div>
-                              <span className="text-sm leading-relaxed text-gray-300">{mode}</span>
-                            </li>
-                          ))}
-                        </ul>
+                      <div className="mt-1.5 flex flex-wrap gap-2">
+                        {displayModes.map((mode, modeIndex) => {
+                          const isStandardBenefitsChip = index > 0 && mode === standardBenefitsLabel;
+                          const ModeIcon = getModeIcon(mode);
+
+                          return (
+                            <span
+                              key={`${abonement.id}-${modeIndex}-${mode}`}
+                              className="inline-flex items-center gap-1.5 rounded-full border border-[#F5B800]/35 bg-[#0e1118]/88 px-2.5 py-1.5 text-[10px] leading-tight text-gray-200 sm:text-xs"
+                            >
+                              <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#0b0e14] text-[#F5B800]">
+                                <ModeIcon className="h-3 w-3" />
+                              </span>
+                              <span className="text-left">{mode}</span>
+                              {isStandardBenefitsChip ? (
+                                <button
+                                  type="button"
+                                  onClick={() => setCurrentIndex(0)}
+                                  aria-label="Перейти к абонементу 1 месяц"
+                                  className="inline-flex h-5 w-5 items-center justify-center rounded-full text-gray-300 transition-colors hover:text-white"
+                                >
+                                  <CircleHelp className="h-4 w-4" />
+                                </button>
+                              ) : null}
+                            </span>
+                          );
+                        })}
                       </div>
-
-                      {hasHiddenModes ? (
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setExpandedAbonementId((prev) => (prev === abonement.id ? null : abonement.id))
-                          }
-                          disabled={!isActive}
-                          aria-expanded={isExpanded}
-                          className="mt-3 inline-flex items-center gap-2 self-start text-sm font-medium text-[#F5B800] transition-opacity hover:text-[#FFD351] disabled:pointer-events-none disabled:opacity-45"
-                        >
-                          <span>{isExpanded ? ABONEMENTS_TEXT.showLess : ABONEMENTS_TEXT.showMore}</span>
-                          <ChevronDown
-                            className={cn('h-4 w-4 transition-transform duration-300', isExpanded && 'rotate-180')}
-                          />
-                        </button>
-                      ) : null}
 
                       <button
                         type="button"
                         onClick={() => onOpenModal({ topic: abonement.topicValue, membershipId: abonement.id })}
                         disabled={!isActive}
-                        className="btn-primary mt-4 w-full text-white disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-55"
+                        className="btn-primary mt-3 w-full text-white transition-none hover:translate-y-0 hover:shadow-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-55"
                       >
                         {ABONEMENTS_TEXT.cta}
                       </button>
-
                     </div>
                   </article>
                 );
               })}
             </div>
 
-            <div className="mt-[0.88125rem] flex items-center justify-center gap-6 md:mt-[2.0125rem] md:gap-3">
+            <div className="relative z-40 -mt-[7rem] flex items-center justify-center gap-4 md:-mt-[8.5rem] md:gap-3 lg:-mt-[6.5rem]">
               {isMobileViewport ? (
                 <button
                   type="button"
                   onClick={prevSlide}
-                  className="abonement-control-motion flex h-12 w-12 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10"
+                  className="abonement-control-motion ml-2 flex h-12 w-12 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10"
                   aria-label={ABONEMENTS_TEXT.prevAria}
                 >
                   <ChevronLeft className="h-6 w-6 text-gray-400" />
                 </button>
               ) : null}
 
-              <div className="flex flex-wrap justify-center gap-3">
+              <div className="flex flex-wrap justify-center gap-2">
                 {memberships.map((_, index) => (
                   <button
                     key={index}
                     type="button"
                     onClick={() => selectAbonementIndex(index)}
-                    className={`abonement-control-motion h-1 rounded-full transition-[width,background-color,opacity] duration-300 ${
+                    className={`abonement-control-motion rounded-full transition-[transform,background-color,opacity] duration-300 ${
                       index === currentIndex
-                        ? 'w-16 bg-gradient-to-r from-[#F5B800] to-[#D89B00]'
-                        : 'w-8 bg-white/20'
+                        ? 'h-2.5 w-2.5 scale-110 bg-gradient-to-r from-[#F5B800] to-[#D89B00]'
+                        : 'h-2 w-2 bg-white/35'
                     }`}
                     aria-label={`${ABONEMENTS_TEXT.selectAriaPrefix} ${index + 1}`}
                   />
@@ -352,7 +316,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
                 <button
                   type="button"
                   onClick={nextSlide}
-                  className="abonement-control-motion flex h-12 w-12 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10"
+                  className="abonement-control-motion mr-2 flex h-12 w-12 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10"
                   aria-label={ABONEMENTS_TEXT.nextAria}
                 >
                   <ChevronRight className="h-6 w-6 text-gray-400" />

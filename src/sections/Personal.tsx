@@ -144,7 +144,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
             className={cn(
               'absolute inset-x-0 bottom-0 p-4 pt-20 sm:p-5 sm:pt-24',
               isExpanded
-                ? 'bg-gradient-to-t from-black via-black to-black/45'
+                ? 'bg-gradient-to-t from-black via-black/95 to-transparent'
                 : 'bg-gradient-to-t from-black via-black/85 to-transparent'
             )}
           >

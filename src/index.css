@@ -516,13 +516,13 @@
 
   /* Keep subscriptions slider motion as originally designed */
   #subscriptions .abonement-slide-motion {
-    transition-property: all !important;
+    transition-property: transform, opacity !important;
     transition-duration: 700ms !important;
     transition-timing-function: ease-out !important;
   }
 
   #subscriptions .abonement-control-motion {
-    transition-property: all !important;
+    transition-property: transform, opacity, background-color !important;
     transition-duration: 300ms !important;
     transition-timing-function: ease !important;
   }
@@ -559,8 +559,8 @@
   }
 
   #subscriptions .btn-primary:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 8px 30px rgba(245, 184, 0, 0.5) !important;
+    transform: none !important;
+    box-shadow: 0 4px 20px rgba(245, 184, 0, 0.4) !important;
   }
 }
 

@@ -83,7 +83,7 @@ export default function Footer() {
   }, [activeDocument]);
 
   return (
-    <footer className="py-10 border-t border-white/5">
+    <footer className="py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-start md:gap-10 lg:grid-cols-[minmax(300px,1fr)_minmax(250px,0.8fr)_minmax(180px,0.55fr)] lg:items-start lg:gap-16 xl:gap-20">
           <div className="order-2 space-y-5 pt-2 md:order-1 md:pt-0 lg:order-1">

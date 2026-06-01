@@ -121,7 +121,7 @@ export default function ContactsSection() {
   }, [isMapOpen]);
 
   return (
-    <section id="contacts" className="deferred-section relative overflow-hidden py-14 md:py-16">
+    <section id="contacts" className="deferred-section relative overflow-hidden pt-14 pb-6 md:pt-16 md:pb-8">
       <div className="hero-glow-layer">
         <div className="hero-glow-top-right" />
         <div className="hero-glow-bottom-left" />
@@ -129,15 +129,16 @@ export default function ContactsSection() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="text-center mb-10 md:mb-12">
+        <div className="mb-10 text-center md:mb-12">
           <BalancedHeading as="h1" className="section-title text-white">
             <HeadingAccent>{CONTACTS_TEXT.title}</HeadingAccent>
           </BalancedHeading>
           <p className="section-subtitle mx-auto">{CONTACTS_TEXT.pageSubtitle}</p>
         </div>
 
-        <div className="glass-card border border-white/10 p-6 md:p-8">
-          <div className="flex flex-col gap-4 border-b border-white/10 pb-6 md:flex-row md:items-center md:justify-between">
+        <div className="border-t border-white/10 pt-8 md:pt-10">
+          <div className="p-6 md:p-8">
+          <div className="flex flex-col gap-4 pb-6 md:flex-row md:items-center md:justify-between">
             <div className="min-w-0">
               <BalancedHeading as="h2" className="text-4xl font-bold text-white md:text-5xl">
                 <HeadingAccent>{CONTACTS_TEXT.reviewsTitle}</HeadingAccent>
@@ -198,10 +199,12 @@ export default function ContactsSection() {
               </a>
             </div>
           ) : null}
+          </div>
         </div>
 
-        <div className="glass-card mt-8 border border-white/10 p-6 md:mt-10 md:p-8">
-          <div className="flex flex-col gap-3 border-b border-white/10 pb-6">
+        <div className="mt-8 border-t border-white/10 pt-8 md:mt-10 md:pt-10">
+          <div className="p-6 md:p-8">
+          <div className="flex flex-col gap-3 pb-6">
             <BalancedHeading as="h2" className="text-4xl font-bold text-white md:text-5xl">
               <HeadingAccent>{CONTACTS_TEXT.contactsTitle}</HeadingAccent>
             </BalancedHeading>
@@ -312,6 +315,7 @@ export default function ContactsSection() {
                 </div>
               </div>
             </div>
+          </div>
           </div>
         </div>
       </div>

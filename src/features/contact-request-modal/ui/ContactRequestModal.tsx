@@ -756,6 +756,7 @@ export default function Modal({
           className={cn(
             'flex max-h-[calc(100dvh-1.5rem)] min-h-0 flex-col overflow-hidden border-none bg-transparent p-0 shadow-none',
             isMobile && 'w-[calc(100vw-1rem)] max-w-[calc(100vw-1rem)]',
+            !isMobile && 'max-lg:w-[calc(100vw-2rem)] max-lg:max-w-[calc(100vw-2rem)]',
             !isMobile &&
               (isAnnouncementMode ? 'sm:max-w-2xl' : currentStep === 'contact' ? 'sm:max-w-xl' : 'sm:max-w-4xl')
           )}

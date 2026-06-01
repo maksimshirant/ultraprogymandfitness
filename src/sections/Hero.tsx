@@ -148,18 +148,18 @@ export default function Hero({ onOpenModal }: HeroProps) {
           <div className="hero-glow-center" />
         </div>
 
-        <div className="relative z-30 mx-auto w-full max-w-7xl px-4 pt-24 pb-14 sm:px-6 md:max-lg:flex md:max-lg:min-h-[calc(100svh-13rem)] md:max-lg:flex-col md:max-lg:justify-between md:max-lg:px-10 md:max-lg:pt-32 md:max-lg:pb-20 lg:px-8 lg:pt-32 lg:pb-16">
+        <div className="relative z-30 mx-auto w-full max-w-7xl px-4 pt-24 pb-14 max-[360px]:pt-20 max-[360px]:pb-10 sm:px-6 md:max-lg:flex md:max-lg:min-h-[calc(100svh-13rem)] md:max-lg:flex-col md:max-lg:justify-between md:max-lg:px-10 md:max-lg:pt-32 md:max-lg:pb-20 lg:px-8 lg:pt-32 lg:pb-16">
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-24">
             <div className="space-y-8 slide-up max-md:w-full max-md:max-w-full max-md:space-y-7 md:max-lg:mx-auto md:max-lg:max-w-[min(94vw,860px)] md:max-lg:space-y-11 lg:max-w-[40rem]">
               <BalancedHeading
                 as="h1"
-                className="section-title text-white max-md:max-w-full max-md:text-[clamp(2.35rem,9vw,3.2rem)] max-md:leading-[0.96] md:max-lg:max-w-full md:max-lg:text-[clamp(4.4rem,9.4vw,6.2rem)] md:max-lg:leading-[0.9] lg:text-[clamp(3.45rem,4.15vw,4.55rem)] lg:leading-[0.94]"
+                className="section-title text-white max-md:max-w-full max-md:text-[clamp(2.35rem,9vw,3.2rem)] max-md:leading-[0.96] max-[360px]:text-[clamp(1.85rem,8.6vw,2.45rem)] max-[360px]:leading-[1.02] md:max-lg:max-w-full md:max-lg:text-[clamp(4.4rem,9.4vw,6.2rem)] md:max-lg:leading-[0.9] lg:text-[clamp(3.45rem,4.15vw,4.55rem)] lg:leading-[0.94]"
               >
-                <span className="block whitespace-nowrap">{HERO_TEXT.titleStart}</span>
-                <HeadingAccent className="inline-block whitespace-nowrap">{HERO_TEXT.titleAccent}</HeadingAccent>
+                <span className="block whitespace-nowrap max-[360px]:whitespace-normal">{HERO_TEXT.titleStart}</span>
+                <HeadingAccent className="inline-block whitespace-nowrap max-[360px]:whitespace-normal">{HERO_TEXT.titleAccent}</HeadingAccent>
               </BalancedHeading>
 
-              <p className="max-w-lg text-lg text-gray-400 leading-relaxed max-md:max-w-full max-md:text-[1.12rem] max-md:leading-[1.42] md:text-xl md:max-lg:max-w-[48rem] md:max-lg:text-[1.6rem] md:max-lg:leading-[1.34]">
+              <p className="max-w-lg text-lg text-gray-400 leading-relaxed max-md:max-w-full max-md:text-[1.12rem] max-md:leading-[1.42] max-[360px]:text-[0.98rem] max-[360px]:leading-[1.34] md:text-xl md:max-lg:max-w-[48rem] md:max-lg:text-[1.6rem] md:max-lg:leading-[1.34]">
                 {HERO_TEXT.description}
               </p>
 
