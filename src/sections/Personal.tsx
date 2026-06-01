@@ -1,10 +1,9 @@
 ﻿
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowRight, Check, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, Check, ChevronDown, ChevronUp } from 'lucide-react';
 import PublicAssetImage from '@/components/PublicAssetImage';
 import { trainerCategories, trainers, type TrainerCategory, type TrainerProfile } from '@/content/trainers';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
-import { useSwipeNavigation } from '@/hooks/useSwipeNavigation';
 import { useViewportTier } from '@/hooks/useViewportTier';
 import { cn } from '@/lib/utils';
 import type { OpenModalHandler } from '@/types/modal';
@@ -68,14 +67,11 @@ function renderAchievement(achievement: string, index: number) {
 
 export default function Personal({ onOpenModal }: PersonalProps) {
   const [activeCategory, setActiveCategory] = useState<TrainerCategory>('personal');
-  const [activeTrainerIndex, setActiveTrainerIndex] = useState(0);
   const [expandedTrainerId, setExpandedTrainerId] = useState<number | null>(null);
   const [isTabletHeroScrollHintVisible, setIsTabletHeroScrollHintVisible] = useState(false);
 
   const viewportTier = useViewportTier();
   const isMobileViewport = viewportTier === 'mobile';
-  const isTabletViewport = viewportTier === 'tablet';
-  const isDesktopViewport = viewportTier === 'desktop';
 
   const filteredTrainers = useMemo(
     () => trainers.filter((trainer) => trainer.category === activeCategory),
@@ -100,26 +96,9 @@ export default function Personal({ onOpenModal }: PersonalProps) {
     };
   }, []);
 
-  const nextSlide = () => {
-    setExpandedTrainerId(null);
-    setActiveTrainerIndex((prev) => (prev + 1) % filteredTrainers.length);
-  };
-
-  const prevSlide = () => {
-    setExpandedTrainerId(null);
-    setActiveTrainerIndex((prev) => (prev - 1 + filteredTrainers.length) % filteredTrainers.length);
-  };
-
-
-  const selectTrainerIndex = (index: number) => {
-    setExpandedTrainerId(null);
-    setActiveTrainerIndex(index);
-  };
-
   const selectCategory = (category: TrainerCategory) => {
     setExpandedTrainerId(null);
     setActiveCategory(category);
-    setActiveTrainerIndex(0);
   };
 
   const scrollToTrainers = () => {
@@ -129,43 +108,22 @@ export default function Personal({ onOpenModal }: PersonalProps) {
     });
   };
 
-  const swipeHandlers = useSwipeNavigation({
-    onNext: nextSlide,
-    onPrev: prevSlide,
-  });
-
-  const getSlideOffset = (index: number) => {
-    let offset = index - activeTrainerIndex;
-    const half = Math.floor(filteredTrainers.length / 2);
-
-    if (offset > half) {
-      offset -= filteredTrainers.length;
-    }
-    if (offset < -half) {
-      offset += filteredTrainers.length;
-    }
-
-    return offset;
-  };
-
-  const renderCarouselTrainerCard = (trainer: TrainerProfile, isActive = false, isActionDisabled = false) => {
+  const renderTrainerCard = (trainer: TrainerProfile) => {
     const isExpanded = expandedTrainerId === trainer.id;
+    const [experienceLabel, ...experienceValueParts] = trainer.experience.split(':');
+    const experienceValue = experienceValueParts.join(':').trim();
+    const hasExperienceSeparator = trainer.experience.includes(':');
 
     return (
-      <article
-        key={trainer.id}
-        className={`glass-card flex flex-col overflow-hidden border border-white/10 p-0 ${
-          isActive ? 'trainer-card-active' : ''
-        }`}
-      >
-        <div className="relative aspect-[4/5] overflow-hidden border-b border-white/10 bg-black/40">
+      <article key={trainer.id} className="glass-card flex flex-col overflow-hidden border border-white/10 p-0">
+        <div className="relative aspect-[4/5] overflow-hidden bg-black/40">
           {trainer.image ? (
             <PublicAssetImage
               src={trainer.image}
               alt={trainer.name}
               loading="lazy"
               fetchPriority="low"
-              sizes="(max-width: 767px) 100vw, (max-width: 1023px) 70vw, 42vw"
+              sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
               variantSuffix="preview"
               deferUntilVisible
               pictureClassName="absolute inset-0 block h-full w-full"
@@ -175,53 +133,69 @@ export default function Personal({ onOpenModal }: PersonalProps) {
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#1A1A27] via-[#111117] to-[#0A0A0F]">
               <img
                 src={CLUB_LOGO_SRC}
-                alt="Р›РѕРіРѕС‚РёРї Ultra Pro Gym & Fitness"
+                alt="Логотип Ultra Pro Gym & Fitness"
                 loading="lazy"
                 decoding="async"
                 className="h-28 w-28 object-contain brightness-0 invert opacity-85 md:h-32 md:w-32"
               />
             </div>
           )}
-        </div>
-
-        <div className="flex flex-col p-5 pt-4 text-left">
-          <div className="flex items-center gap-2">
-            <h3 className="text-2xl font-bold text-white">{trainer.name}</h3>
-            {trainer.role ? (
-              <span className="inline-flex shrink-0 items-center rounded-full border border-[#F5B800]/30 bg-[#F5B800]/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#F5B800]">
-                {trainer.role}
-              </span>
-            ) : null}
+          <div
+            className={cn(
+              'absolute inset-x-0 bottom-0 p-4 pt-20 sm:p-5 sm:pt-24',
+              isExpanded
+                ? 'bg-gradient-to-t from-black via-black to-black/45'
+                : 'bg-gradient-to-t from-black via-black/85 to-transparent'
+            )}
+          >
+            {!isExpanded ? (
+              <>
+                <div>
+                  {trainer.role ? (
+                    <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#F5B800] sm:text-[11px]">
+                      {trainer.role}
+                    </p>
+                  ) : null}
+                  <h3 className="truncate whitespace-nowrap text-xl font-bold leading-tight text-white sm:text-2xl">
+                    {trainer.name}
+                  </h3>
+                </div>
+                <p className="mt-2 text-xs sm:text-sm">
+                  {hasExperienceSeparator ? (
+                    <>
+                      <span className="font-medium text-[#F5B800]">{experienceLabel}:</span>{' '}
+                      <span className="text-white">{experienceValue}</span>
+                    </>
+                  ) : (
+                    <span className="text-white">{trainer.experience}</span>
+                  )}
+                </p>
+              </>
+            ) : (
+              <ul className="max-h-[48%] space-y-2 overflow-auto pr-1">
+                {trainer.achievements.map((achievement, achievementIndex) =>
+                  renderAchievement(achievement, achievementIndex)
+                )}
+              </ul>
+            )}
+            <div className="mt-3 flex items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={() => onOpenModal({ topic: 'personal', trainer: trainer.name })}
+                className="btn-primary min-h-[2.25rem] px-3 py-1.5 text-xs text-white sm:min-h-[2.5rem] sm:px-4 sm:py-2 sm:text-sm"
+              >
+                Запись на тренировку
+              </button>
+              <button
+                type="button"
+                onClick={() => setExpandedTrainerId((prev) => (prev === trainer.id ? null : trainer.id))}
+                className="inline-flex min-h-[2.5rem] items-center justify-center gap-1 text-xs font-medium text-[#F5B800] transition-colors hover:text-[#FFD351] sm:text-sm"
+              >
+                <span>{isExpanded ? PERSONAL_TEXT.showLess : 'Подробнее'}</span>
+                {isExpanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+              </button>
+            </div>
           </div>
-          <p className="mt-3 text-sm text-gray-300">{trainer.experience}</p>
-
-          <button
-            type="button"
-            onClick={() => setExpandedTrainerId((prev) => (prev === trainer.id ? null : trainer.id))}
-            disabled={isActionDisabled}
-            aria-expanded={isExpanded}
-            className="mt-4 inline-flex items-center gap-2 self-start text-sm font-medium text-[#F5B800] transition-opacity hover:text-[#FFD351] disabled:pointer-events-none disabled:opacity-45"
-          >
-            <span>{isExpanded ? PERSONAL_TEXT.showLess : PERSONAL_TEXT.showMore}</span>
-            <ChevronDown className={cn('h-4 w-4 transition-transform duration-300', isExpanded && 'rotate-180')} />
-          </button>
-
-          {isExpanded ? (
-            <ul className="mt-4 space-y-2 pr-1">
-              {trainer.achievements.map((achievement, achievementIndex) =>
-                renderAchievement(achievement, achievementIndex)
-              )}
-            </ul>
-          ) : null}
-
-          <button
-            type="button"
-            onClick={() => onOpenModal({ topic: 'personal', trainer: trainer.name })}
-            disabled={isActionDisabled}
-            className="btn-primary mt-5 w-full text-white disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-55"
-          >
-            {PERSONAL_TEXT.cta}
-          </button>
         </div>
       </article>
     );
@@ -331,203 +305,14 @@ export default function Personal({ onOpenModal }: PersonalProps) {
 
           <div className="mx-auto mt-6 h-px w-20 bg-white/10" />
 
-          {isMobileViewport ? (
-            <div>
-              <div className="overflow-hidden" {...swipeHandlers}>
-                <div
-                  className="trainer-slide-motion flex transition-transform duration-500 ease-out"
-                  style={{ transform: `translateX(-${activeTrainerIndex * 100}%)` }}
-                >
-                  {filteredTrainers.map((trainer) => (
-                    <div key={trainer.id} className="w-full shrink-0">
-                      {renderCarouselTrainerCard(trainer)}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ) : null}
-
-          {isTabletViewport ? (
-            <div className="relative md:-mx-6">
-              <button
-                type="button"
-                onClick={prevSlide}
-                className="trainer-control-motion absolute left-4 top-[18rem] z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-[#111217]/90 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-colors hover:border-white/35 hover:bg-[#181a22]"
-                aria-label={PERSONAL_TEXT.prevAria}
-              >
-                <ChevronLeft className="h-6 w-6 text-white" />
-              </button>
-
-              <button
-                type="button"
-                onClick={nextSlide}
-                className="trainer-control-motion absolute right-4 top-[18rem] z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-[#111217]/90 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-colors hover:border-white/35 hover:bg-[#181a22]"
-                aria-label={PERSONAL_TEXT.nextAria}
-              >
-                <ChevronRight className="h-6 w-6 text-white" />
-              </button>
-
-              <div
-                className={cn(
-                  'relative overflow-hidden transition-[height] duration-300 ease-out',
-                  expandedTrainerId === null ? 'h-[760px]' : 'h-[980px]'
-                )}
-                {...swipeHandlers}
-              >
-                {filteredTrainers.map((trainer, index) => {
-                  const offset = getSlideOffset(index);
-                  const isActive = offset === 0;
-
-                  return (
-                    <article
-                      key={trainer.id}
-                      className={`trainer-slide-motion absolute left-1/2 top-8 w-[72%] max-w-[24rem] will-change-transform transition-[transform,opacity] duration-700 ease-out ${
-                        isActive
-                          ? 'z-20 -translate-x-1/2 scale-100 opacity-100'
-                          : offset === -1
-                            ? 'z-10 -translate-x-[124%] scale-92 opacity-35'
-                            : offset === 1
-                              ? 'z-10 translate-x-[24%] scale-92 opacity-35'
-                              : 'pointer-events-none z-0 -translate-x-1/2 scale-90 opacity-0'
-                      }`}
-                    >
-                      {renderCarouselTrainerCard(trainer, isActive, !isActive)}
-                    </article>
-                  );
-                })}
-              </div>
-            </div>
-          ) : null}
-
-          {!isDesktopViewport ? (
-            <div className="mt-3 flex items-center justify-center gap-6 md:-mx-6 md:mt-4 md:gap-3">
-              {isMobileViewport ? (
-                <button
-                  type="button"
-                  onClick={prevSlide}
-                  className="trainer-control-motion flex h-12 w-12 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10"
-                  aria-label={PERSONAL_TEXT.prevAria}
-                >
-                  <ChevronLeft className="h-6 w-6 text-gray-400" />
-                </button>
-              ) : null}
-
-              <div className="flex flex-wrap justify-center gap-3">
-                {filteredTrainers.map((trainer, index) => (
-                  <button
-                    key={trainer.id}
-                    type="button"
-                    onClick={() => selectTrainerIndex(index)}
-                    className={`trainer-control-motion h-1 rounded-full transition-[width,background-color,opacity] duration-300 ${
-                      index === activeTrainerIndex
-                        ? 'w-16 bg-gradient-to-r from-[#F5B800] to-[#D89B00]'
-                        : 'w-8 bg-white/20'
-                    }`}
-                    aria-label={`${PERSONAL_TEXT.selectAriaPrefix} ${index + 1}`}
-                  />
-                ))}
-              </div>
-
-              {isMobileViewport ? (
-                <button
-                  type="button"
-                  onClick={nextSlide}
-                  className="trainer-control-motion flex h-12 w-12 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10"
-                  aria-label={PERSONAL_TEXT.nextAria}
-                >
-                  <ChevronRight className="h-6 w-6 text-gray-400" />
-                </button>
-              ) : null}
-            </div>
-          ) : null}
-
-          {isDesktopViewport ? (
-            <div className="space-y-12">
-              {filteredTrainers.map((trainer) => (
-                <article
-                  key={trainer.id}
-                  className="min-h-[18.5rem] overflow-hidden rounded-[26px] border border-white/10 bg-[#111217] sm:min-h-[21rem] sm:rounded-[28px] md:min-h-[24rem] lg:min-h-0 lg:rounded-[30px]"
-                >
-                  <div
-                    className="h-full gap-3 sm:gap-4 md:gap-6 lg:gap-10"
-                    style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}
-                  >
-                    <div
-                      className="flex shrink-0 items-center justify-center"
-                      style={{ flex: '0 0 clamp(8.5rem, 34vw, 24rem)' }}
-                    >
-                      <div className="relative aspect-[4/5] h-full w-full max-w-[24rem] overflow-hidden rounded-l-[26px] rounded-r-none border border-white/10 bg-black/40 sm:rounded-l-[28px] lg:rounded-l-[30px]">
-                        {trainer.image ? (
-                          <PublicAssetImage
-                            src={trainer.image}
-                            alt={trainer.name}
-                            loading="lazy"
-                            fetchPriority="low"
-                            sizes="(max-width: 1279px) 34vw, 28rem"
-                            variantSuffix="preview"
-                            deferUntilVisible
-                            pictureClassName="absolute inset-0 block h-full w-full"
-                            className={cn('h-full w-full object-cover object-center', trainer.imageClassName)}
-                          />
-                        ) : (
-                          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#1A1A27] via-[#111117] to-[#0A0A0F]">
-                            <img
-                              src={CLUB_LOGO_SRC}
-                              alt="Р›РѕРіРѕС‚РёРї Ultra Pro Gym & Fitness"
-                              loading="lazy"
-                              decoding="async"
-                              className="h-28 w-28 object-contain brightness-0 invert opacity-85 md:h-32 md:w-32"
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div
-                      className="flex min-w-0 flex-1 flex-col justify-center px-1.5 py-3 sm:px-2 sm:py-4 md:px-3 md:py-5 lg:px-0 lg:py-2"
-                      style={{ flex: '1 1 auto' }}
-                    >
-                      <div className="min-w-0 max-w-none">
-                        <div className="flex items-center gap-2">
-                          <h3 className="whitespace-nowrap text-[0.95rem] font-extrabold leading-tight text-white sm:text-lg md:text-[1.55rem] lg:text-[2.75rem]">
-                            {trainer.name}
-                          </h3>
-                          {trainer.role ? (
-                            <span className="inline-flex shrink-0 items-center rounded-full border border-[#F5B800]/30 bg-[#F5B800]/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#F5B800] sm:text-[10px] md:text-[11px] lg:text-xs">
-                              {trainer.role}
-                            </span>
-                          ) : null}
-                        </div>
-                        <p className="mt-1.5 text-[11px] leading-snug text-gray-300 sm:text-xs md:text-sm lg:text-base">
-                          {trainer.experience}
-                        </p>
-                      </div>
-
-                      <ul className="mt-2.5 space-y-1.5 pr-1 sm:mt-3 sm:space-y-2 md:mt-4 md:space-y-2.5 lg:mt-5 lg:space-y-3">
-                        {trainer.achievements.map((achievement, achievementIndex) =>
-                          renderAchievement(achievement, achievementIndex)
-                        )}
-                      </ul>
-
-                      <div className="mt-4 sm:mt-5 md:mt-6 lg:mt-8">
-                        <button
-                          type="button"
-                          onClick={() => onOpenModal({ topic: 'personal', trainer: trainer.name })}
-                          className="btn-primary w-full px-3 py-2.5 text-[11px] text-white sm:w-full sm:px-4 sm:py-3 sm:text-xs md:w-auto md:px-6 md:text-sm lg:px-7 lg:py-4 lg:text-base"
-                        >
-                          {PERSONAL_TEXT.cta}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          ) : null}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3 xl:gap-6">
+            {filteredTrainers.map((trainer) => renderTrainerCard(trainer))}
+          </div>
         </div>
       </section>
+
     </div>
   );
 }
+
 

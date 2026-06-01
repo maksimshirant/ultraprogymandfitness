@@ -56,7 +56,7 @@ export const trainers: TrainerProfile[] = [
     id: 2,
     name: 'Зарубина Юлия',
     category: 'personal',
-    experience: 'Опыт работы более 4 лет.',
+    experience: 'Опыт работы: более 4 лет',
     summary: 'Набор массы, снижение веса, МФР и растяжка',
     achievements: [
       'Высшее образование в сфере физической культуры и спорта',

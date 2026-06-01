@@ -70,19 +70,19 @@ export default function GroupTrainingsSection({ onOpenModal }: GroupTrainingsPro
               return (
                 <section key={category.key} className="space-y-6">
                   <div><h2 className="text-2xl font-bold leading-tight text-white sm:text-3xl lg:text-[2.2rem]">{category.title}</h2></div>
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 2xl:grid-cols-3">
                     {directions.map((direction) => (
-                      <article key={direction.key} id={direction.key} className="scroll-mt-28 rounded-3xl bg-white/[0.08] px-4 py-4 sm:border sm:border-white/10 sm:bg-[#101117]/90 sm:px-5 sm:py-5">
+                      <article key={direction.key} id={direction.key} className="scroll-mt-28 rounded-3xl bg-white/[0.08] px-4 py-4 sm:border sm:border-white/10 sm:bg-[#101117]/90 sm:px-5 sm:py-5 lg:px-6 lg:py-6">
                         <div className="grid grid-cols-[4rem_minmax(0,1fr)] items-start gap-5 sm:grid-cols-[4.75rem_minmax(0,1fr)]">
                           <div className="ml-2 flex justify-center"><TrainerAvatar direction={direction} /></div>
                           <div className="min-w-0 self-center text-left">
-                            <h3 className="text-[0.95rem] font-bold leading-tight text-white [overflow-wrap:anywhere] sm:text-lg">{direction.text}</h3>
-                            <p className="mt-1 text-[0.82rem] leading-snug text-gray-200 [overflow-wrap:anywhere] sm:text-sm"><span className="text-[#F5B800]">Тренер:</span> {direction.trainer}</p>
+                            <h3 className="text-[0.95rem] font-bold leading-tight text-white [overflow-wrap:anywhere] sm:text-lg lg:text-xl">{direction.text}</h3>
+                            <p className="mt-1 text-[0.82rem] leading-snug text-gray-200 [overflow-wrap:anywhere] sm:text-sm lg:text-base"><span className="text-[#F5B800]">Тренер:</span> {direction.trainer}</p>
                           </div>
                         </div>
 
                         <div className="mt-3 flex items-center justify-between gap-2 sm:mt-4">
-                          <button type="button" data-action={direction.action} data-booking-action={direction.bookingAction} data-confirm-booking-action={direction.confirmBookingAction} data-group-direction={direction.key} onClick={() => onOpenModal({ topic: 'group', groupDirection: direction.text })} className="inline-flex min-h-9 items-center justify-center rounded-full bg-[#F5B800] px-3.5 py-1.5 text-[0.82rem] font-semibold text-white">Записаться</button>
+                          <button type="button" data-action={direction.action} data-booking-action={direction.bookingAction} data-confirm-booking-action={direction.confirmBookingAction} data-group-direction={direction.key} onClick={() => onOpenModal({ topic: 'group', groupDirection: direction.text })} className="inline-flex min-h-9 items-center justify-center rounded-full bg-[#F5B800] px-3.5 py-1.5 text-[0.82rem] font-semibold text-white">Запись на занятие</button>
                           <button type="button" onClick={() => openDirectionDetails(direction)} className="inline-flex min-h-9 items-center justify-center gap-1 text-[0.82rem] font-medium text-[#F5B800]"><span>{GROUP_TRAININGS_TEXT.detailsCta}</span><ArrowRight className="h-3.5 w-3.5" /></button>
                         </div>
                       </article>
@@ -107,17 +107,17 @@ export default function GroupTrainingsSection({ onOpenModal }: GroupTrainingsPro
 
       <Dialog open={isDetailsModalOpen} onOpenChange={setIsDetailsModalOpen}>
         <DialogContent showCloseButton className="w-[calc(100vw-1rem)] max-h-[calc(100dvh-1.5rem)] max-w-[calc(100vw-1rem)] overflow-y-auto border border-white/10 bg-[#0f121a]/95 p-4 sm:max-w-3xl sm:p-6">
-          <div className="px-8 text-center">
+          <div className="px-3 text-center lg:px-0">
             <DialogTitle className="text-lg font-semibold leading-tight text-white sm:text-2xl">{selectedDirection?.text ?? GROUP_TRAININGS_TEXT.detailsCta}</DialogTitle>
           </div>
           <DialogDescription className="sr-only">Подробная информация о выбранном групповом направлении.</DialogDescription>
           {selectedDirection ? (
             <div className="mt-2 sm:mt-3">
-              <div className="px-8 text-center">
+              <div className="px-3 text-center lg:px-0">
                 <p className="text-sm text-gray-200 sm:text-base"><span className="text-[#F5B800]">Тренер:</span> {selectedDirection.trainer}</p>
               </div>
               <div className="mt-4 sm:mt-5">
-                <DirectionDetails direction={selectedDirection} unwrapped centered />
+                <DirectionDetails direction={selectedDirection} unwrapped />
               </div>
             </div>
           ) : null}
