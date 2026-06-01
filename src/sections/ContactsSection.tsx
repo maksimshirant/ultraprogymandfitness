@@ -216,7 +216,7 @@ export default function ContactsSection() {
                 <div>
                   <p className="text-xs uppercase tracking-[0.22em] text-gray-500">Адрес</p>
                   <div className="mt-3 text-white">
-                    <span className="text-xl leading-tight md:text-[1.75rem] lg:whitespace-nowrap">{CONTACTS_TEXT.address}</span>
+                    <span className="text-xl leading-tight md:text-[1.75rem] max-w-[18ch] text-balance">{CONTACTS_TEXT.address}</span>
                   </div>
                 </div>
 

@@ -95,7 +95,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
   const swipeHandlers = useSwipeNavigation({ onNext: nextSlide, onPrev: prevSlide });
 
   return (
-    <div className="relative overflow-x-clip overflow-y-hidden">
+    <div className="relative overflow-x-clip">
       <section className="relative flex min-h-[100svh] items-center overflow-hidden">
         <div className="hero-glow-layer">
           <div className="hero-glow-top-right" />
@@ -150,7 +150,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
         </div>
       </section>
 
-      <section id="subscriptions" className="relative overflow-x-clip overflow-y-hidden scroll-mt-24 py-10 md:py-14">
+      <section id="subscriptions" className="relative overflow-x-clip scroll-mt-24 pt-10 pb-20 md:pt-14 md:pb-24 lg:pb-28">
         <div className="hero-glow-layer">
           <div className="hero-glow-top-right" />
           <div className="hero-glow-bottom-left" />
@@ -192,7 +192,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
               </>
             ) : null}
 
-            <div className="relative h-[760px] overflow-hidden sm:h-[700px] md:max-lg:h-[840px] lg:h-[760px]" {...swipeHandlers}>
+            <div className="relative h-[760px] overflow-hidden sm:h-[700px] md:max-lg:h-[840px] lg:h-[860px]" {...swipeHandlers}>
               {memberships.map((abonement, index) => {
                 const offset = getSlideOffset(index);
                 const isActive = offset === 0;
@@ -284,7 +284,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
               })}
             </div>
 
-            <div className="relative z-40 -mt-[7rem] flex items-center justify-center gap-4 md:-mt-[8.5rem] md:gap-3 lg:-mt-[6.5rem]">
+            <div className="relative z-40 mt-6 flex items-center justify-center gap-4 md:mt-8 md:gap-3 lg:mt-10">
               {isMobileViewport ? (
                 <button
                   type="button"
