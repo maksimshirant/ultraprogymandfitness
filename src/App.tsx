@@ -1,4 +1,5 @@
 import { Suspense, lazy, useEffect, useRef, useState } from 'react';
+import { zeroRightClassName } from 'react-remove-scroll-bar';
 import { useLocation } from 'react-router-dom';
 import Announcement from './sections/Announcement';
 import AppRoutes from '@/router/AppRoutes';
@@ -225,7 +226,7 @@ function App() {
 
   return (
     <div className="relative min-h-screen bg-[#0a0a0f] text-white overflow-x-hidden">
-      <div className="pointer-events-none fixed inset-0 z-0">
+      <div className={`pointer-events-none fixed inset-0 z-0 ${zeroRightClassName}`}>
         {shouldRenderFrostBackground ? (
           <div
             ref={frostLayerRef}

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { Menu, Phone, X } from 'lucide-react';
+import { zeroRightClassName } from 'react-remove-scroll-bar';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useViewportTier } from '@/hooks/useViewportTier';
 import { cn } from '@/lib/utils';
@@ -123,6 +124,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
         ref={headerRef}
         className={cn(
           'site-header fixed top-0 left-0 right-0 z-50 border-b border-transparent bg-transparent transition-[background-color,border-color,backdrop-filter,opacity] duration-500',
+          zeroRightClassName,
           isMobileMenuOpen && 'header-scrolled'
         )}
       >
