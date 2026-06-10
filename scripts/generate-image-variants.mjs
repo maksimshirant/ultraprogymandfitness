@@ -15,6 +15,7 @@ const PROJECT_ROOT = process.cwd();
 const CONTENT_SOURCE_MAPPINGS = [
   { inputDir: 'content/trainers', outputDir: 'public/trainers' },
   { inputDir: 'content/floors', outputDir: 'public/floors' },
+  { inputDir: 'content/sections', outputDir: 'public/sections' },
 ];
 const TARGET_INPUT_FILES = [
   { inputPath: 'public/mainhero/card.png', outputPath: 'public/mainhero/card.png' },

@@ -21,7 +21,7 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
 
 
   const groupTrainingsPreviewImage = `${import.meta.env.BASE_URL}floors/floor2/group-workouts/5.jpg`;
-  const trainersPreviewImage = `${import.meta.env.BASE_URL}floors/floor2/crossfit-zone/5.jpg`;
+  const trainersPreviewImage = `${import.meta.env.BASE_URL}sections/trainers-home.jpg`;
   const membershipsPreviewImage = `${import.meta.env.BASE_URL}floors/floor1/RESEPTION/1.jpg?v=20260516`;
 
   useEffect(() => {
