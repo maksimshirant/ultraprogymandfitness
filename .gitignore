@@ -1,5 +1,7 @@
 node_modules/
 dist/
+.assets-source/
+content/
 
 # accidental root assets / archives
 /contact-form-function.zip
