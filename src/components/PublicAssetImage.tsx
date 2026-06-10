@@ -43,9 +43,10 @@ const VARIANT_SUFFIX_PATTERN = /^(.*?)(?:-(preview|thumb|placeholder))?(?:-w(\d+
 
 function normalizeAssetSrc(src: string) {
   const parsedUrl = new URL(src, 'https://ultraprofitness.local');
-  const relativePath = parsedUrl.pathname.startsWith(BASE_URL)
-    ? parsedUrl.pathname.slice(BASE_URL.length)
-    : parsedUrl.pathname.replace(/^\/+/, '');
+  const decodedPathname = decodeURIComponent(parsedUrl.pathname);
+  const relativePath = decodedPathname.startsWith(BASE_URL)
+    ? decodedPathname.slice(BASE_URL.length)
+    : decodedPathname.replace(/^\/+/, '');
   const extensionSeparatorIndex = relativePath.lastIndexOf('.');
 
   if (extensionSeparatorIndex < 0) {
