@@ -51,7 +51,7 @@ const HERO_ASSETS = {
 } as const;
 
 const HERO_TEXT = {
-  titleStart: 'ФИТНЕСС-КЛУБ',
+  titleStart: 'ФИТНЕС-КЛУБ',
   titleAccent: 'НОВОГО УРОВНЯ',
   description:
     'Современное оборудование, профессиональные тренеры и программы для любого уровня подготовки',
