@@ -212,8 +212,6 @@ function createPipeline(inputPath, width, blurSigma) {
   if (typeof width === 'number') {
     image = image.resize({
       width,
-      height: width,
-      fit: 'inside',
       withoutEnlargement: true,
     });
   }

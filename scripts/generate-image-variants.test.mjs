@@ -8,12 +8,12 @@ import sharp from 'sharp';
 const PROJECT_ROOT = process.cwd();
 const SCRIPT_PATH = path.join(PROJECT_ROOT, 'scripts', 'generate-image-variants.mjs');
 
-async function ensureFile(filePath) {
+async function ensureFile(filePath, { width = 1600, height = 900 } = {}) {
   await fs.mkdir(path.dirname(filePath), { recursive: true });
   await sharp({
     create: {
-      width: 1600,
-      height: 900,
+      width,
+      height,
       channels: 3,
       background: '#7a5c2e',
     },
@@ -113,9 +113,24 @@ async function testFallbackSourceDirectory() {
   await assert.doesNotReject(() => fs.access(path.join(tempDir, 'public', 'trainers', 'sample-preview.avif')));
 }
 
+async function testPortraitWidthCandidatesMatchTheirDescriptors() {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'ultrapro-images-'));
+  const contentFile = path.join(tempDir, 'content', 'trainers', 'portrait.jpg');
+
+  await ensureFile(contentFile, { width: 900, height: 1600 });
+  await runGenerator(tempDir, 'portrait-width');
+
+  const metadata = await sharp(
+    path.join(tempDir, 'public', 'trainers', 'portrait-preview-w480.avif')
+  ).metadata();
+
+  assert.equal(metadata.width, 480);
+}
+
 async function main() {
   await testMinimalVariantSet();
   await testFallbackSourceDirectory();
+  await testPortraitWidthCandidatesMatchTheirDescriptors();
   console.log('generate-image-variants tests passed');
 }
 
