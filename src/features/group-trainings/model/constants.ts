@@ -54,8 +54,6 @@ const HERO_SCHEDULE_GROUPS: HeroScheduleGroup[] = [
       { id: 'mon-stretching', time: '19:00 - 20:00', directionKey: 'stretching', trainerName: 'Виктория' },
   ]},
   { id: 'tuesday', day: 'Вт', rows: [
-      { id: 'tue-tabata', time: '09:00 - 10:00', directionKey: 'circuit_strength', directionText: 'ТАБАТА', trainerName: 'Жанна' },
-      { id: 'tue-soft-strength', time: '10:00 - 11:00', directionKey: 'circuit_strength', directionText: 'МЯГКАЯ СИЛА', trainerName: 'Анна' },
       { id: 'tue-step-cardio', time: '18:00 - 19:00', directionKey: 'cycle', directionText: 'СТЕП-КАРДИО', trainerName: 'Анастасия' },
       { id: 'tue-body-balance', time: '19:00 - 20:00', directionKey: 'smart_fitness', directionText: 'ТЕЛО В БАЛАНСЕ', trainerName: 'Надежда' },
   ]},
@@ -67,13 +65,10 @@ const HERO_SCHEDULE_GROUPS: HeroScheduleGroup[] = [
       { id: 'wed-kids-wrestling', time: '16:00 - 17:00', directionKey: 'kids_martial_arts', directionText: 'БОРЬБА для детей', trainerName: 'Антон' },
       { id: 'wed-afk-17', time: '17:00 - 18:00', directionKey: 'afk', trainerName: 'Александр' },
       { id: 'wed-cycle', time: '18:00 - 19:00', directionKey: 'cycle', trainerName: 'Александр' },
-      { id: 'wed-strong-core', time: '18:00 - 19:00', directionKey: 'functional_training', directionText: 'СИЛЬНЫЙ КОР', trainerName: 'Анна' },
       { id: 'wed-crossfit-19', time: '19:00 - 20:00', directionKey: 'crossfit', trainerName: 'Александр' },
       { id: 'wed-stretching', time: '19:00 - 20:00', directionKey: 'stretching', trainerName: 'Виктория' },
   ]},
   { id: 'thursday', day: 'Чт', rows: [
-      { id: 'thu-tabata', time: '09:00 - 10:00', directionKey: 'circuit_strength', directionText: 'ТАБАТА', trainerName: 'Жанна' },
-      { id: 'thu-strong-core', time: '10:00 - 11:00', directionKey: 'functional_training', directionText: 'СИЛЬНЫЙ КОР', trainerName: 'Анна' },
       { id: 'thu-step-cardio', time: '18:00 - 19:00', directionKey: 'cycle', directionText: 'СТЕП-КАРДИО', trainerName: 'Анастасия' },
   ]},
   { id: 'friday', day: 'Пт', rows: [

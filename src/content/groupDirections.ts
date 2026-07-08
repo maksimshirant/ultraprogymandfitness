@@ -287,57 +287,6 @@ export const groupDirections: GroupDirection[] = [
     confirmBookingAction: 'group_booking_confirm:smart_fitness',
   },
   {
-    key: 'strong_core',
-    text: 'Сильный кор',
-    trainer: 'Анна',
-    shortDescription:
-      'Контролируемая тренировка на глубокие мышцы, стабильность позвоночника и красивую осанку.',
-    benefits: ['укрепление глубоких мышц', 'стабильность позвоночника', 'улучшение осанки и баланса'],
-    category: 'recovery',
-    badge: GROUP_DIRECTION_BADGE,
-    status: 'Контроль и техника',
-    trainerAvatar: getTrainerAvatar('Анна'),
-    description:
-      '«Сильный кор» — это тренировка, направленная на проработку мышц кора: пресса, спины, тазового дна и боковой поверхности корпуса.\n\nУпражнения выполняются с контролем и акцентом на качество движения, а не количество повторений. Регулярные занятия укрепляют «мышечный корсет», улучшают осанку, снижают риск болей в спине и повышают общую устойчивость тела.\n\nТренер Анна уделяет внимание правильному дыханию и технике, чтобы каждое движение приносило пользу без перегрузки.',
-    action: 'group_direction:strong_core',
-    bookingAction: 'group_booking_request:strong_core',
-    confirmBookingAction: 'group_booking_confirm:strong_core',
-  },
-  {
-    key: 'tabata',
-    text: 'Табата',
-    trainer: 'Жанна',
-    shortDescription:
-      'Высокоинтенсивные интервалы для быстрого жиросжигания, выносливости и максимальной отдачи за короткое время.',
-    benefits: ['высокая интенсивность', 'быстрое сжигание жира', 'повышение выносливости'],
-    category: 'active',
-    badge: GROUP_DIRECTION_BADGE,
-    status: 'HIIT-формат',
-    trainerAvatar: getTrainerAvatar('Жанна'),
-    description:
-      'Табата — это зажигательный и высокоинтенсивный интервальный формат тренировок: 20 секунд работы на максимум + 10 секунд отдыха, повторяется 8 кругов (всего 4 минуты на упражнение).\n\nЗа одно занятие вы прорабатываете всё тело, запускаете процесс жиросжигания и значительно повышаете выносливость. Эффект «дожигания» сохраняется ещё 24-48 часов после тренировки.\n\nТренер Жанна создаёт мотивирующую атмосферу и помогает выложиться на 100%, даже если вы устали. Подходит для тех, у кого мало времени, но есть стремление к результату.',
-    action: 'group_direction:tabata',
-    bookingAction: 'group_booking_request:tabata',
-    confirmBookingAction: 'group_booking_confirm:tabata',
-  },
-  {
-    key: 'soft_strength',
-    text: 'Мягкая сила',
-    trainer: 'Анна',
-    shortDescription:
-      'Щадящий силовой формат для восстановления, тонуса и укрепления без перегрузки суставов.',
-    benefits: ['плавная нагрузка', 'тонус тела', 'восстановление и укрепление'],
-    category: 'recovery',
-    badge: GROUP_DIRECTION_BADGE,
-    status: 'Щадящий формат',
-    trainerAvatar: getTrainerAvatar('Анна'),
-    description:
-      '«Мягкая сила» — это щадящий силовой формат тренировок с использованием лёгких отягощений и плавных, контролируемых движений.\n\nТренировка укрепляет мышцы, улучшает подвижность суставов и помогает восстановиться после интенсивных нагрузок или стресса. Идеально подходит для тех, кто возвращается к фитнесу, заботится о суставах или хочет тренироваться без экстрима.\n\nТренер Анна создаёт спокойную, поддерживающую атмосферу и помогает найти баланс между усилием и комфортом.',
-    action: 'group_direction:soft_strength',
-    bookingAction: 'group_booking_request:soft_strength',
-    confirmBookingAction: 'group_booking_confirm:soft_strength',
-  },
-  {
     key: 'circuit_strength',
     text: 'Круговая силовая',
     trainer: 'Юлия',
@@ -399,7 +348,7 @@ export const groupDirectionRecommendations = [
   },
   {
     goal: 'Скорректировать осанку',
-    directions: ['lfk', 'pilates', 'strong_core'],
+    directions: ['lfk', 'pilates'],
   },
   {
     goal: 'Развить гибкость',
