@@ -146,7 +146,7 @@ export function ContactStep({
           </p>
         ) : null}
 
-        <button type="submit" disabled={isSubmitting} aria-live="polite" className="btn-primary w-full text-white disabled:cursor-not-allowed disabled:opacity-60">
+        <button type="submit" disabled={isSubmitting} aria-live="polite" className="modal-submit-button btn-primary w-full text-white disabled:cursor-not-allowed disabled:opacity-60">
           {isSubmitting ? (
             <span className="inline-flex items-center justify-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin text-[#F5B800]" />

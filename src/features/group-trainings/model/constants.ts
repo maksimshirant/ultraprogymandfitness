@@ -4,7 +4,6 @@ export const CLUB_LOGO_SRC = `${import.meta.env.BASE_URL}logo.webp`;
 
 export const GROUP_TRAININGS_TEXT = {
   heroTitle: 'Групповые тренировки',
-  heroAccent: 'взрослых и детей',
   heroSubtitle:
     'Силовые, функциональные и восстановительные направления с тренерами клуба. Подберите тренировку под свои цели и уровень подготовки.',
   heroPrimaryCta: 'Расписание',

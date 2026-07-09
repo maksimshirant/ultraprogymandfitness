@@ -29,7 +29,7 @@ export function LegalDocumentModal({
 
       <div
         className={cn(
-          'glass-card modal-surface relative mx-auto my-auto flex w-full flex-col overflow-hidden rounded-[30px] border border-white/10 p-6 shadow-[0_28px_120px_rgba(0,0,0,0.45)] max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] sm:p-8',
+          'glass-card modal-surface relative mx-auto my-auto flex w-full flex-col overflow-hidden rounded-[1.75rem] border-white/20 p-6 max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] sm:p-8',
           maxWidthClassName
         )}
         onClick={(event) => event.stopPropagation()}

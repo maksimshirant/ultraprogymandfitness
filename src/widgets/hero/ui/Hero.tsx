@@ -141,7 +141,7 @@ export default function Hero({ onOpenModal }: HeroProps) {
             className={cn('h-full w-full object-cover', isDesktopViewport ? 'object-center' : 'object-right')}
           />
         </picture>
-        <div className="hero-overlay-layer absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(5,6,10,0.43)_0%,rgba(6,7,11,0.36)_42%,rgba(5,6,10,0.46)_100%)] md:bg-[linear-gradient(180deg,rgba(5,6,10,0.62)_0%,rgba(6,7,11,0.52)_42%,rgba(5,6,10,0.66)_100%)]" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-48 bg-[linear-gradient(180deg,transparent_0%,rgba(5,6,10,0.9)_100%)] sm:h-56 lg:h-64" />
         <div className="hero-glow-layer">
           <div className="hero-glow-top-right" />
           <div className="hero-glow-bottom-left" />
@@ -150,7 +150,7 @@ export default function Hero({ onOpenModal }: HeroProps) {
 
         <div className="relative z-30 mx-auto w-full max-w-7xl px-4 pt-24 pb-14 max-[360px]:pt-20 max-[360px]:pb-10 sm:px-6 md:max-lg:flex md:max-lg:min-h-[calc(100svh-13rem)] md:max-lg:flex-col md:max-lg:justify-between md:max-lg:px-10 md:max-lg:pt-32 md:max-lg:pb-20 lg:px-8 lg:pt-32 lg:pb-16">
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-24">
-            <div className="space-y-8 slide-up max-md:w-full max-md:max-w-full max-md:space-y-7 md:max-lg:mx-auto md:max-lg:max-w-[min(94vw,860px)] md:max-lg:space-y-11 lg:max-w-[40rem]">
+            <div className="hero-copy-shadow space-y-8 slide-up max-md:w-full max-md:max-w-full max-md:space-y-7 md:max-lg:mx-auto md:max-lg:max-w-[min(94vw,860px)] md:max-lg:space-y-11 lg:max-w-[40rem]">
               <BalancedHeading
                 as="h1"
                 className="section-title text-white max-md:max-w-full max-md:text-[clamp(2.35rem,9vw,3.2rem)] max-md:leading-[0.96] max-[360px]:text-[clamp(1.85rem,8.6vw,2.45rem)] max-[360px]:leading-[1.02] md:max-lg:max-w-full md:max-lg:text-[clamp(4.4rem,9.4vw,6.2rem)] md:max-lg:leading-[0.9] lg:text-[clamp(3.45rem,4.15vw,4.55rem)] lg:leading-[0.94]"
@@ -244,7 +244,7 @@ export default function Hero({ onOpenModal }: HeroProps) {
           />
 
           <div
-            className="relative mx-auto my-auto max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto rounded-2xl border border-white/10 bg-[#111117] p-6 sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] sm:p-7"
+            className="modal-surface relative mx-auto my-auto max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto rounded-[1.75rem] border-white/20 p-6 sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] sm:p-7"
             onClick={(event) => event.stopPropagation()}
           >
             <button

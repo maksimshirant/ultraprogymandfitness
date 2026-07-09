@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ArrowRight,
   CircleHelp,
@@ -21,7 +21,6 @@ import type { OpenModalHandler } from '@/types/modal';
 
 const ABONEMENTS_TEXT = {
   heroTitle: 'Абонементы',
-  heroAccent: 'Ultra Pro',
   heroSubtitle:
     'Форматы посещения под быстрый старт, стабильный тренировочный ритм и долгий системный прогресс. Сравните условия и выберите удобный режим занятий.',
   heroPrimaryCta: 'Я знаю что мне нужно',
@@ -103,13 +102,13 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
           <div className="hero-glow-center" />
         </div>
 
-        <div className="relative z-30 mx-auto w-full max-w-7xl px-4 pb-14 pt-24 sm:px-6 md:max-lg:flex md:max-lg:min-h-[calc(100svh-13rem)] md:max-lg:flex-col md:max-lg:justify-between md:max-lg:px-10 md:max-lg:pb-20 md:max-lg:pt-32 lg:px-8 lg:pb-16 lg:pt-32">
+        <div className="relative z-30 mx-auto w-full max-w-7xl px-4 pt-0 pb-20 sm:px-6 sm:pt-24 sm:pb-14 md:max-lg:flex md:max-lg:min-h-[calc(100svh-13rem)] md:max-lg:flex-col md:max-lg:justify-between md:max-lg:px-10 md:max-lg:pt-32 md:max-lg:pb-20 lg:px-8 lg:pb-16 lg:pt-32">
           <div className="space-y-8 max-md:w-full max-md:max-w-full max-md:space-y-7 md:max-lg:mx-auto md:max-lg:max-w-[min(94vw,860px)] md:max-lg:space-y-11">
             <BalancedHeading
               as="h1"
-              className="section-title text-white max-md:text-[clamp(2.1rem,8.8vw,3.3rem)] max-md:leading-[0.98] md:max-lg:max-w-full md:max-lg:text-[clamp(4.4rem,9.4vw,6.2rem)] md:max-lg:leading-[0.9] lg:text-[clamp(4.6rem,6.6vw,6.8rem)] lg:leading-[0.9]"
+              className="section-title text-white max-md:text-[clamp(3rem,11vw,4rem)] max-md:leading-[0.98] md:max-lg:max-w-full md:max-lg:text-[clamp(4.4rem,9.4vw,6.2rem)] md:max-lg:leading-[0.9] lg:text-[clamp(4.6rem,6.6vw,6.8rem)] lg:leading-[0.9]"
             >
-              {ABONEMENTS_TEXT.heroTitle} <HeadingAccent>{ABONEMENTS_TEXT.heroAccent}</HeadingAccent>
+              {ABONEMENTS_TEXT.heroTitle}
             </BalancedHeading>
             <p className="max-w-2xl text-sm leading-relaxed text-gray-200 sm:text-lg md:max-lg:max-w-[48rem] md:max-lg:text-[1.6rem] md:max-lg:leading-[1.34] lg:text-xl">
               {ABONEMENTS_TEXT.heroSubtitle}
@@ -205,22 +204,18 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
                 return (
                   <article
                     key={abonement.id}
-                    className={`abonement-slide-motion absolute left-1/2 top-12 w-[88%] max-w-[30rem] will-change-transform transition-[transform,opacity] duration-700 ease-out sm:w-[72%] md:top-16 md:w-[56%] lg:w-[52%] ${
+                    className={`abonement-slide-motion absolute left-1/2 top-12 w-[88%] max-w-[30rem] will-change-transform transition-[transform,opacity,filter] duration-700 ease-out sm:w-[72%] md:top-16 md:w-[56%] lg:w-[52%] ${
                       isActive
-                        ? 'z-20 -translate-x-1/2 scale-100 opacity-100'
+                        ? 'z-20 -translate-x-1/2 scale-100 opacity-100 brightness-100'
                         : offset === -1
-                          ? 'z-10 -translate-x-[118%] scale-92 opacity-35'
+                          ? 'z-10 -translate-x-[118%] scale-92 opacity-35 brightness-75'
                           : offset === 1
-                            ? 'z-10 translate-x-[14%] scale-92 opacity-35'
-                            : 'pointer-events-none z-0 -translate-x-1/2 scale-90 opacity-0'
+                            ? 'z-10 translate-x-[14%] scale-92 opacity-35 brightness-75'
+                            : 'pointer-events-none z-0 -translate-x-1/2 scale-90 opacity-0 brightness-75'
                     }`}
                   >
                     <div
-                      className={`glass-card flex flex-col p-4 md:p-6 ${
-                        isActive
-                          ? 'abonement-card-active border border-[#F5B800]/70 shadow-[0_0_28px_rgba(245,184,0,0.26)]'
-                          : 'border border-white/5'
-                      }`}
+                      className={`modal-surface flex flex-col rounded-[1.75rem] p-4 md:p-6 ${isActive ? 'abonement-card-active' : ''}`}
                     >
                       <BalancedHeading
                         as="h3"
@@ -234,7 +229,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
 
                       <div className="mt-3">
                         <span className="relative inline-flex items-end gap-2">
-                          <span className="relative z-10 text-[2.2rem] font-black text-[rgb(255,255,255,0.82)] md:text-5xl">{abonement.price}</span>
+                          <span className="abonement-price-shadow relative z-10 text-[2.2rem] font-black text-[rgb(255,255,255,0.82)] md:text-5xl">{abonement.price}</span>
                           <span className="absolute bottom-1 left-0 right-0 z-0 h-1.5 bg-gradient-to-r from-[#F5B800] to-[#D89B00]" />
                         </span>
                       </div>
@@ -249,7 +244,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
                           return (
                             <span
                               key={`${abonement.id}-${modeIndex}-${mode}`}
-                              className="inline-flex items-center gap-1.5 rounded-full border border-[#F5B800]/35 bg-[#0e1118]/88 px-2.5 py-1.5 text-[10px] leading-tight text-gray-200 sm:text-xs"
+                              className="inline-flex items-center gap-1.5 rounded-full bg-[#0e1118]/88 px-2.5 py-1.5 text-[10px] leading-tight text-gray-200 sm:text-xs"
                             >
                               <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#0b0e14] text-[#F5B800]">
                                 <ModeIcon className="h-3 w-3" />

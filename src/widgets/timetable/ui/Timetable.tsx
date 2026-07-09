@@ -62,7 +62,7 @@ export default function Timetable() {
   );
 
   return (
-    <section id="schedule" className="deferred-section relative overflow-hidden py-14 scroll-mt-24">
+    <section id="schedule" className="deferred-section relative overflow-hidden pt-0 pb-10 scroll-mt-24 sm:py-14">
       <div className="hero-glow-layer">
         <div className="hero-glow-top-right" />
         <div className="hero-glow-bottom-left" />

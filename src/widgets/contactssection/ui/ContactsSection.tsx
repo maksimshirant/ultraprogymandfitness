@@ -162,7 +162,7 @@ export default function ContactsSection() {
             {visibleReviews.map((review) => (
               <article
                 key={`${review.author}-${review.date}`}
-                className="rounded-[24px] border border-white/10 bg-white/[0.03] p-6"
+                className="modal-surface rounded-[1.75rem] p-6"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
@@ -326,7 +326,7 @@ export default function ContactsSection() {
           onClick={() => setIsMapOpen(false)}
         >
           <div
-            className="relative max-w-6xl mx-auto h-[90vh] rounded-2xl border border-white/10 bg-[#111117] p-4 sm:p-6"
+            className="modal-surface relative mx-auto h-[90vh] max-w-6xl rounded-[1.75rem] border-white/20 p-4 sm:p-6"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex justify-end">

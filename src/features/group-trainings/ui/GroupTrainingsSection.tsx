@@ -1,5 +1,5 @@
 ﻿import { useState } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 import { groupDirectionCategories, groupDirections, type GroupDirection } from '@/content/groupDirections';
@@ -38,17 +38,27 @@ export default function GroupTrainingsSection({ onOpenModal }: GroupTrainingsPro
     <div className="relative overflow-hidden">
       <section className="relative flex min-h-[100svh] items-center overflow-hidden">
         <div className="hero-glow-layer"><div className="hero-glow-top-right" /><div className="hero-glow-bottom-left" /><div className="hero-glow-center" /></div>
-        <div className="relative z-30 mx-auto w-full max-w-7xl px-4 pt-24 pb-14 sm:px-6 md:max-lg:flex md:max-lg:min-h-[calc(100svh-13rem)] md:max-lg:flex-col md:max-lg:justify-center md:max-lg:px-10 md:max-lg:pt-32 md:max-lg:pb-20 lg:px-8 lg:pt-32 lg:pb-16">
+        <div className="relative z-30 mx-auto w-full max-w-7xl px-4 pt-0 pb-20 sm:px-6 sm:pt-24 sm:pb-14 md:max-lg:flex md:max-lg:min-h-[calc(100svh-13rem)] md:max-lg:flex-col md:max-lg:justify-between md:max-lg:px-10 md:max-lg:pt-32 md:max-lg:pb-20 lg:px-8 lg:pt-32 lg:pb-16">
           <div className="space-y-8 max-md:w-full max-md:max-w-full max-md:space-y-7 md:max-lg:mx-auto md:max-lg:max-w-[min(94vw,860px)] md:max-lg:space-y-11">
             <BalancedHeading as="h1" className="section-title text-white max-md:text-[clamp(2.8rem,10vw,4rem)] max-md:leading-[1.04] md:max-lg:max-w-full md:max-lg:text-[clamp(4rem,8.6vw,5.8rem)] md:max-lg:leading-[0.98] lg:text-[clamp(4.4rem,6vw,6.4rem)] lg:leading-[0.98]">
-              <span className="block">{GROUP_TRAININGS_TEXT.heroTitle}</span>
-              <span className="block">для {GROUP_TRAININGS_TEXT.heroAccent}</span>
+              {GROUP_TRAININGS_TEXT.heroTitle}
             </BalancedHeading>
             <p className="max-w-2xl text-base leading-relaxed text-gray-200 sm:text-lg md:max-lg:max-w-[48rem] md:max-lg:text-[1.45rem] md:max-lg:leading-[1.34] lg:text-xl">{GROUP_TRAININGS_TEXT.heroSubtitle}</p>
             <div className="flex flex-col gap-3 sm:flex-row md:max-lg:gap-4">
               <button type="button" onClick={scrollToSchedule} className="btn-primary inline-flex items-center justify-center gap-2 px-7 py-4 text-white md:max-lg:px-10 md:max-lg:py-5 md:max-lg:text-lg">{GROUP_TRAININGS_TEXT.heroPrimaryCta}<ArrowRight className="h-4 w-4" /></button>
               <button type="button" onClick={scrollToDirections} className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-7 py-4 text-sm font-semibold text-white transition-colors md:max-lg:px-10 md:max-lg:py-5 md:max-lg:text-lg lg:hover:border-white/30 lg:hover:bg-white/[0.08]">{GROUP_TRAININGS_TEXT.heroSecondaryCta}</button>
             </div>
+          </div>
+
+          <div className="hidden min-h-[5.5rem] items-end justify-center md:max-lg:flex">
+            <button
+              type="button"
+              onClick={scrollToSchedule}
+              aria-label="Прокрутить к расписанию"
+              className="inline-flex items-center justify-center text-white"
+            >
+              <ChevronDown className="h-11 w-11 text-white" strokeWidth={1.85} />
+            </button>
           </div>
         </div>
       </section>
@@ -72,7 +82,7 @@ export default function GroupTrainingsSection({ onOpenModal }: GroupTrainingsPro
                   <div><h2 className="text-2xl font-bold leading-tight text-white sm:text-3xl lg:text-[2.2rem]">{category.title}</h2></div>
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 2xl:grid-cols-3">
                     {directions.map((direction) => (
-                      <article key={direction.key} id={direction.key} className="scroll-mt-28 rounded-3xl bg-white/[0.08] px-4 py-4 sm:border sm:border-white/10 sm:bg-[#101117]/90 sm:px-5 sm:py-5 lg:px-6 lg:py-6">
+                      <article key={direction.key} id={direction.key} className="modal-surface scroll-mt-28 rounded-[1.75rem] px-4 py-4 sm:px-5 sm:py-5 lg:px-6 lg:py-6">
                         <div className="grid grid-cols-[4rem_minmax(0,1fr)] items-start gap-5 sm:grid-cols-[4.75rem_minmax(0,1fr)]">
                           <div className="ml-2 flex justify-center"><TrainerAvatar direction={direction} /></div>
                           <div className="min-w-0 self-center text-left">
@@ -106,7 +116,7 @@ export default function GroupTrainingsSection({ onOpenModal }: GroupTrainingsPro
       </section>
 
       <Dialog open={isDetailsModalOpen} onOpenChange={setIsDetailsModalOpen}>
-        <DialogContent showCloseButton className="w-[calc(100vw-1rem)] max-h-[calc(100dvh-1.5rem)] max-w-[calc(100vw-1rem)] overflow-y-auto border border-white/10 bg-[#0f121a]/95 p-4 sm:max-w-3xl sm:p-6">
+        <DialogContent showCloseButton className="modal-surface w-[calc(100vw-1rem)] max-h-[calc(100dvh-1.5rem)] max-w-[calc(100vw-1rem)] overflow-y-auto rounded-[1.75rem] border-white/20 p-4 sm:max-w-3xl sm:p-6">
           <div className="px-3 text-center lg:px-0">
             <DialogTitle className="text-lg font-semibold leading-tight text-white sm:text-2xl">{selectedDirection?.text ?? GROUP_TRAININGS_TEXT.detailsCta}</DialogTitle>
           </div>

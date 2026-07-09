@@ -211,13 +211,13 @@ export default function Personal({ onOpenModal }: PersonalProps) {
         </div>
 
 
-        <div className="relative z-30 mx-auto w-full max-w-7xl px-4 pt-24 pb-14 sm:px-6 md:max-lg:flex md:max-lg:min-h-[calc(100svh-13rem)] md:max-lg:flex-col md:max-lg:justify-between md:max-lg:px-10 md:max-lg:pt-32 md:max-lg:pb-20 lg:px-8 lg:pt-32 lg:pb-16">
+        <div className="relative z-30 mx-auto w-full max-w-7xl px-4 pt-0 pb-20 sm:px-6 sm:pt-24 sm:pb-14 md:max-lg:flex md:max-lg:min-h-[calc(100svh-13rem)] md:max-lg:flex-col md:max-lg:justify-between md:max-lg:px-10 md:max-lg:pt-32 md:max-lg:pb-20 lg:px-8 lg:pt-32 lg:pb-16">
           <div className="space-y-8 max-md:w-full max-md:max-w-full max-md:space-y-7 md:max-lg:mx-auto md:max-lg:max-w-[min(94vw,860px)] md:max-lg:space-y-11">
             <BalancedHeading
               as="h1"
               className="section-title text-white max-md:text-[clamp(3.25rem,11.5vw,4.5rem)] max-md:leading-[0.94] md:max-lg:max-w-full md:max-lg:text-[clamp(4.4rem,9.4vw,6.2rem)] md:max-lg:leading-[0.9] lg:text-[clamp(4.6rem,6.6vw,6.8rem)] lg:leading-[0.9]"
             >
-              {PERSONAL_TEXT.heroTitle} <HeadingAccent>{PERSONAL_TEXT.heroAccent}</HeadingAccent>
+              {PERSONAL_TEXT.heroTitle} <HeadingAccent className="bg-none p-0">{PERSONAL_TEXT.heroAccent}</HeadingAccent>
             </BalancedHeading>
             <p className="max-w-2xl text-base leading-relaxed text-gray-200 sm:text-lg md:max-lg:max-w-[48rem] md:max-lg:text-[1.6rem] md:max-lg:leading-[1.34] lg:text-xl">
               {PERSONAL_TEXT.heroSubtitle}

@@ -21,7 +21,7 @@ export default function PreviewCard({
   reverse = false,
 }: PreviewCardProps) {
   return (
-    <article className="glass-card relative isolate overflow-hidden border border-white/10 p-0">
+    <article className="glass-card relative isolate overflow-hidden rounded-[1.75rem] border border-white/10 p-0">
       <div className="absolute inset-0 md:hidden">
         <PublicAssetImage
           src={imageSrc}

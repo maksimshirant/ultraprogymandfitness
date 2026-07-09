@@ -733,7 +733,7 @@ export default function Modal({
   const content = (
     <div
       className={cn(
-        'glass-card modal-surface flex min-h-0 max-h-full flex-col overflow-hidden border border-white/10 bg-[#0b0e14]/96 shadow-[0_28px_120px_rgba(0,0,0,0.45)]',
+        'glass-card modal-surface flex min-h-0 max-h-full flex-col overflow-hidden rounded-[1.75rem] border border-white/20',
         isAnnouncementMode ? 'justify-center p-6 sm:p-8' : ''
       )}
     >
