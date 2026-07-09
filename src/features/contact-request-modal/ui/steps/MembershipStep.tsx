@@ -15,7 +15,6 @@ export function MembershipStep({ isMobile, activeMembershipId, onSelect }: Membe
         {memberships.map((membership) => {
           const isActive = activeMembershipId === membership.id;
           const Icon = membership.icon;
-          const mobileTitle = membership.id === 6 ? 'Р Р°Р·РѕРІРѕРµ' : membership.title;
 
           return (
             <button
@@ -47,7 +46,7 @@ export function MembershipStep({ isMobile, activeMembershipId, onSelect }: Membe
                       membership.id === 5 ? 'text-sm whitespace-normal' : 'truncate whitespace-nowrap text-sm'
                     )}
                   >
-                    {mobileTitle}
+                    {membership.title}
                   </h3>
                   <p className="shrink-0 text-base font-black text-[rgb(255,255,255,0.84)]">{membership.price}</p>
                 </div>
