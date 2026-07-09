@@ -4,7 +4,7 @@ import { Seo } from '@/seo/Seo';
 import { pageSeo } from '@/seo/pageSeo';
 import type { OpenModalHandler } from '@/types/modal';
 
-const Personal = lazy(() => import('@/sections/Personal'));
+const Personal = lazy(() => import('@/widgets/personal/ui/Personal'));
 
 interface TrainersPageProps {
   onOpenModal: OpenModalHandler;

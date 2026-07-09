@@ -1,10 +1,10 @@
 import { Suspense, lazy } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import Header from '@/sections/Header';
+import Header from '@/widgets/header/ui/Header';
 import ScrollToTop from '@/router/ScrollToTop';
 import type { OpenModalHandler } from '@/types/modal';
 
-const Footer = lazy(() => import('@/sections/Footer'));
+const Footer = lazy(() => import('@/widgets/footer/ui/Footer'));
 
 interface MainLayoutProps {
   onOpenModal: OpenModalHandler;

@@ -38,8 +38,18 @@ export default defineConfig({
     },
   },
   resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
+    alias: [
+      { find: '@/api', replacement: path.resolve(__dirname, './src/shared/api') },
+      { find: '@/components', replacement: path.resolve(__dirname, './src/shared/ui') },
+      { find: '@/content', replacement: path.resolve(__dirname, './src/shared/data') },
+      { find: '@/hooks', replacement: path.resolve(__dirname, './src/shared/lib/hooks') },
+      { find: '@/lib', replacement: path.resolve(__dirname, './src/shared/lib/utils') },
+      { find: '@/types', replacement: path.resolve(__dirname, './src/shared/types') },
+      { find: '@/seo', replacement: path.resolve(__dirname, './src/shared/config/seo') },
+      { find: '@/sections', replacement: path.resolve(__dirname, './src/widgets') },
+      { find: '@/router', replacement: path.resolve(__dirname, './src/app/router') },
+      { find: '@/layout', replacement: path.resolve(__dirname, './src/app/layout') },
+      { find: '@', replacement: path.resolve(__dirname, './src') },
+    ],
   },
 });

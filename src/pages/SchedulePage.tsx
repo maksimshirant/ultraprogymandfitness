@@ -4,7 +4,7 @@ import { Seo } from '@/seo/Seo';
 import { pageSeo } from '@/seo/pageSeo';
 import type { OpenModalHandler } from '@/types/modal';
 
-const GroupTrainings = lazy(() => import('@/sections/GroupTrainings'));
+const GroupTrainings = lazy(() => import('@/features/group-trainings/ui/GroupTrainingsSection'));
 
 interface SchedulePageProps {
   onOpenModal: OpenModalHandler;

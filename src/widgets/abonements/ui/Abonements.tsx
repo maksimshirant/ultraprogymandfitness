@@ -274,7 +274,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
                         type="button"
                         onClick={() => onOpenModal({ topic: abonement.topicValue, membershipId: abonement.id })}
                         disabled={!isActive}
-                        className="btn-primary mt-3 w-full text-white transition-none hover:translate-y-0 hover:shadow-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-55"
+                        className="btn-primary mt-3 w-full text-white transition-none hover:shadow-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-55"
                       >
                         {ABONEMENTS_TEXT.cta}
                       </button>

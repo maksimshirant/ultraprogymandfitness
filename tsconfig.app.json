@@ -12,7 +12,17 @@
     "paths": {
       "@/*": [
         "./src/*"
-      ]
+      ],
+      "@/api/*": ["./src/shared/api/*"],
+      "@/components/*": ["./src/shared/ui/*"],
+      "@/content/*": ["./src/shared/data/*"],
+      "@/hooks/*": ["./src/shared/lib/hooks/*"],
+      "@/lib/*": ["./src/shared/lib/utils/*"],
+      "@/types/*": ["./src/shared/types/*"],
+      "@/seo/*": ["./src/shared/config/seo/*"],
+      "@/sections/*": ["./src/widgets/*"],
+      "@/router/*": ["./src/app/router/*"],
+      "@/layout/*": ["./src/app/layout/*"]
     },
     /* Bundler mode */
     "moduleResolution": "bundler",

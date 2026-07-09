@@ -1,6 +1,6 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
 
-const Modal = lazy(() => import('./Modal'));
+const Modal = lazy(() => import('@/features/contact-request-modal/ui/ContactRequestModal'));
 
 const SHOW_ANNOUNCEMENT = false;
 const ANNOUNCEMENT_DELAY_MS = 1000;

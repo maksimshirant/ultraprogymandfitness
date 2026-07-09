@@ -4,7 +4,7 @@ import { Seo } from '@/seo/Seo';
 import { pageSeo } from '@/seo/pageSeo';
 import type { OpenModalHandler } from '@/types/modal';
 
-const Abonements = lazy(() => import('@/sections/Abonements'));
+const Abonements = lazy(() => import('@/widgets/abonements/ui/Abonements'));
 
 interface MembershipsPageProps {
   onOpenModal: OpenModalHandler;

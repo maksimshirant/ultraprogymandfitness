@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useRef, useState } from 'react';
-import Hero from '@/sections/Hero';
+import Hero from '@/widgets/hero/ui/Hero';
 import { SectionFallback } from '@/components/SectionFallback';
 import PreviewCard from '@/components/PreviewCard';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
@@ -7,9 +7,9 @@ import { Seo } from '@/seo/Seo';
 import { pageSeo } from '@/seo/pageSeo';
 import type { OpenModalHandler } from '@/types/modal';
 
-const Flors = lazy(() => import('@/sections/Flors'));
-const TryFree = lazy(() => import('@/sections/TryFree'));
-const FAQ = lazy(() => import('@/sections/FAQ'));
+const Flors = lazy(() => import('@/widgets/flors/ui/Flors'));
+const TryFree = lazy(() => import('@/widgets/tryfree/ui/TryFree'));
+const FAQ = lazy(() => import('@/widgets/faq/ui/FAQ'));
 
 interface HomePageProps {
   onOpenModal: OpenModalHandler;

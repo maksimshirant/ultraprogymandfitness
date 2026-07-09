@@ -1,7 +1,7 @@
 import { Suspense, lazy, useEffect, useRef, useState } from 'react';
-import { zeroRightClassName } from 'react-remove-scroll-bar';
 import { useLocation } from 'react-router-dom';
-import Announcement from './sections/Announcement';
+import { FrostBackground } from '@/app/ui/FrostBackground';
+import Announcement from '@/widgets/announcement/ui/Announcement';
 import AppRoutes from '@/router/AppRoutes';
 import { syncStructuredData } from '@/seo/structuredData';
 import type { OpenModalRequest } from '@/types/modal';
@@ -23,27 +23,7 @@ const ALLOWED_MODAL_TOPICS = new Set([
   'other',
 ]);
 
-const Modal = lazy(() => import('./sections/Modal'));
-
-const FROST_BACKGROUND = {
-  avif: `${import.meta.env.BASE_URL}frost-bg.avif`,
-  webp: `${import.meta.env.BASE_URL}frost-bg.webp`,
-  png: `${import.meta.env.BASE_URL}frost-bg.png`,
-  avifSrcSet: [
-    `${import.meta.env.BASE_URL}frost-bg-w480.avif 480w`,
-    `${import.meta.env.BASE_URL}frost-bg-w768.avif 768w`,
-    `${import.meta.env.BASE_URL}frost-bg-w1024.avif 1024w`,
-    `${import.meta.env.BASE_URL}frost-bg-w1280.avif 1280w`,
-    `${import.meta.env.BASE_URL}frost-bg.avif 1881w`,
-  ].join(', '),
-  webpSrcSet: [
-    `${import.meta.env.BASE_URL}frost-bg-w480.webp 480w`,
-    `${import.meta.env.BASE_URL}frost-bg-w768.webp 768w`,
-    `${import.meta.env.BASE_URL}frost-bg-w1024.webp 1024w`,
-    `${import.meta.env.BASE_URL}frost-bg-w1280.webp 1280w`,
-    `${import.meta.env.BASE_URL}frost-bg.webp 1881w`,
-  ].join(', '),
-} as const;
+const Modal = lazy(() => import('@/features/contact-request-modal/ui/ContactRequestModal'));
 
 function App() {
   const { pathname } = useLocation();
@@ -226,41 +206,13 @@ function App() {
 
   return (
     <div className="relative min-h-screen bg-[#0a0a0f] text-white overflow-x-hidden">
-      <div className={`pointer-events-none fixed inset-0 z-0 ${zeroRightClassName}`}>
-        {shouldRenderFrostBackground ? (
-          <div
-            ref={frostLayerRef}
-            className="absolute inset-0 transition-opacity duration-700 ease-out"
-            style={{ opacity: initialFrostOpacity }}
-          >
-            <picture className="block h-full w-full">
-              <source
-                type="image/avif"
-                srcSet={FROST_BACKGROUND.avifSrcSet}
-                sizes="100vw"
-              />
-              <source
-                type="image/webp"
-                srcSet={FROST_BACKGROUND.webpSrcSet}
-                sizes="100vw"
-              />
-              <img
-                src={FROST_BACKGROUND.png}
-                alt=""
-                aria-hidden="true"
-                loading="eager"
-                decoding="async"
-                className="h-full w-full object-cover object-center"
-              />
-            </picture>
-          </div>
-        ) : null}
-        <div
-          ref={frostTintLayerRef}
-          className="absolute inset-0 bg-[#05060a] transition-opacity duration-700 ease-out"
-          style={{ opacity: initialFrostTintOpacity }}
-        />
-      </div>
+      <FrostBackground
+        isRendered={shouldRenderFrostBackground}
+        initialOpacity={initialFrostOpacity}
+        initialTintOpacity={initialFrostTintOpacity}
+        layerRef={frostLayerRef}
+        tintLayerRef={frostTintLayerRef}
+      />
 
       <div className="relative z-10">
         <AppRoutes onOpenModal={openModal} />
