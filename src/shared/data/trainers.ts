@@ -34,7 +34,7 @@ const TRAINER_ASSETS = {
   natalia: `${BASE_URL}trainers/natalia.jpg`,
   vladislav: `${BASE_URL}trainers/vladislav.jpeg`,
   mark: `${BASE_URL}trainers/mark.JPG?v=20260327b`,
-  alice: `${BASE_URL}trainers/alice.JPG`,
+  alice: `${BASE_URL}trainers/alice.jpg`,
 } as const;
 
 export const trainers: TrainerProfile[] = [
