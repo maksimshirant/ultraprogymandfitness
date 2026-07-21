@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { Star, X } from 'lucide-react';
+import { Clock, MessageCircle, Phone, Star } from 'lucide-react';
 import { SiVk, SiTelegram } from 'react-icons/si';
 import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
 import { useViewportTier } from '@/hooks/useViewportTier';
@@ -15,9 +14,6 @@ const CONTACTS_TEXT = {
   reviewsTitle: 'Отзывы',
   reviewsCta: 'Смотреть все отзывы',
   contactsTitle: 'Контакты',
-  openMap: 'Открыть карту',
-  openMapAria: 'Открыть карту на весь экран',
-  closeMapAria: 'Закрыть карту',
   mapFrameTitle: 'Карта: г. Волжский, Профсоюзов 7Б, ТЦ Радуга',
   address: 'г. Волжский, Профсоюзов 7Б, ТЦ Радуга',
   phone: '8(8443) 323-323',
@@ -94,31 +90,10 @@ const CONTACTS_MAP_SRC = `https://yandex.ru/map-widget/v1/?mode=search&text=${en
 )}&z=17`;
 
 export default function ContactsSection() {
-  const [isMapOpen, setIsMapOpen] = useState(false);
   const viewportTier = useViewportTier();
   const isMobileViewport = viewportTier === 'mobile';
   const visibleReviewsCount = viewportTier === 'desktop' ? 6 : viewportTier === 'tablet' ? 4 : 2;
   const visibleReviews = CONTACTS_REVIEWS.slice(0, visibleReviewsCount);
-
-  useEffect(() => {
-    if (!isMapOpen) {
-      return;
-    }
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setIsMapOpen(false);
-      }
-    };
-
-    document.addEventListener('keydown', onKeyDown);
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [isMapOpen]);
 
   return (
     <section id="contacts" className="deferred-section relative overflow-hidden pt-14 pb-6 md:pt-16 md:pb-8">
@@ -203,104 +178,91 @@ export default function ContactsSection() {
         </div>
 
         <div className="mt-8 border-t border-white/10 pt-8 md:mt-10 md:pt-10">
-          <div className="p-6 md:p-8">
-          <div className="flex flex-col gap-3 pb-6">
-            <BalancedHeading as="h2" className="text-4xl font-bold text-white md:text-5xl">
-              <HeadingAccent>{CONTACTS_TEXT.contactsTitle}</HeadingAccent>
-            </BalancedHeading>
-          </div>
-
-          <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-stretch lg:gap-12">
-            <div>
-              <div className="space-y-6">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.22em] text-gray-500">Адрес</p>
-                  <div className="mt-3 text-white">
-                    <span className="text-xl leading-tight md:text-[1.75rem] max-w-[18ch] text-balance">{CONTACTS_TEXT.address}</span>
-                  </div>
-                </div>
-
-                <div>
-                  <p className="text-xs uppercase tracking-[0.22em] text-gray-500">Телефон</p>
-                  <div className="mt-3 text-white">
-                    <a href={CONTACTS_TEXT.phoneHref} className="text-xl md:text-[1.75rem] lg:whitespace-nowrap lg:hover:text-[#F5B800] transition-colors">
-                      {CONTACTS_TEXT.phone}
-                    </a>
-                  </div>
-                </div>
-
-                <div>
-                  <p className="text-xs uppercase tracking-[0.22em] text-gray-500">График</p>
-                  <div className="mt-3 space-y-2 text-lg text-white md:text-xl">
-                    {CONTACTS_TEXT.schedule.map((slot) => (
-                      <p key={slot.day} className="leading-snug">
-                        <span className="mr-2 text-gray-400">{slot.day}</span>
-                        <span>{slot.time}</span>
-                      </p>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-8 flex flex-wrap items-center gap-4">
-                <a
-                  href={CONTACTS_SOCIALS.vk}
-                  className="flex h-12 min-w-[3rem] items-center justify-center gap-2 rounded-full border border-white/12 bg-white/[0.055] px-4 text-sm font-semibold text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
-                  aria-label={CONTACTS_TEXT.vkAria}
-                >
-                  <SiVk className="w-4 h-4 text-[#0077FF]" />
-                  <span>{CONTACTS_TEXT.vkLabel}</span>
-                </a>
-                <a
-                  href={CONTACTS_SOCIALS.telegram}
-                  className="flex h-12 min-w-[3rem] items-center justify-center gap-2 rounded-full border border-white/12 bg-white/[0.055] px-4 text-sm font-semibold text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
-                  aria-label={CONTACTS_TEXT.telegramAria}
-                >
-                  <SiTelegram className="w-4 h-4 text-[#26A5E4]" />
-                  <span>{CONTACTS_TEXT.telegramLabel}</span>
-                </a>
-                <a
-                  href={CONTACTS_SOCIALS.max}
-                  className="flex h-12 min-w-[3rem] items-center justify-center gap-2 rounded-full border border-white/12 bg-white/[0.055] px-4 text-sm font-semibold text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
-                  aria-label={CONTACTS_TEXT.maxAria}
-                >
-                  <img
-                    src={CONTACTS_ASSETS.maxIcon}
-                    alt=""
-                    aria-hidden="true"
-                    loading="lazy"
-                    decoding="async"
-                    className="w-4 h-4 object-contain"
-                  />
-                  <span>{CONTACTS_TEXT.maxLabel}</span>
-                </a>
-                <a
-                  href={CONTACTS_SOCIALS.reviews}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex h-12 items-center justify-center gap-2 rounded-full border border-white/12 bg-white/[0.055] px-5 text-sm font-semibold text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
-                  aria-label={CONTACTS_TEXT.reviewsAria}
-                >
-                  <Star className="w-4 h-4 text-[#F5B800] transition-colors" />
-                  {CONTACTS_TEXT.reviewsLabel}
-                </a>
-              </div>
+          <div className="p-0 md:p-2">
+            <div className="text-center">
+              <BalancedHeading as="h2" className="text-4xl font-bold text-white md:text-5xl">
+                <HeadingAccent>{CONTACTS_TEXT.contactsTitle}</HeadingAccent>
+              </BalancedHeading>
             </div>
 
-            <div className="lg:flex">
-              <div
-                className="relative h-[320px] cursor-zoom-in overflow-hidden rounded-xl border border-white/10 bg-black/30 sm:h-[400px] lg:h-full lg:flex-1"
-                onClick={() => setIsMapOpen(true)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();
-                    setIsMapOpen(true);
-                  }
-                }}
-                aria-label={CONTACTS_TEXT.openMapAria}
-              >
+            <div className="mt-8 grid gap-4 md:grid-cols-3 lg:gap-5">
+              <article className="modal-surface rounded-xl p-5 transition-[border-color,background-color] duration-200 ease-out motion-reduce:transition-colors lg:p-6 lg:hover:border-[#F5B800]/20">
+                <div className="flex items-center gap-3 text-[#F5B800]">
+                  <Phone className="h-5 w-5" aria-hidden="true" />
+                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Телефон</p>
+                </div>
+                <a
+                  href={CONTACTS_TEXT.phoneHref}
+                  className="mt-4 block text-2xl font-semibold leading-tight text-white transition-colors lg:hover:text-[#F5B800]"
+                >
+                  {CONTACTS_TEXT.phone}
+                </a>
+                <p className="mt-2 text-sm text-gray-500">Звонки и консультации</p>
+              </article>
+
+              <article className="modal-surface rounded-xl p-5 transition-[border-color,background-color] duration-200 ease-out motion-reduce:transition-colors lg:p-6 lg:hover:border-[#F5B800]/20">
+                <div className="flex items-center gap-3 text-[#F5B800]">
+                  <Clock className="h-5 w-5" aria-hidden="true" />
+                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">График</p>
+                </div>
+                <div className="mt-4 space-y-2 text-base text-white md:text-lg">
+                  {CONTACTS_TEXT.schedule.map((slot) => (
+                    <p key={slot.day} className="leading-snug">
+                      <span className="text-gray-400">{slot.day}</span> <span>{slot.time}</span>
+                    </p>
+                  ))}
+                </div>
+              </article>
+
+              <article className="modal-surface rounded-xl p-5 transition-[border-color,background-color] duration-200 ease-out motion-reduce:transition-colors lg:p-6 lg:hover:border-[#F5B800]/20">
+                <div className="flex items-center gap-3 text-[#F5B800]">
+                  <MessageCircle className="h-5 w-5" aria-hidden="true" />
+                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Мессенджеры</p>
+                </div>
+                <div className="mt-5 grid grid-cols-4 gap-2">
+                  <a
+                    href={CONTACTS_SOCIALS.vk}
+                    className="flex h-12 min-w-0 items-center justify-center rounded-xl border border-white/12 bg-white/[0.055] text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition-[border-color,background-color,color] duration-200 ease-out motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
+                    aria-label={CONTACTS_TEXT.vkAria}
+                  >
+                    <SiVk className="h-5 w-5 shrink-0 text-[#0077FF]" />
+                  </a>
+                  <a
+                    href={CONTACTS_SOCIALS.telegram}
+                    className="flex h-12 min-w-0 items-center justify-center rounded-xl border border-white/12 bg-white/[0.055] text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition-[border-color,background-color,color] duration-200 ease-out motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
+                    aria-label={CONTACTS_TEXT.telegramAria}
+                  >
+                    <SiTelegram className="h-5 w-5 shrink-0 text-[#26A5E4]" />
+                  </a>
+                  <a
+                    href={CONTACTS_SOCIALS.max}
+                    className="flex h-12 min-w-0 items-center justify-center rounded-xl border border-white/12 bg-white/[0.055] text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition-[border-color,background-color,color] duration-200 ease-out motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
+                    aria-label={CONTACTS_TEXT.maxAria}
+                  >
+                    <img
+                      src={CONTACTS_ASSETS.maxIcon}
+                      alt=""
+                      aria-hidden="true"
+                      loading="lazy"
+                      decoding="async"
+                      className="h-5 w-5 shrink-0 object-contain"
+                    />
+                  </a>
+                  <a
+                    href={CONTACTS_SOCIALS.reviews}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-12 min-w-0 items-center justify-center rounded-xl border border-white/12 bg-white/[0.055] text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition-[border-color,background-color,color] duration-200 ease-out motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
+                    aria-label={CONTACTS_TEXT.reviewsAria}
+                  >
+                    <Star className="h-5 w-5 shrink-0 text-[#F5B800] transition-colors" />
+                  </a>
+                </div>
+              </article>
+            </div>
+
+            <div className="mt-5 space-y-3">
+              <div className="relative min-h-[360px] overflow-hidden rounded-xl border border-white/10 bg-black/40 shadow-[0_24px_70px_rgba(0,0,0,0.42)] sm:min-h-[430px] lg:min-h-[520px]">
                 <iframe
                   title={CONTACTS_TEXT.mapFrameTitle}
                   src={CONTACTS_MAP_SRC}
@@ -308,52 +270,14 @@ export default function ContactsSection() {
                   height="100%"
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  className="w-full h-full pointer-events-none"
+                  className="h-full min-h-[360px] w-full sm:min-h-[430px] lg:min-h-[520px]"
                 />
-                <div className="absolute bottom-3 right-3 rounded-full border border-white/15 bg-black/70 px-3 py-1 text-xs text-white">
-                  {CONTACTS_TEXT.openMap}
-                </div>
               </div>
             </div>
-          </div>
-          </div>
         </div>
       </div>
+      </div>
 
-      {isMapOpen && (
-        <div
-          className="fixed inset-0 z-[140] bg-black/90 backdrop-blur-sm p-4 sm:p-6"
-          onClick={() => setIsMapOpen(false)}
-        >
-          <div
-            className="modal-surface relative mx-auto h-[90vh] max-w-6xl rounded-[1.75rem] border-white/20 p-4 sm:p-6"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className="flex justify-end">
-              <button
-                type="button"
-                onClick={() => setIsMapOpen(false)}
-                className="w-10 h-10 rounded-full bg-white/10 lg:hover:bg-white/20 transition-colors flex items-center justify-center z-10"
-                aria-label={CONTACTS_TEXT.closeMapAria}
-              >
-                <X className="w-5 h-5 text-white" />
-              </button>
-            </div>
-
-            <div className="mt-3 h-[calc(100%-3.25rem)] rounded-xl overflow-hidden border border-white/10">
-              <iframe
-                title={CONTACTS_TEXT.mapFrameTitle}
-                src={CONTACTS_MAP_SRC}
-                width="100%"
-                height="100%"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="w-full h-full"
-              />
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 }
