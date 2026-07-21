@@ -126,7 +126,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
               <button
                 type="button"
                 onClick={scrollToSubscriptions}
-                className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-7 py-4 text-sm font-semibold text-white transition-colors md:max-lg:px-10 md:max-lg:py-5 md:max-lg:text-lg lg:hover:border-white/30 lg:hover:bg-white/[0.08]"
+                className="inline-flex items-center justify-center rounded-full border border-white/12 bg-white/[0.055] px-7 py-4 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] md:max-lg:px-10 md:max-lg:py-5 md:max-lg:text-lg motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-[#F5B800]"
               >
                 {ABONEMENTS_TEXT.heroSecondaryCta}
               </button>
@@ -269,7 +269,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
                         type="button"
                         onClick={() => onOpenModal({ topic: abonement.topicValue, membershipId: abonement.id })}
                         disabled={!isActive}
-                        className="btn-primary mt-3 w-full text-white transition-none hover:shadow-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-55"
+                        className="btn-primary mt-3 w-full text-white disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-55"
                       >
                         {ABONEMENTS_TEXT.cta}
                       </button>

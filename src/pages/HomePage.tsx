@@ -73,14 +73,13 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
             </BalancedHeading>
           </div>
 
-          <div className="space-y-8 md:space-y-12 lg:space-y-14">
+          <div className="grid gap-8 lg:grid-cols-3 lg:gap-6 xl:gap-8">
             <PreviewCard
               imageSrc={trainersPreviewImage}
               title="Тренеры"
               buttonLabel="Выбрать тренера"
               route="/trainers"
               description="Команда специалистов, которые помогут выстроить программу и держать стабильный прогресс."
-              reverse
             />
             <PreviewCard
               imageSrc={groupTrainingsPreviewImage}
@@ -94,7 +93,6 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
               title="Абонементы"
               buttonLabel="Выбрать абонементы"
               route="/memberships"
-                   reverse
               description="Подберите формат посещения: от быстрого старта до годового плана — с понятными условиями."
             />
           </div>

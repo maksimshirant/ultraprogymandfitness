@@ -7,6 +7,7 @@ import type { OpenModalHandler } from '@/types/modal';
 import { GROUP_TRAININGS_TEXT } from '@/features/group-trainings/model/constants';
 import { DirectionDetails, TrainerAvatar } from '@/features/group-trainings/ui/components/DirectionCardParts';
 import { GroupSchedulePreview } from '@/features/group-trainings/ui/components/GroupSchedulePreview';
+import { cn } from '@/lib/utils';
 
 interface GroupTrainingsProps {
   onOpenModal: OpenModalHandler;
@@ -46,7 +47,7 @@ export default function GroupTrainingsSection({ onOpenModal }: GroupTrainingsPro
             <p className="max-w-2xl text-base leading-relaxed text-gray-200 sm:text-lg md:max-lg:max-w-[48rem] md:max-lg:text-[1.45rem] md:max-lg:leading-[1.34] lg:text-xl">{GROUP_TRAININGS_TEXT.heroSubtitle}</p>
             <div className="flex flex-col gap-3 sm:flex-row md:max-lg:gap-4">
               <button type="button" onClick={scrollToSchedule} className="btn-primary inline-flex items-center justify-center gap-2 px-7 py-4 text-white md:max-lg:px-10 md:max-lg:py-5 md:max-lg:text-lg">{GROUP_TRAININGS_TEXT.heroPrimaryCta}<ArrowRight className="h-4 w-4" /></button>
-              <button type="button" onClick={scrollToDirections} className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-7 py-4 text-sm font-semibold text-white transition-colors md:max-lg:px-10 md:max-lg:py-5 md:max-lg:text-lg lg:hover:border-white/30 lg:hover:bg-white/[0.08]">{GROUP_TRAININGS_TEXT.heroSecondaryCta}</button>
+              <button type="button" onClick={scrollToDirections} className="inline-flex items-center justify-center rounded-full border border-white/12 bg-white/[0.055] px-7 py-4 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] md:max-lg:px-10 md:max-lg:py-5 md:max-lg:text-lg motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-[#F5B800]">{GROUP_TRAININGS_TEXT.heroSecondaryCta}</button>
             </div>
           </div>
 
@@ -81,8 +82,18 @@ export default function GroupTrainingsSection({ onOpenModal }: GroupTrainingsPro
                 <section key={category.key} className="space-y-6">
                   <div><h2 className="text-2xl font-bold leading-tight text-white sm:text-3xl lg:text-[2.2rem]">{category.title}</h2></div>
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 2xl:grid-cols-3">
-                    {directions.map((direction) => (
-                      <article key={direction.key} id={direction.key} className="modal-surface scroll-mt-28 rounded-[1.75rem] px-4 py-4 sm:px-5 sm:py-5 lg:px-6 lg:py-6">
+                    {directions.map((direction, directionIndex) => (
+                      <article
+                        key={direction.key}
+                        id={direction.key}
+                        className={cn(
+                          "relative scroll-mt-28 rounded-[1.75rem] px-4 py-4 after:absolute after:inset-x-4 after:bottom-0 after:h-px after:bg-white/10 sm:px-5 sm:py-5 sm:after:inset-x-5 lg:px-6 lg:py-6 lg:after:inset-x-6",
+                          directionIndex % 2 === 0 &&
+                            "md:max-2xl:before:absolute md:max-2xl:before:inset-y-4 md:max-2xl:before:-right-3 md:max-2xl:before:w-px md:max-2xl:before:bg-white/10",
+                          directionIndex % 3 !== 2 &&
+                            "2xl:before:absolute 2xl:before:inset-y-4 2xl:before:-right-3 2xl:before:w-px 2xl:before:bg-white/10",
+                        )}
+                      >
                         <div className="grid grid-cols-[4rem_minmax(0,1fr)] items-start gap-5 sm:grid-cols-[4.75rem_minmax(0,1fr)]">
                           <div className="ml-2 flex justify-center"><TrainerAvatar direction={direction} /></div>
                           <div className="min-w-0 self-center text-left">
@@ -91,9 +102,9 @@ export default function GroupTrainingsSection({ onOpenModal }: GroupTrainingsPro
                           </div>
                         </div>
 
-                        <div className="mt-3 flex items-center justify-between gap-2 sm:mt-4">
-                          <button type="button" data-action={direction.action} data-booking-action={direction.bookingAction} data-confirm-booking-action={direction.confirmBookingAction} data-group-direction={direction.key} onClick={() => onOpenModal({ topic: 'group', groupDirection: direction.text })} className="inline-flex min-h-9 items-center justify-center rounded-full bg-[#F5B800] px-3.5 py-1.5 text-[0.82rem] font-semibold text-white">Запись на занятие</button>
-                          <button type="button" onClick={() => openDirectionDetails(direction)} className="inline-flex min-h-9 items-center justify-center gap-1 text-[0.82rem] font-medium text-[#F5B800]"><span>{GROUP_TRAININGS_TEXT.detailsCta}</span><ArrowRight className="h-3.5 w-3.5" /></button>
+                        <div className="mt-3 flex flex-col items-stretch gap-2 min-[390px]:flex-row min-[390px]:items-center min-[390px]:justify-between sm:mt-4">
+                          <button type="button" data-action={direction.action} data-booking-action={direction.bookingAction} data-confirm-booking-action={direction.confirmBookingAction} data-group-direction={direction.key} onClick={() => onOpenModal({ topic: 'group', groupDirection: direction.text })} className="btn-primary inline-flex min-h-10 flex-1 items-center justify-center whitespace-nowrap px-4 py-2 text-[0.82rem] text-white">Запись на занятие</button>
+                          <button type="button" onClick={() => openDirectionDetails(direction)} className="inline-flex min-h-10 items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-white/12 bg-white/[0.055] px-3.5 py-2 text-[0.82rem] font-semibold text-[#F5B800] shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08]"><span>{GROUP_TRAININGS_TEXT.detailsCta}</span><ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 ease-out" /></button>
                         </div>
                       </article>
                     ))}

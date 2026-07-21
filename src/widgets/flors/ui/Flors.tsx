@@ -145,7 +145,6 @@ export default function Flors() {
   const [activeZoneId, setActiveZoneId] = useState(getDefaultZoneId(defaultFloor));
   const [viewerSlide, setViewerSlide] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
-  const [isMobileExpanded, setIsMobileExpanded] = useState(false);
   const viewportTier = useViewportTier();
   const isMobileViewport = viewportTier === 'mobile';
 
@@ -174,20 +173,11 @@ export default function Flors() {
     disabled: totalSlides < 2,
   });
 
-  const selectFloor = (floorId: FloorId) => {
-    const nextFloor = floorConfigs.find((floor) => floor.id === floorId) ?? defaultFloor;
-    setActiveFloorId(nextFloor.id);
-    setActiveZoneId(getDefaultZoneId(nextFloor));
-    setViewerSlide(0);
-    setIsViewerOpen(false);
-    setIsMobileExpanded(false);
-  };
-
-  const selectZone = (zoneId: string) => {
+  const selectZone = (floorId: FloorId, zoneId: string) => {
+    setActiveFloorId(floorId);
     setActiveZoneId(zoneId);
     setViewerSlide(0);
     setIsViewerOpen(false);
-    setIsMobileExpanded(false);
   };
 
   return (
@@ -199,86 +189,131 @@ export default function Flors() {
           </BalancedHeading>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-3 md:gap-4">
-          {floorConfigs.map((floor) => {
-            const isActive = floor.id === activeFloorId;
+        <div className="mt-8 space-y-4 md:space-y-5">
+          <div className="overflow-x-auto pb-1">
+            <div className="flex min-w-max gap-4 pr-4">
+              {floorConfigs.map((floor, floorIndex) => (
+                <div key={floor.id} className={cn('flex items-end gap-2', floorIndex > 0 && 'border-l border-white/10 pl-4')}>
+                  <div className="pb-2 pr-1">
+                    <span className="block whitespace-nowrap text-xs font-semibold uppercase text-[#F5B800]">{floor.label}</span>
+                  </div>
 
-            return (
-              <button
-                key={floor.id}
-                type="button"
-                onClick={() => selectFloor(floor.id)}
-                aria-label={`${FLORS_TEXT.chooseFloorAria} ${floor.label}`}
-                aria-pressed={isActive}
-                className={cn(
-                  'min-w-[154px] rounded-full border px-5 py-3 text-sm transition-[background-color,border-color,color] md:text-base',
-                  isActive
-                    ? 'border-white/35 bg-white/10 text-white'
-                    : 'border-white/10 bg-white/[0.03] text-gray-300 hover:border-white/20 hover:text-white'
-                )}
-              >
-                <span className="block font-semibold">{floor.label}</span>
-                {!isMobileViewport ? <span className="mt-1 block text-xs text-gray-400">{floor.subtitle}</span> : null}
-              </button>
-            );
-          })}
-        </div>
+                  {floor.zones.map((zone) => {
+                    const isActive = floor.id === activeFloor.id && zone.id === activeZone.id;
 
-        <div className="mx-auto mt-6 h-px w-20 bg-white/10" />
+                    return (
+                      <button
+                        key={zone.id}
+                        type="button"
+                        onClick={() => selectZone(floor.id, zone.id)}
+                        aria-label={FLORS_TEXT.chooseZoneAria + ' ' + zone.title}
+                        aria-pressed={isActive}
+                        className={cn(
+                          'min-h-[3.5rem] w-[10.75rem] rounded-[1rem] border px-4 py-3 text-left transition-[transform,background-color,border-color,color,box-shadow] duration-200 ease-out active:scale-[0.98] motion-reduce:transition-colors sm:w-[12rem] lg:w-[13rem]',
+                          isActive
+                            ? 'border-[#F5B800]/42 bg-[#F5B800]/12 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]'
+                            : 'border-white/8 bg-white/[0.025] text-gray-400 hover:border-white/18 hover:bg-white/[0.055] hover:text-white'
+                        )}
+                      >
+                        <span className="block text-sm font-semibold leading-tight">{zone.title}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          </div>
 
-        <div className="mt-4 flex flex-wrap justify-center gap-2.5 md:gap-3">
-          {activeFloor.zones.map((zone) => {
-            const isActive = zone.id === activeZone.id;
-
-            return (
-              <button
-                key={zone.id}
-                type="button"
-                onClick={() => selectZone(zone.id)}
-                aria-label={`${FLORS_TEXT.chooseZoneAria} ${zone.title}`}
-                aria-pressed={isActive}
-                className={cn(
-                  'rounded-full border px-4 py-2 text-xs transition-[background-color,border-color,color] md:px-4.5 md:py-2.5 md:text-sm',
-                  isActive
-                    ? 'border-white/25 bg-white/10 text-white'
-                    : 'border-white/8 bg-transparent text-gray-400 hover:border-white/18 hover:text-white'
-                )}
-              >
-                <span className="block font-medium">{zone.title}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="mt-8 rounded-[30px] bg-[#0a0c11]/92 p-4 sm:p-5">
           {totalSlides > 0 ? (
-            <div className="mx-auto max-w-5xl">
-              <div
-                className={cn(
-                  'relative overflow-hidden md:overflow-visible',
-                  !isMobileExpanded && totalSlides > 2 && 'max-h-[17rem] md:max-h-none'
-                )}
-              >
-                <div className="club-gallery-grid">
+            <>
+              <div className="lg:hidden">
+                <div className="relative overflow-hidden rounded-[1.5rem] bg-black/40 shadow-[0_24px_70px_rgba(0,0,0,0.36)]">
+                  <button
+                    type="button"
+                    onClick={() => setIsViewerOpen(true)}
+                    className="block w-full text-left"
+                    aria-label={'Открыть фото ' + (currentViewerSlide + 1) + ' зоны ' + activeZone.title}
+                  >
+                    <div className="aspect-[4/3] sm:aspect-[16/11]">
+                      <PublicAssetImage
+                        key={activeZone.id + '-preview-' + currentViewerSlide}
+                        src={activeZone.slides[currentViewerSlide]}
+                        alt={activeZone.title + ' - фото ' + (currentViewerSlide + 1)}
+                        loading="lazy"
+                        fetchPriority="low"
+                        sizes="(max-width: 767px) 100vw, (max-width: 1023px) 92vw"
+                        variantSuffix={isMobileViewport ? 'thumb' : 'preview'}
+                        deferUntilVisible
+                        observerRootMargin="120px 0px"
+                        pictureClassName="block h-full w-full"
+                        className="h-full w-full object-cover object-center"
+                      />
+                    </div>
+
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/82 via-black/42 to-transparent px-4 pb-4 pt-14 sm:px-5 sm:pb-5">
+                      <div className="flex items-end justify-between gap-4">
+                        <div>
+                          <span className="block text-xs font-medium uppercase text-[#F5B800]">Фото</span>
+                          <span className="mt-1 block text-lg font-semibold leading-tight text-white md:text-xl">
+                            {activeZone.title}
+                          </span>
+                        </div>
+                        <span className="shrink-0 rounded-[0.75rem] border border-white/15 bg-black/35 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-xl">
+                          {currentViewerSlide + 1} / {totalSlides}
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (totalSlides < 2) return;
+                      setViewerSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+                    }}
+                    disabled={totalSlides < 2}
+                    className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-[0.9rem] border border-white/15 bg-black/45 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,background-color,border-color,opacity] duration-200 ease-out hover:bg-black/62 active:scale-[0.96] disabled:pointer-events-none disabled:opacity-0 motion-reduce:transition-colors"
+                    aria-label={'Предыдущее фото зоны ' + activeZone.title}
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (totalSlides < 2) return;
+                      setViewerSlide((prev) => (prev + 1) % totalSlides);
+                    }}
+                    disabled={totalSlides < 2}
+                    className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-[0.9rem] border border-white/15 bg-black/45 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,background-color,border-color,opacity] duration-200 ease-out hover:bg-black/62 active:scale-[0.96] disabled:pointer-events-none disabled:opacity-0 motion-reduce:transition-colors"
+                    aria-label={'Следующее фото зоны ' + activeZone.title}
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="hidden rounded-[30px] bg-[#0a0c11]/92 p-4 lg:block xl:p-5">
+                <div className="grid grid-cols-3 gap-3 xl:grid-cols-4">
                   {activeZone.slides.map((slide, index) => (
                     <button
-                      key={`${activeZone.id}-${index}`}
+                      key={activeZone.id + '-' + index}
                       type="button"
                       onClick={() => {
                         setViewerSlide(index);
                         setIsViewerOpen(true);
                       }}
                       className="overflow-hidden rounded-xl border border-white/10 bg-black/30 text-left transition-colors hover:border-white/20"
-                      aria-label={`Открыть фото ${index + 1} зоны ${activeZone.title}`}
+                      aria-label={'Открыть фото ' + (index + 1) + ' зоны ' + activeZone.title}
                     >
                       <div className="aspect-square">
                         <PublicAssetImage
                           src={slide}
-                          alt={`${activeZone.title} — фото ${index + 1}`}
+                          alt={activeZone.title + ' - фото ' + (index + 1)}
                           loading="lazy"
                           fetchPriority="low"
-                          sizes="(max-width: 767px) 50vw, (max-width: 1279px) 40vw, 33vw"
-                          variantSuffix={isMobileViewport ? 'thumb' : 'preview'}
+                          sizes="(max-width: 1279px) 30vw, 22vw"
+                          variantSuffix="preview"
                           deferUntilVisible
                           observerRootMargin="120px 0px"
                           pictureClassName="block h-full w-full"
@@ -288,24 +323,8 @@ export default function Flors() {
                     </button>
                   ))}
                 </div>
-
-                {isMobileViewport && !isMobileExpanded && totalSlides > 2 ? (
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a0c11] via-[#0a0c11]/88 to-transparent" />
-                ) : null}
               </div>
-
-              {isMobileViewport && totalSlides > 2 ? (
-                <div className="mt-4 flex justify-center">
-                  <button
-                    type="button"
-                    onClick={() => setIsMobileExpanded((prev) => !prev)}
-                    className="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
-                  >
-                    {isMobileExpanded ? 'Скрыть часть фото' : 'Показать полностью'}
-                  </button>
-                </div>
-              ) : null}
-            </div>
+            </>
           ) : (
             <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-gray-400">
               {FLORS_TEXT.noPhotos}

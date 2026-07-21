@@ -22,15 +22,15 @@ export function TrainerAvatar({ direction }: TrainerAvatarProps) {
         sizes="(max-width: 639px) 76px, (max-width: 1023px) 80px, 88px"
         variantSuffix="thumb"
         deferUntilVisible
-        pictureClassName="block h-[4.75rem] w-[4.75rem] shrink-0 overflow-hidden rounded-full border border-white/10 md:h-20 md:w-20 lg:h-[5.5rem] lg:w-[5.5rem]"
-        className="h-full w-full object-cover object-top"
+        pictureClassName="block h-[4.75rem] w-[4.75rem] shrink-0 overflow-hidden rounded-[1.45rem] border border-white/15 bg-white/[0.06] p-0.5 shadow-[0_18px_40px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.18)] ring-1 ring-white/[0.06] backdrop-blur-xl md:h-20 md:w-20 md:rounded-[1.55rem] lg:h-[5.5rem] lg:w-[5.5rem] lg:rounded-[1.65rem]"
+        className="h-full w-full rounded-[1.2rem] object-cover object-top md:rounded-[1.3rem] lg:rounded-[1.4rem]"
         style={{ objectPosition: direction.trainerAvatarPosition ?? '50% 0%' }}
       />
     );
   }
 
   return (
-    <div className="flex h-[4.75rem] w-[4.75rem] shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] p-3 md:h-20 md:w-20 md:p-4 lg:h-[5.5rem] lg:w-[5.5rem] lg:p-5">
+    <div className="flex h-[4.75rem] w-[4.75rem] shrink-0 items-center justify-center overflow-hidden rounded-[1.45rem] border border-white/15 bg-white/[0.06] p-3 shadow-[0_18px_40px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.18)] ring-1 ring-white/[0.06] backdrop-blur-xl md:h-20 md:w-20 md:rounded-[1.55rem] md:p-4 lg:h-[5.5rem] lg:w-[5.5rem] lg:rounded-[1.65rem] lg:p-5">
       <img
         src={CLUB_LOGO_SRC}
         alt="Логотип Ultra Pro Gym & Fitness"

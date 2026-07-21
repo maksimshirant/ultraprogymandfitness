@@ -150,7 +150,7 @@ export default function ContactsSection() {
                 href={CONTACTS_SOCIALS.reviews}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-12 items-center justify-center rounded-full border border-white/15 bg-white/5 px-5 text-sm font-semibold text-white transition-colors lg:hover:border-white/25 lg:hover:bg-white/10"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-white/12 bg-white/[0.055] px-5 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-[#F5B800]"
                 aria-label={CONTACTS_TEXT.reviewsAria}
               >
                 {CONTACTS_TEXT.reviewsCta}
@@ -192,7 +192,7 @@ export default function ContactsSection() {
                 href={CONTACTS_SOCIALS.reviews}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-12 items-center justify-center rounded-full border border-white/15 bg-white/5 px-5 text-sm font-semibold text-white transition-colors"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-white/12 bg-white/[0.055] px-5 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98]"
                 aria-label={CONTACTS_TEXT.reviewsAria}
               >
                 {CONTACTS_TEXT.reviewsCta}
@@ -245,7 +245,7 @@ export default function ContactsSection() {
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <a
                   href={CONTACTS_SOCIALS.vk}
-                  className="flex h-12 min-w-[3rem] items-center justify-center gap-2 rounded-full bg-white/5 px-4 text-sm font-semibold text-gray-300 transition-colors lg:hover:bg-[#F5B800] lg:hover:text-black"
+                  className="flex h-12 min-w-[3rem] items-center justify-center gap-2 rounded-full border border-white/12 bg-white/[0.055] px-4 text-sm font-semibold text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
                   aria-label={CONTACTS_TEXT.vkAria}
                 >
                   <SiVk className="w-4 h-4 text-[#0077FF]" />
@@ -253,7 +253,7 @@ export default function ContactsSection() {
                 </a>
                 <a
                   href={CONTACTS_SOCIALS.telegram}
-                  className="flex h-12 min-w-[3rem] items-center justify-center gap-2 rounded-full bg-white/5 px-4 text-sm font-semibold text-gray-300 transition-colors lg:hover:bg-[#F5B800] lg:hover:text-black"
+                  className="flex h-12 min-w-[3rem] items-center justify-center gap-2 rounded-full border border-white/12 bg-white/[0.055] px-4 text-sm font-semibold text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
                   aria-label={CONTACTS_TEXT.telegramAria}
                 >
                   <SiTelegram className="w-4 h-4 text-[#26A5E4]" />
@@ -261,7 +261,7 @@ export default function ContactsSection() {
                 </a>
                 <a
                   href={CONTACTS_SOCIALS.max}
-                  className="flex h-12 min-w-[3rem] items-center justify-center gap-2 rounded-full bg-white/5 px-4 text-sm font-semibold text-gray-300 transition-colors lg:hover:bg-[#F5B800] lg:hover:text-black"
+                  className="flex h-12 min-w-[3rem] items-center justify-center gap-2 rounded-full border border-white/12 bg-white/[0.055] px-4 text-sm font-semibold text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
                   aria-label={CONTACTS_TEXT.maxAria}
                 >
                   <img
@@ -278,10 +278,10 @@ export default function ContactsSection() {
                   href={CONTACTS_SOCIALS.reviews}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex h-12 items-center justify-center gap-2 rounded-full bg-white/5 px-5 text-sm font-semibold text-gray-300 transition-colors lg:hover:bg-[#F5B800] lg:hover:text-black"
+                  className="group flex h-12 items-center justify-center gap-2 rounded-full border border-white/12 bg-white/[0.055] px-5 text-sm font-semibold text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
                   aria-label={CONTACTS_TEXT.reviewsAria}
                 >
-                  <Star className="w-4 h-4 text-[#F5B800] lg:group-hover:text-black transition-colors" />
+                  <Star className="w-4 h-4 text-[#F5B800] transition-colors" />
                   {CONTACTS_TEXT.reviewsLabel}
                 </a>
               </div>

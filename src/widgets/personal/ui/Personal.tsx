@@ -1,4 +1,4 @@
-﻿
+
 import { useEffect, useMemo, useState } from 'react';
 import { ArrowRight, Check, ChevronDown, ChevronUp } from 'lucide-react';
 import PublicAssetImage from '@/components/PublicAssetImage';
@@ -189,7 +189,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
               <button
                 type="button"
                 onClick={() => setExpandedTrainerId((prev) => (prev === trainer.id ? null : trainer.id))}
-                className="inline-flex min-h-[2.5rem] items-center justify-center gap-1 text-xs font-medium text-[#F5B800] transition-colors hover:text-[#FFD351] sm:text-sm"
+                className="inline-flex min-h-[2.5rem] items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-white/12 bg-white/[0.055] px-3.5 py-2 text-xs font-semibold text-[#F5B800] shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] motion-reduce:transition-colors sm:text-sm lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08]"
               >
                 <span>{isExpanded ? PERSONAL_TEXT.showLess : 'Подробнее'}</span>
                 {isExpanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
@@ -235,7 +235,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
               <button
                 type="button"
                 onClick={scrollToTrainers}
-                className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-7 py-4 text-sm font-semibold text-white transition-colors md:max-lg:px-10 md:max-lg:py-5 md:max-lg:text-lg lg:hover:border-white/30 lg:hover:bg-white/[0.08]"
+                className="inline-flex items-center justify-center rounded-full border border-white/12 bg-white/[0.055] px-7 py-4 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] md:max-lg:px-10 md:max-lg:py-5 md:max-lg:text-lg motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-[#F5B800]"
               >
                 {PERSONAL_TEXT.heroSecondaryCta}
               </button>

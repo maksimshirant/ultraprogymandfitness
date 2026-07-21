@@ -132,7 +132,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
                 href={HEADER_TEXT.phoneHref}
                 aria-label={HEADER_TEXT.callAria}
                 title={HEADER_TEXT.phone}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[linear-gradient(135deg,#F5B800_0%,#E2A700_55%,#C98E00_100%)] text-white shadow-[0_4px_20px_rgba(245,184,0,0.4)] transition-[box-shadow,background-color,color,opacity] duration-300 sm:h-10 sm:w-10 md:max-lg:h-12 md:max-lg:w-12 lg:hover:shadow-[0_8px_30px_rgba(245,184,0,0.5)]"
+                className="btn-primary inline-flex h-9 w-9 items-center justify-center p-0 text-white sm:h-10 sm:w-10 md:max-lg:h-12 md:max-lg:w-12"
               >
                 <Phone className="h-4 w-4 md:max-lg:h-5 md:max-lg:w-5" />
               </a>
@@ -142,7 +142,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
 
                     type="button"
                     onClick={() => onOpenModal()}
-                    className="rounded-full bg-[linear-gradient(135deg,#F5B800_0%,#E2A700_55%,#C98E00_100%)] px-4 py-2 text-xs font-semibold text-white shadow-[0_4px_20px_rgba(245,184,0,0.4)] transition-[box-shadow,background-color,color,opacity] duration-300 lg:hover:shadow-[0_8px_30px_rgba(245,184,0,0.5)] xl:px-6 xl:py-3 xl:text-sm"
+                    className="btn-primary px-4 py-2 text-xs text-white xl:px-6 xl:py-3 xl:text-sm"
                   >
                     {HEADER_TEXT.cta}
                   </button>
