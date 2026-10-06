@@ -1,0 +1,24 @@
+node_modules/
+dist/
+.assets-source/
+content/
+
+# accidental root assets / archives
+/contact-form-function.zip
+/card.avif
+/card.webp
+/фон*
+
+# macOS
+.DS_Store
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env
+.env
+.env.local
+.env.*.local

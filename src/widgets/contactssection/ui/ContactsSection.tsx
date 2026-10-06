@@ -1,0 +1,283 @@
+import { Clock, MessageCircle, Phone, Star } from 'lucide-react';
+import { SiVk, SiTelegram } from 'react-icons/si';
+import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
+import { useViewportTier } from '@/hooks/useViewportTier';
+
+const CONTACTS_ASSETS = {
+  maxIcon: 'https://logo-teka.com/wp-content/uploads/2025/07/max-messenger-sign-logo.svg',
+} as const;
+
+const CONTACTS_TEXT = {
+  title: 'Отзывы и контакты',
+  titleAccent: '',
+  pageSubtitle: 'Отзывы гостей о клубе и все способы быстро связаться с нами.',
+  reviewsTitle: 'Отзывы',
+  reviewsCta: 'Смотреть все отзывы',
+  contactsTitle: 'Контакты',
+  mapFrameTitle: 'Карта: г. Волжский, Профсоюзов 7Б, ТЦ Радуга',
+  address: 'г. Волжский, Профсоюзов 7Б, ТЦ Радуга',
+  phone: '8(8443) 323-323',
+  phoneHref: 'tel:+78443323323',
+  schedule: [
+    { day: 'Понедельник–Суббота:', time: '07:00–00:00' },
+    { day: 'Воскресенье:', time: '07:00–22:00' },
+  ],
+  vkLabel: 'VK',
+  telegramLabel: 'Telegram',
+  maxLabel: 'Max',
+  reviewsLabel: 'Отзывы',
+  vkAria: 'VK',
+  telegramAria: 'Telegram',
+  maxAria: 'Max',
+  reviewsAria: 'Отзывы в Яндекс Картах',
+} as const;
+
+const CONTACTS_REVIEWS = [
+  {
+    author: 'Дмитрий',
+    meta: 'Отзыв клиента',
+    date: '13 декабря 2024',
+    text:
+      'Лучший зал города Волжского, хожу практически с его открытия. Тренажеры новые, везде чисто, просторно, нет посторонних запахов. Персонал отзывчивый, всегда придумывают что-то новое. Также посоветую персонального тренера Евгения: он квалифицированный специалист в своем деле.',
+  },
+  {
+    author: 'Екатерина',
+    meta: 'Отзыв клиента',
+    date: '16 января 2026',
+    text:
+      'Отличный спортзал. Цены доступные. Тренеры отменные профессионалы, я очень довольна всем. Если вы хотите быть в форме, то идите, не пожалеете.',
+  },
+  {
+    author: 'Анастасия',
+    meta: 'Отзыв клиента',
+    date: '28 августа 2025',
+    text:
+      'Отличный зал. Цена абонемента оптимальная, можно взять со скидкой. Раздевалки, душевая, даже сауна имеется. Зал на два этажа с многочисленными и разнообразными тренажерами.',
+  },
+  {
+    author: 'Александр',
+    meta: 'Отзыв клиента',
+    date: '20 июля 2025',
+    text:
+      'Отличный тренажерный зал, ходил еще со времен Magma. Приветливые тренеры, хорошие тренажеры. После того как зал разросся на 2 этажа, стало ощутимо больше места и оборудования, люди не толпятся даже вечером.',
+  },
+  {
+    author: 'Андрей',
+    meta: 'Отзыв клиента',
+    date: '27 мая 2025',
+    text:
+      'Хочу выразить благодарность сотрудникам зала Ultra Pro, отдельно тренерам Павлу и Евгению: профессионалы в своем деле. Девушки-администраторы всегда улыбчивые и приветливые, цены на абонементы более чем адекватные, а часы работы очень удобные.',
+  },
+  {
+    author: 'Надежда',
+    meta: 'Отзыв клиента',
+    date: '13 мая 2025',
+    text:
+      'Отличный зал, профессиональный коллектив. Чисто, свободно, нет посторонних запахов. Тренажеры новые, цены очень приемлемые, расположение удобное.',
+  },
+] as const;
+
+const CONTACTS_SOCIALS = {
+  vk: 'https://vk.com/ultrapro_fitness_vlz',
+  telegram: 'https://t.me/ultrapro_fitness_vlz',
+  max: 'https://max.ru/join/EBdCAZCx276jxGGS7-tFsXj5KHvwM1QOhP128UvDN1I',
+  reviews: 'https://yandex.com/maps/org/ultra_pro/233756976456/reviews/?ll=44.777002%2C48.777976&z=16',
+} as const;
+
+const CONTACTS_MAP_QUERY = 'г. Волжский, Профсоюзов 7б, УльтраПро';
+const CONTACTS_MAP_SRC = `https://yandex.ru/map-widget/v1/?mode=search&text=${encodeURIComponent(
+  CONTACTS_MAP_QUERY
+)}&z=17`;
+
+export default function ContactsSection() {
+  const viewportTier = useViewportTier();
+  const isMobileViewport = viewportTier === 'mobile';
+  const visibleReviewsCount = viewportTier === 'desktop' ? 6 : viewportTier === 'tablet' ? 4 : 2;
+  const visibleReviews = CONTACTS_REVIEWS.slice(0, visibleReviewsCount);
+
+  return (
+    <section id="contacts" className="deferred-section relative overflow-hidden pt-14 pb-6 md:pt-16 md:pb-8">
+      <div className="hero-glow-layer">
+        <div className="hero-glow-top-right" />
+        <div className="hero-glow-bottom-left" />
+        <div className="hero-glow-center" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="mb-10 text-center md:mb-12">
+          <BalancedHeading as="h1" className="section-title text-white">
+            <HeadingAccent>{CONTACTS_TEXT.title}</HeadingAccent>
+          </BalancedHeading>
+          <p className="section-subtitle mx-auto">{CONTACTS_TEXT.pageSubtitle}</p>
+        </div>
+
+        <div className="border-t border-white/10 pt-8 md:pt-10">
+          <div className="p-6 md:p-8">
+          <div className="flex flex-col gap-4 pb-6 md:flex-row md:items-center md:justify-between">
+            <div className="min-w-0">
+              <BalancedHeading as="h2" className="text-4xl font-bold text-white md:text-5xl">
+                <HeadingAccent>{CONTACTS_TEXT.reviewsTitle}</HeadingAccent>
+              </BalancedHeading>
+            </div>
+
+            {!isMobileViewport ? (
+              <a
+                href={CONTACTS_SOCIALS.reviews}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-white/12 bg-white/[0.055] px-5 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-[#F5B800]"
+                aria-label={CONTACTS_TEXT.reviewsAria}
+              >
+                {CONTACTS_TEXT.reviewsCta}
+              </a>
+            ) : null}
+          </div>
+
+          <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {visibleReviews.map((review) => (
+              <article
+                key={`${review.author}-${review.date}`}
+                className="modal-surface rounded-[1.75rem] p-6"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="text-xl font-semibold text-white">{review.author}</h3>
+                    <p className="mt-1 text-sm text-gray-500">{review.meta}</p>
+                  </div>
+                  <div className="shrink-0 text-right">
+                    <div className="flex items-center justify-end gap-1">
+                      {Array.from({ length: 5 }).map((_, index) => (
+                        <Star key={index} className="h-3.5 w-3.5 fill-[#F5B800] text-[#F5B800] md:h-4 md:w-4" />
+                      ))}
+                    </div>
+                    <p className="mt-2 text-[10px] uppercase tracking-[0.14em] text-gray-500 md:text-xs md:tracking-[0.16em]">
+                      {review.date}
+                    </p>
+                  </div>
+                </div>
+
+                <p className="mt-6 text-sm leading-8 text-gray-300 md:text-base">{review.text}</p>
+              </article>
+            ))}
+          </div>
+
+          {isMobileViewport ? (
+            <div className="mt-6 flex justify-center">
+              <a
+                href={CONTACTS_SOCIALS.reviews}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-white/12 bg-white/[0.055] px-5 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98]"
+                aria-label={CONTACTS_TEXT.reviewsAria}
+              >
+                {CONTACTS_TEXT.reviewsCta}
+              </a>
+            </div>
+          ) : null}
+          </div>
+        </div>
+
+        <div className="mt-8 border-t border-white/10 pt-8 md:mt-10 md:pt-10">
+          <div className="p-0 md:p-2">
+            <div className="text-center">
+              <BalancedHeading as="h2" className="text-4xl font-bold text-white md:text-5xl">
+                <HeadingAccent>{CONTACTS_TEXT.contactsTitle}</HeadingAccent>
+              </BalancedHeading>
+            </div>
+
+            <div className="mt-8 grid gap-4 md:grid-cols-3 lg:gap-5">
+              <article className="modal-surface rounded-xl p-5 transition-[border-color,background-color] duration-200 ease-out motion-reduce:transition-colors lg:p-6 lg:hover:border-[#F5B800]/20">
+                <div className="flex items-center gap-3 text-[#F5B800]">
+                  <Phone className="h-5 w-5" aria-hidden="true" />
+                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Телефон</p>
+                </div>
+                <a
+                  href={CONTACTS_TEXT.phoneHref}
+                  className="mt-4 block text-2xl font-semibold leading-tight text-white transition-colors lg:hover:text-[#F5B800]"
+                >
+                  {CONTACTS_TEXT.phone}
+                </a>
+                <p className="mt-2 text-sm text-gray-500">Звонки и консультации</p>
+              </article>
+
+              <article className="modal-surface rounded-xl p-5 transition-[border-color,background-color] duration-200 ease-out motion-reduce:transition-colors lg:p-6 lg:hover:border-[#F5B800]/20">
+                <div className="flex items-center gap-3 text-[#F5B800]">
+                  <Clock className="h-5 w-5" aria-hidden="true" />
+                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">График</p>
+                </div>
+                <div className="mt-4 space-y-2 text-base text-white md:text-lg">
+                  {CONTACTS_TEXT.schedule.map((slot) => (
+                    <p key={slot.day} className="leading-snug">
+                      <span className="text-gray-400">{slot.day}</span> <span>{slot.time}</span>
+                    </p>
+                  ))}
+                </div>
+              </article>
+
+              <article className="modal-surface rounded-xl p-5 transition-[border-color,background-color] duration-200 ease-out motion-reduce:transition-colors lg:p-6 lg:hover:border-[#F5B800]/20">
+                <div className="flex items-center gap-3 text-[#F5B800]">
+                  <MessageCircle className="h-5 w-5" aria-hidden="true" />
+                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Мессенджеры</p>
+                </div>
+                <div className="mt-5 grid grid-cols-4 gap-2">
+                  <a
+                    href={CONTACTS_SOCIALS.vk}
+                    className="flex h-12 min-w-0 items-center justify-center rounded-xl border border-white/12 bg-white/[0.055] text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition-[border-color,background-color,color] duration-200 ease-out motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
+                    aria-label={CONTACTS_TEXT.vkAria}
+                  >
+                    <SiVk className="h-5 w-5 shrink-0 text-[#0077FF]" />
+                  </a>
+                  <a
+                    href={CONTACTS_SOCIALS.telegram}
+                    className="flex h-12 min-w-0 items-center justify-center rounded-xl border border-white/12 bg-white/[0.055] text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition-[border-color,background-color,color] duration-200 ease-out motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
+                    aria-label={CONTACTS_TEXT.telegramAria}
+                  >
+                    <SiTelegram className="h-5 w-5 shrink-0 text-[#26A5E4]" />
+                  </a>
+                  <a
+                    href={CONTACTS_SOCIALS.max}
+                    className="flex h-12 min-w-0 items-center justify-center rounded-xl border border-white/12 bg-white/[0.055] text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition-[border-color,background-color,color] duration-200 ease-out motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
+                    aria-label={CONTACTS_TEXT.maxAria}
+                  >
+                    <img
+                      src={CONTACTS_ASSETS.maxIcon}
+                      alt=""
+                      aria-hidden="true"
+                      loading="lazy"
+                      decoding="async"
+                      className="h-5 w-5 shrink-0 object-contain"
+                    />
+                  </a>
+                  <a
+                    href={CONTACTS_SOCIALS.reviews}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-12 min-w-0 items-center justify-center rounded-xl border border-white/12 bg-white/[0.055] text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition-[border-color,background-color,color] duration-200 ease-out motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
+                    aria-label={CONTACTS_TEXT.reviewsAria}
+                  >
+                    <Star className="h-5 w-5 shrink-0 text-[#F5B800] transition-colors" />
+                  </a>
+                </div>
+              </article>
+            </div>
+
+            <div className="mt-5 space-y-3">
+              <div className="relative min-h-[360px] overflow-hidden rounded-xl border border-white/10 bg-black/40 shadow-[0_24px_70px_rgba(0,0,0,0.42)] sm:min-h-[430px] lg:min-h-[520px]">
+                <iframe
+                  title={CONTACTS_TEXT.mapFrameTitle}
+                  src={CONTACTS_MAP_SRC}
+                  width="100%"
+                  height="100%"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="h-full min-h-[360px] w-full sm:min-h-[430px] lg:min-h-[520px]"
+                />
+              </div>
+            </div>
+        </div>
+      </div>
+      </div>
+
+    </section>
+  );
+}

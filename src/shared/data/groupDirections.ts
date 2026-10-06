@@ -1,0 +1,309 @@
+﻿const BASE_URL = import.meta.env.BASE_URL;
+const GROUP_DIRECTION_BADGE = 'Групповое направление';
+const TRAINER_AVATAR_PLACEHOLDER = `${BASE_URL}trainers/alexander-placeholder.jpg`;
+
+const TRAINER_AVATARS: Record<string, string> = {
+  Александр: `${BASE_URL}trainers/saikl.jpg`,
+  Анжелика: `${BASE_URL}trainers/angelina.jpg`,
+  Антон: `${BASE_URL}trainers/anton.jpg`,
+  Юлия: `${BASE_URL}trainers/yulia.jpg`,
+};
+
+const getTrainerAvatar = (trainer?: string) => {
+  if (!trainer) return TRAINER_AVATAR_PLACEHOLDER;
+  return TRAINER_AVATARS[trainer] ?? TRAINER_AVATAR_PLACEHOLDER;
+};
+
+export type GroupDirectionCategory = 'active' | 'recovery' | 'kids';
+
+export interface GroupDirection {
+  key: string;
+  text: string;
+  trainer: string;
+  shortDescription: string;
+  benefits: string[];
+  category: GroupDirectionCategory;
+  badge: string;
+  status: string;
+  trainerAvatar?: string;
+  trainerAvatarPosition?: string;
+  description: string;
+  action: string;
+  bookingAction: string;
+  confirmBookingAction: string;
+}
+
+export const groupDirectionCategories = [
+  {
+    key: 'active',
+    title: 'Активные тренировки',
+    description:
+      'Силовые и динамичные форматы для тех, кто хочет работать на тонус, выносливость и интенсивность.',
+  },
+  {
+    key: 'recovery',
+    title: 'Восстановление и здоровье',
+    description:
+      'Бережные направления для подвижности, осанки, восстановления и комфортного укрепления тела.',
+  },
+  {
+    key: 'kids',
+    title: 'Детские тренировки',
+    description:
+      'Форматы для физического развития ребенка в безопасной и поддерживающей атмосфере.',
+  },
+] as const;
+
+export const groupDirections: GroupDirection[] = [
+  {
+    key: 'glute_pump',
+    text: 'Ягодичный памп',
+    trainer: 'Анжелика',
+    shortDescription:
+      'Тренировка с акцентом на ягодицы и ноги для тонуса, силы и заметной проработки нижней части тела.',
+    benefits: ['ягодицы и ноги', 'тонус', 'сила нижней части тела'],
+    category: 'active',
+    badge: GROUP_DIRECTION_BADGE,
+    status: 'Акцент на ягодицы',
+    trainerAvatar: getTrainerAvatar('Анжелика'),
+    trainerAvatarPosition: '50% 18%',
+    description:
+      'Ягодичный памп — это тренировка, направленная на укрепление мышц ног и ягодиц, улучшение тонуса и формирование красивого силуэта.\n\nЗанятия помогают повысить силу нижней части тела, улучшить выносливость и получить максимальный эффект от каждой тренировки за счёт правильно подобранных упражнений.\n\nТренер Анжелика внимательно контролирует технику выполнения и помогает добиться заметного результата.',
+    action: 'group_direction:glute_pump',
+    bookingAction: 'group_booking_request:glute_pump',
+    confirmBookingAction: 'group_booking_confirm:glute_pump',
+  },
+  {
+    key: 'afk',
+    text: 'АФК (Адаптивная физкультура)',
+    trainer: 'Александр',
+    shortDescription:
+      'Мягкие тренировки для восстановления подвижности, укрепления здоровья и улучшения самочувствия.',
+    benefits: ['мягкое укрепление', 'восстановление подвижности', 'улучшение самочувствия'],
+    category: 'recovery',
+    badge: GROUP_DIRECTION_BADGE,
+    status: 'Восстановительный формат',
+    trainerAvatar: getTrainerAvatar('Александр'),
+    trainerAvatarPosition: '50% 14%',
+    description:
+      'АФК (адаптивная физическая культура) — это занятия, направленные на укрепление здоровья, восстановление подвижности и улучшение общего физического состояния в том числе после травм и операций.\n\nТренировки проходят в малых группах и подходят людям с разным уровнем подготовки, а также тем, кому важно мягкое и безопасное укрепление организма.\n\nЗанятия проводит тренер Александр — реабилитолог с профильным образованием, который подбирает нагрузку индивидуально с учётом особенностей участников и помогает вернуть подвижность и постепенно улучшать физическую форму и самочувствие.',
+    action: 'group_direction:afk',
+    bookingAction: 'group_booking_request:afk',
+    confirmBookingAction: 'group_booking_confirm:afk',
+  }, {
+    key: 'kids_martial_arts',
+    text: 'Единоборства (дети)',
+    trainer: 'Антон',
+    shortDescription:
+      'Детские тренировки для дисциплины, координации, уверенности и общей физической подготовки.',
+    benefits: ['дисциплина', 'координация', 'уверенность'],
+    category: 'kids',
+    badge: GROUP_DIRECTION_BADGE,
+    status: 'Для детей',
+    trainerAvatar: getTrainerAvatar('Антон'),
+    trainerAvatarPosition: '50% 18%',
+    description:
+      'Детские занятия по единоборствам направлены на развитие силы, координации, дисциплины и уверенности в себе.\n\nТренировки помогают улучшить физическую подготовку ребёнка, развивают реакцию, внимание и умение работать в команде. Занятия проходят в безопасной и поддерживающей атмосфере.\n\nТренер Антон уделяет внимание каждому участнику и помогает детям развиваться физически и психологически через регулярные тренировки.',
+    action: 'group_direction:kids_martial_arts',
+    bookingAction: 'group_booking_request:kids_martial_arts',
+    confirmBookingAction: 'group_booking_confirm:kids_martial_arts',
+  },
+  {
+    key: 'afk_kids',
+    text: 'АФК (Дети)',
+    trainer: 'Александр',
+    shortDescription:
+      'Мягкие тренировки для восстановления подвижности, укрепления здоровья и улучшения самочувствия.',
+    benefits: ['мягкое укрепление', 'восстановление подвижности', 'улучшение самочувствия'],
+    category: 'kids',
+    badge: GROUP_DIRECTION_BADGE,
+    status: 'Восстановительный формат',
+    trainerAvatar: getTrainerAvatar('Александр'),
+    trainerAvatarPosition: '50% 14%',
+    description:
+      'АФК (адаптивная физическая культура) — это занятия, направленные на укрепление здоровья, восстановление подвижности и улучшение общего физического состояния в том числе после травм и операций.\n\nТренировки проходят в малых группах и подходят людям с разным уровнем подготовки, а также тем, кому важно мягкое и безопасное укрепление организма.\n\nЗанятия проводит тренер Александр — реабилитолог с профильным образованием, который подбирает нагрузку индивидуально с учётом особенностей участников и помогает вернуть подвижность и постепенно улучшать физическую форму и самочувствие.',
+    action: 'group_direction:afk_kids',
+    bookingAction: 'group_booking_request:afk_kids',
+    confirmBookingAction: 'group_booking_confirm:afk_kids',
+  },
+  {
+    key: 'crossfit',
+    text: 'Кроссфит',
+    trainer: 'Александр',
+    shortDescription:
+      'Высокоинтенсивный формат для силы, выносливости и комплексной проработки всего тела.',
+    benefits: ['силовая выносливость', 'мощность', 'развивает все группы мышц'],
+    category: 'active',
+    badge: GROUP_DIRECTION_BADGE,
+    status: 'Высокая интенсивность',
+    trainerAvatar: getTrainerAvatar('Александр'),
+    trainerAvatarPosition: '50% 14%',
+    description:
+      'Кроссфит сочетает силовые упражнения, кардио-нагрузку и функциональные связки для развития силы, выносливости и общей физической формы.\n\nФормат подходит тем, кто стремится развить способности тела на максимум, любит динамику, хочет быстро прогрессировать и получать мощную тренировочную нагрузку в группе. Занятия подходят для подготовки к соревнованиям.\n\nЗанятия проводит тренер Александр, который следит за техникой, масштабирует нагрузку под уровень подготовки и помогает безопасно расти от тренировки к тренировке.',
+    action: 'group_direction:crossfit',
+    bookingAction: 'group_booking_request:crossfit',
+    confirmBookingAction: 'group_booking_confirm:crossfit',
+  },
+   {
+    key: 'crossfit_kids',
+    text: 'Кроссфит (Дети)',
+    trainer: 'Александр',
+    shortDescription:
+      'Высокоинтенсивный формат для силы, выносливости и комплексной проработки всего тела.',
+    benefits: ['силовая выносливость', 'мощность', 'развивает все группы мышц'],
+    category: 'kids',
+    badge: GROUP_DIRECTION_BADGE,
+    status: 'Высокая интенсивность',
+    trainerAvatar: getTrainerAvatar('Александр'),
+    trainerAvatarPosition: '50% 14%',
+    description:
+      'Кроссфит сочетает силовые упражнения, кардио-нагрузку и функциональные связки для развития силы, выносливости и общей физической формы.\n\nФормат подходит тем, кто стремится развить способности тела на максимум, любит динамику, хочет быстро прогрессировать и получать мощную тренировочную нагрузку в группе. Занятия подходят для подготовки к соревнованиям.\n\nЗанятия проводит тренер Александр, который следит за техникой, масштабирует нагрузку под уровень подготовки и помогает безопасно расти от тренировки к тренировке.',
+    action: 'group_direction:crossfit_kids',
+    bookingAction: 'group_booking_request:crossfit_kids',
+    confirmBookingAction: 'group_booking_confirm:crossfit_kids',
+  },
+  {
+    key: 'martial_arts_adults',
+    text: 'Единоборства',
+    trainer: 'Антон',
+    shortDescription:
+      'Силовой и скоростной формат для выносливости, координации, реакции и уверенности в себе.',
+    benefits: ['выносливость', 'координация', 'реакция'],
+    category: 'active',
+    badge: GROUP_DIRECTION_BADGE,
+    status: 'Интенсивный формат',
+    trainerAvatar: getTrainerAvatar('Антон'),
+    trainerAvatarPosition: '50% 18%',
+    description:
+      'Единоборства — это сила, скорость и уверенность в себе.\n\nТренировки проходят под руководством тренера Антона, чемпиона России. Занятия помогают развить выносливость, координацию, реакцию и укрепить всё тело. Подходят как начинающим, так и тем, кто хочет повысить уровень подготовки и улучшить физическую форму.',
+    action: 'group_direction:martial_arts_adults',
+    bookingAction: 'group_booking_request:martial_arts_adults',
+    confirmBookingAction: 'group_booking_confirm:martial_arts_adults',
+  },
+ 
+  {
+    key: 'cycle',
+    text: 'Сайкл',
+    trainer: 'Александр',
+    shortDescription:
+      'Энергичная кардио-тренировка на велотренажёрах для выносливости и интенсивной нагрузки.',
+    benefits: ['кардио-нагрузка', 'выносливость', 'энергичный темп'],
+    category: 'active',
+    badge: GROUP_DIRECTION_BADGE,
+    status: 'Кардио-формат',
+    trainerAvatar: getTrainerAvatar('Александр'),
+    trainerAvatarPosition: '50% 14%',
+    description:
+      'Сайкл — это энергичная групповая тренировка на велотренажёрах, которая помогает развить выносливость, укрепить ноги и получить интенсивную кардио-нагрузку.\n\nФормат подходит тем, кто любит ритм, хочет сжигать калории и работать в драйвовой атмосфере группы.\n\nТренер Александр задаёт темп, помогает распределять усилия и делает тренировку понятной как для новичков, так и для тех, кто уже любит интенсивное кардио.',
+    action: 'group_direction:cycle',
+    bookingAction: 'group_booking_request:cycle',
+    confirmBookingAction: 'group_booking_confirm:cycle',
+  },
+  {
+    key: 'step_cardio',
+    text: 'Степ-кардио',
+    trainer: 'Анастасия',
+    shortDescription:
+      'Динамичная кардио-тренировка на степ-платформе для выносливости, координации и жиросжигания.',
+    benefits: ['кардио-нагрузка', 'ритм и координация', 'жиросжигание'],
+    category: 'active',
+    badge: GROUP_DIRECTION_BADGE,
+    status: 'Динамичный формат',
+    trainerAvatar: getTrainerAvatar('Анастасия'),
+    description:
+      'Степ-кардио — это динамичная тренировка на специальной платформе (степе), сочетающая ритмичные движения под музыку и интенсивную кардио-нагрузку.\n\nЗанятия развивают выносливость, улучшают координацию и помогают эффективно сжигать калории. Формат подходит как новичкам, так и тем, кто уже не новичок в спорте.\n\nТренер Анастасия помогает держать темп и понятно объясняет технику, чтобы тренировка была простой, безопасной и эффективной.',
+    action: 'group_direction:step_cardio',
+    bookingAction: 'group_booking_request:step_cardio',
+    confirmBookingAction: 'group_booking_confirm:step_cardio',
+  },
+  {
+    key: 'smart_fitness',
+    text: 'Умный фитнес',
+    trainer: 'Анжелика',
+    shortDescription:
+      'Осознанные тренировки с акцентом на технику, безопасную нагрузку и мягкий тонус всего тела.',
+    benefits: ['контроль техники', 'мягкая нагрузка', 'тонус всего тела'],
+    category: 'recovery',
+    badge: GROUP_DIRECTION_BADGE,
+    status: 'Комфортный формат',
+    trainerAvatar: getTrainerAvatar('Анжелика'),
+    trainerAvatarPosition: '50% 18%',
+    description:
+      'Умный фитнес — это формат тренировок с акцентом на грамотную технику, безопасную нагрузку и постепенное укрепление всего тела.\n\nПодходит тем, кто хочет тренироваться осознанно, улучшать самочувствие, поддерживать тонус тела и двигаться без перегрузки.\n\nЗанятия проводит тренер Анжелика, помогая выстроить понятную, безопасную и эффективную работу в комфортном темпе.',
+    action: 'group_direction:smart_fitness',
+    bookingAction: 'group_booking_request:smart_fitness',
+    confirmBookingAction: 'group_booking_confirm:smart_fitness',
+  },
+  {
+    key: 'circuit_strength',
+    text: 'Круговая силовая',
+    trainer: 'Юлия',
+    shortDescription:
+      'Интенсивная круговая тренировка на все группы мышц с акцентом на силовую выносливость.',
+    benefits: ['всё тело', 'силовая выносливость', 'интенсивный темп'],
+    category: 'active',
+    badge: GROUP_DIRECTION_BADGE,
+    status: 'Интенсивный формат',
+    trainerAvatar: getTrainerAvatar('Юлия'),
+    trainerAvatarPosition: '68% 18%',
+    description:
+      'Круговая силовая тренировка — это интенсивный формат занятий, направленный на укрепление всех основных групп мышц и развитие выносливости.\n\nУпражнения выполняются по кругу с чередованием нагрузок, что позволяет эффективно проработать всё тело за одну тренировку.\n\nТренер Юлия контролирует технику выполнения упражнений и помогает подобрать комфортный уровень нагрузки для стабильного прогресса.',
+    action: 'group_direction:circuit_strength',
+    bookingAction: 'group_booking_request:circuit_strength',
+    confirmBookingAction: 'group_booking_confirm:circuit_strength',
+  },
+  {
+    key: 'lfk',
+    text: 'ЛФК',
+    trainer: 'Александр',
+    shortDescription:
+      'Восстановительные тренировки для подвижности, осанки и снижения дискомфорта в спине и суставах.',
+    benefits: ['подвижность', 'осанка', 'снижение дискомфорта'],
+    category: 'recovery',
+    badge: GROUP_DIRECTION_BADGE,
+    status: 'Восстановительный формат',
+    trainerAvatar: getTrainerAvatar('Александр'),
+    trainerAvatarPosition: '50% 14%',
+    description:
+      'ЛФК (лечебная физическая культура) — это тренировки, направленные на восстановление подвижности, укрепление мышц и улучшение общего состояния организма.\n\nЗанятия помогают снизить болевые ощущения в спине и суставах, улучшить осанку и повысить уровень повседневной активности. Подходят людям с разным уровнем подготовки.\n\nТренировки проводит тренер Александр, который подбирает упражнения с учётом индивидуальных особенностей и помогает безопасно укреплять организм.',
+    action: 'group_direction:lfk',
+    bookingAction: 'group_booking_request:lfk',
+    confirmBookingAction: 'group_booking_confirm:lfk',
+  },
+  {
+    key: 'pilates',
+    text: 'Пилатес',
+    trainer: 'Анастасия',
+    shortDescription:
+      'Спокойная тренировка для глубоких мышц, осанки, контроля тела и качества движения.',
+    benefits: ['укрепление глубоких мышц', 'тонус всего тела', 'улучшение осанки и подвижности'],
+    category: 'recovery',
+    badge: GROUP_DIRECTION_BADGE,
+    status: 'Спокойный темп',
+    trainerAvatar: getTrainerAvatar('Анастасия'),
+    description:
+      'Пилатес — это тренировка, направленная на укрепление глубоких мышц кора, развитие контроля над телом и улучшение качества движения.\n\nЗанятия проходят в спокойном темпе с акцентом на правильное дыхание, выравнивание тела и точность выполнения. Регулярная практика помогает снять напряжение в спине, улучшить осанку, повысить гибкость и развить «мышечную память».\n\nТренер Анастасия внимательно следит за техникой каждого участника, помогая выполнять упражнения безопасно и эффективно, независимо от уровня подготовки.',
+    action: 'group_direction:pilates',
+    bookingAction: 'group_booking_request:pilates',
+    confirmBookingAction: 'group_booking_confirm:pilates',
+  },
+];
+
+export const groupDirectionRecommendations = [
+  {
+    goal: 'Укрепить тело и повысить выносливость',
+    directions: ['circuit_strength'],
+  },
+  {
+    goal: 'Скорректировать осанку',
+    directions: ['lfk', 'pilates'],
+  },
+  {
+    goal: 'Развить гибкость',
+    directions: ['pilates'],
+  },
+  {
+    goal: 'Физическое развитие ребенка',
+    directions: ['kids_martial_arts'],
+  },
+] as const;
