@@ -159,6 +159,7 @@ const CURRENT_HERO_SCHEDULE_GROUPS: HeroScheduleGroup[] = [
     { id: 'wed-kids-martial-arts', time: '16:00–17:00', directionKey: 'kids_martial_arts', directionText: 'Единоборства дети', trainerName: 'Антон' },
     { id: 'wed-afk-17', time: '17:00–18:00', directionKey: 'afk', trainerName: 'Александр' },
     { id: 'wed-cycle', time: '18:00–19:00', directionKey: 'cycle', trainerName: 'Александр' },
+    { id: 'wed-pilates', time: '18:00–19:00', directionKey: 'pilates', trainerName: 'Анастасия' },
     { id: 'wed-crossfit', time: '19:00–20:00', directionKey: 'crossfit', trainerName: 'Александр' },
   ]},
   { id: 'thursday', day: 'Чт', rows: [
