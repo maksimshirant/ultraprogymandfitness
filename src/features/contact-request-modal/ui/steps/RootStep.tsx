@@ -24,12 +24,12 @@ export function RootStep({
   onScenarioSelect,
 }: RootStepProps) {
   return (
-    <div className={isMobile ? 'mx-auto w-full max-w-4xl space-y-3' : 'mx-auto w-full max-w-4xl space-y-5'}>
-      <div className={isMobile ? 'grid grid-cols-1 gap-3 md:grid-cols-2' : 'grid grid-cols-1 gap-3 md:grid-cols-2'}>
+    <div className="mx-auto w-full">
+      <div className="grid grid-cols-1">
         {primaryOptions.map((option) => (
           <ScenarioCard
             key={option.id}
-            title={isMobile ? option.mobileTitle : option.title}
+            title={option.title}
             icon={option.icon}
             onClick={() => onScenarioSelect(option.id)}
             isActive={activeTopic === option.id}
@@ -38,12 +38,12 @@ export function RootStep({
         ))}
       </div>
 
-      <div className={isMobile ? 'grid grid-cols-1 gap-3' : 'grid grid-cols-1 gap-2'}>
+      <div className="grid grid-cols-1">
         {secondaryOptions.map((option) => (
           isMobile ? (
             <ScenarioCard
               key={option.id}
-              title={option.mobileTitle}
+              title={option.title}
               icon={option.icon}
               onClick={() => onScenarioSelect(option.id)}
               isActive={activeTopic === option.id}

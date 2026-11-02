@@ -83,5 +83,13 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    // Restricts hover feedback to desktop screens with a mouse-like primary pointer.
+    function ({ addVariant }) {
+      const desktopHover = '@media (min-width: 1024px) and (hover: hover) and (pointer: fine)';
+      addVariant('hover', `${desktopHover} { &:hover }`);
+      addVariant('group-hover', `${desktopHover} { :merge(.group):hover & }`);
+    },
+  ],
 }

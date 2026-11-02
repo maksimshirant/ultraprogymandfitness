@@ -66,11 +66,14 @@
     transition-property: box-shadow, border-color, filter, opacity;
     transition-timing-function: ease-out;
   }
+
+  @media (min-width: 1024px) and (hover: hover) and (pointer: fine){
   
   .btn-primary:hover {
     filter: brightness(1.05);
     transform: none;
     box-shadow: 0 18px 38px rgba(245, 184, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.42);
+  }
   }
 
   .btn-primary:active {
@@ -87,12 +90,15 @@
     transition-property: border-color, background-color, color, opacity;
     transition-timing-function: ease-out;
   }
+
+  @media (min-width: 1024px) and (hover: hover) and (pointer: fine){
   
   .btn-white:hover {
     color: #F5B800;
     transform: none;
     border-color: rgba(245, 184, 0, 0.3);
     background: rgba(255, 255, 255, 0.08);
+  }
   }
 
   .btn-white:active {
@@ -119,10 +125,17 @@
     -webkit-backdrop-filter: blur(24px);
   }
 
-  .modal-surface .btn-primary,
+  .modal-surface .btn-primary {
+    box-shadow: none !important;
+    filter: none;
+  }
+
+  @media (min-width: 1024px) and (hover: hover) and (pointer: fine){
+
   .modal-surface .btn-primary:hover {
     box-shadow: none !important;
     filter: none;
+  }
   }
 
   .modal-surface .modal-submit-button {
@@ -314,8 +327,11 @@
   border-radius: 4px;
 }
 
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine){
+
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
 }
 
 ::selection {
@@ -566,25 +582,6 @@
     transition-duration: 700ms !important;
     transition-timing-function: ease-out !important;
   }
-
-  /* Disable hover states on tablet/mobile outside subscriptions slider */
-  .btn-primary:hover {
-    filter: none !important;
-    transform: none !important;
-    box-shadow: 0 14px 30px rgba(245, 184, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.38) !important;
-  }
-
-  .btn-white:hover {
-    color: #fff !important;
-    background: rgba(255, 255, 255, 0.055) !important;
-    transform: none !important;
-  }
-
-  #subscriptions .btn-primary:hover {
-    filter: none !important;
-    transform: none !important;
-    box-shadow: 0 14px 30px rgba(245, 184, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.38) !important;
-  }
 }
 
 /* Respect reduced-motion without removing static desktop glow backgrounds */
@@ -629,7 +626,440 @@
   -webkit-backdrop-filter: none !important;
 }
 
+/* The booking form shares the home page's solid surfaces and restrained typography. */
+.booking-modal.modal-surface,
+.legal-document-modal.modal-surface,
+.direction-details-modal.modal-surface {
+  background: #111214 !important;
+  background-image: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  color: #f3f4f6;
+}
+
+.booking-modal :is(h2, h3),
+.legal-document-modal :is(h2, h3),
+.direction-details-modal :is(h2, h3) {
+  text-transform: none;
+}
+
+.booking-modal .text-white {
+  color: #f3f4f6 !important;
+}
+
+.booking-modal .booking-option {
+  min-height: 52px;
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0;
+  background: transparent;
+  color: #f3f4f6;
+  box-shadow: none;
+}
+
+.booking-modal .booking-option-active {
+  border-bottom-color: #f5b800;
+  color: #f5b800;
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine){
+
+.booking-modal .booking-option:hover {
+  border-bottom-color: #f5b800;
+  color: #f5b800;
+}
+}
+
+.booking-modal .booking-option .text-white {
+  color: inherit !important;
+}
+
+.booking-modal button:focus-visible {
+  outline: 2px solid #f5b800;
+  outline-offset: -2px;
+}
+
+.booking-modal .modal-submit-button {
+  border-radius: 2px !important;
+}
+
+.booking-modal .btn-primary {
+  border-radius: 2px;
+  border-color: #f5b800;
+  background: #f5b800;
+  color: #111214 !important;
+}
+
+/* Keep mobile dialogs flush with the viewport and scroll only their content. */
+@media (max-width: 767px) {
+  .booking-modal[data-slot="dialog-content"] {
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100vh;
+    max-height: 100dvh;
+    transform: none !important;
+    border: 0 !important;
+    border-radius: 0;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+
+  .booking-modal > div {
+    height: 100%;
+  }
+
+  .booking-modal .modal-step-scroll {
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .booking-modal .modal-step-scroll-rail {
+    display: none;
+  }
+
+  .legal-modal-frame {
+    padding: 0;
+  }
+
+  .legal-document-modal.modal-surface {
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100vh;
+    max-height: 100dvh;
+    max-width: none;
+    margin: 0;
+    border: 0 !important;
+    border-radius: 0;
+    padding-top: calc(1rem + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    padding-left: calc(1.25rem + env(safe-area-inset-left, 0px));
+    padding-right: calc(1.25rem + env(safe-area-inset-right, 0px));
+  }
+}
+
+/* Keep the home page focused on photography with flat, high-contrast controls. */
+.home-hero :is(h1, h2, h3),
+.home-editorial :is(h1, h2, h3),
+#flors :is(h1, h2, h3) {
+  text-transform: none;
+}
+
+.home-action,
+.home-secondary-action {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+
+.home-action {
+  border-color: #f5b800;
+  background: #f5b800;
+  color: #111214;
+}
+
+.home-secondary-action {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(5, 6, 10, 0.3);
+  color: #fff;
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine){
+
+.home-secondary-action:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine){
+
+.home-action:hover {
+  border-color: #ffd247;
+  background: #ffd247;
+}
+}
+
+.home-action:active {
+  background: #dfa900;
+}
+
+.home-text-link {
+  text-underline-offset: 5px;
+  transition: color 180ms ease;
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine){
+
+.home-text-link:hover {
+  color: #f5b800;
+  text-decoration: underline;
+}
+}
+
+.home-action:focus-visible,
+.home-secondary-action:focus-visible,
+.home-text-link:focus-visible,
+.home-photo-link:focus-visible,
+#flors button:focus-visible {
+  outline: 2px solid #f5b800;
+  outline-offset: 5px;
+}
+
+/* Give the main mobile section actions the same touch target and visual weight. */
+@media (max-width: 767px) {
+  .home-mobile-action {
+    display: flex;
+    width: 100%;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border-radius: 2px;
+    padding: 14px 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25;
+    text-align: center;
+  }
+
+  .home-mobile-action:not(.home-action) {
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(5, 6, 10, 0.3);
+    color: #f3f4f6 !important;
+  }
+
+  .home-mobile-action svg {
+    flex-shrink: 0;
+  }
+}
+
+body:has(.home-hero) .btn-primary {
+  border-radius: 2px;
+  border-color: #f5b800;
+  background: #f5b800;
+  color: #111214;
+  box-shadow: none;
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine){
+
+body:has(.home-hero) .btn-primary:hover {
+  background: #ffd247;
+  box-shadow: none;
+}
+}
+
+#flors button {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+
+/* Crossfade only the background; the hero copy stays still. */
+.hero-slide {
+  transition: opacity 1100ms ease-in-out;
+}
+
+.hero-slide-control {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  color: white;
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine){
+
+.hero-slide-control:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+}
+
+.hero-slide-control:focus-visible {
+  outline: 2px solid #f5b800;
+  outline-offset: 2px;
+}
+
+.hero-slide-control:disabled {
+  opacity: 0.35;
+  cursor: wait;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-action,
+  .home-secondary-action,
+  .home-text-link,
+  .hero-slide,
+  .home-editorial img {
+    transition: none;
+  }
+}
+
+/* Internal pages reuse the flat typography and spacing from the updated home page. */
+.club-page {
+  color: #f3f4f6;
+}
+
+.club-page :is(h1, h2, h3, h4) {
+  text-transform: none;
+}
+
+.club-page-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.club-page-hero-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(16, 17, 20, 0.78) 0%, rgba(16, 17, 20, 0.52) 50%, rgba(16, 17, 20, 0.12) 100%);
+}
+
+.club-page-hero > .hero-media-layer,
+.club-page-hero-shade {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 80px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 80px), transparent 100%);
+}
+
+.club-page-header {
+  position: relative;
+  z-index: 1;
+  padding-top: calc(4rem + clamp(3rem, 6vw, 5rem));
+  padding-bottom: clamp(4rem, 7vw, 6rem);
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .club-page-header {
+    padding-top: calc(6rem + clamp(3rem, 6vw, 5rem));
+  }
+}
+
+@media (min-width: 1024px) {
+  .club-page-header {
+    padding-top: calc(5rem + clamp(3rem, 6vw, 5rem));
+  }
+}
+
+.club-page-title {
+  font-size: clamp(2.75rem, 6.5vw, 6rem);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  color: #fff;
+}
+
+.club-page :is(button, summary):focus-visible,
+.direction-details-modal button:focus-visible,
+.direction-details-body:focus-visible {
+  outline: 2px solid #f5b800;
+  outline-offset: 4px;
+}
+
+.club-page details[open] > summary svg {
+  transform: rotate(180deg);
+}
+
+/* Reveal details inside the photo without moving the trainer name or actions. */
+.trainer-photo-card .trainer-photo-details {
+  flex: 1 1 0%;
+  min-height: 0;
+  margin-bottom: 20px;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 260ms ease, transform 260ms ease, visibility 0s 260ms !important;
+}
+
+.trainer-photo-card .trainer-photo-details-shade {
+  opacity: 0;
+  transition: opacity 260ms ease !important;
+}
+
+.trainer-photo-card[data-expanded="true"] .trainer-photo-details {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition-delay: 0s !important;
+}
+
+.trainer-photo-card[data-expanded="true"] .trainer-photo-details-shade {
+  opacity: 1;
+}
+
+.trainer-photo-details-scroll:focus-visible {
+  outline: 2px solid #f5b800;
+  outline-offset: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trainer-photo-card .trainer-photo-details,
+  .trainer-photo-card .trainer-photo-details-shade {
+    transition: none !important;
+    transform: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .direction-details-modal[data-slot="dialog-content"] {
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
+    transform: none;
+    border: 0 !important;
+    border-radius: 0;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+}
+
 /* Keep fixed header compositing stable to avoid tablet scroll jitter */
+#site-header .home-text-link {
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine){
+
+#site-header .home-text-link:hover {
+  color: #f5b800;
+}
+}
+
+#site-header .home-text-link svg {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.95));
+}
+
 #site-header.site-header {
   transform: translateZ(0);
   -webkit-transform: translateZ(0);

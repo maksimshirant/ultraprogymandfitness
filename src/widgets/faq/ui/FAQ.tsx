@@ -1,27 +1,22 @@
 import { useState } from 'react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { Plus, Minus } from 'lucide-react';
-import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
+import { BalancedHeading } from '@/components/typography/BalancedHeading';
 import { FAQ_ITEMS } from '@/content/faq';
 
 const FAQ_TEXT = {
   title: 'Частые вопросы',
 } as const;
 
+// Keeps first-visit questions available in the existing accessible accordion.
 export default function FAQ() {
   const [openValue, setOpenValue] = useState('');
 
   return (
     <section id="faq" className="deferred-section relative overflow-hidden py-14 md:py-24">
-      <div className="hero-glow-layer">
-        <div className="hero-glow-top-right" />
-        <div className="hero-glow-bottom-left" />
-        <div className="hero-glow-center" />
-      </div>
-
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <BalancedHeading as="h2" className="section-title text-white mb-12 text-center">
-          <HeadingAccent>{FAQ_TEXT.title}</HeadingAccent>
+        <BalancedHeading as="h2" className="mb-8 text-3xl font-semibold tracking-tight text-white md:mb-12">
+          {FAQ_TEXT.title}
         </BalancedHeading>
         <AccordionPrimitive.Root
           type="single"

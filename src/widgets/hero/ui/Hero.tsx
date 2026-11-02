@@ -1,295 +1,150 @@
-import { useEffect, useState } from 'react';
-import { ArrowRight, ChevronDown, Images, X } from 'lucide-react';
-import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
-import { useViewportTier } from '@/hooks/useViewportTier';
-
-import { cn } from '@/lib/utils';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowDown, ArrowRight, ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
+import { BalancedHeading } from '@/components/typography/BalancedHeading';
+import PublicAssetImage from '@/components/PublicAssetImage';
 import type { OpenModalHandler } from '@/types/modal';
 
 interface HeroProps {
   onOpenModal: OpenModalHandler;
 }
 
-const HERO_ASSETS = {
-  background: {
-    avif: `${import.meta.env.BASE_URL}mainhero/hbg.avif`,
-    webp: `${import.meta.env.BASE_URL}mainhero/hbg.webp`,
-    png: `${import.meta.env.BASE_URL}mainhero/hbg.png`,
-    avifSrcSet: [
-      `${import.meta.env.BASE_URL}mainhero/hbg-w480.avif 480w`,
-      `${import.meta.env.BASE_URL}mainhero/hbg-w768.avif 768w`,
-      `${import.meta.env.BASE_URL}mainhero/hbg-w1024.avif 1024w`,
-      `${import.meta.env.BASE_URL}mainhero/hbg-w1280.avif 1280w`,
-      `${import.meta.env.BASE_URL}mainhero/hbg.avif 1536w`,
-    ].join(', '),
-    webpSrcSet: [
-      `${import.meta.env.BASE_URL}mainhero/hbg-w480.webp 480w`,
-      `${import.meta.env.BASE_URL}mainhero/hbg-w768.webp 768w`,
-      `${import.meta.env.BASE_URL}mainhero/hbg-w1024.webp 1024w`,
-      `${import.meta.env.BASE_URL}mainhero/hbg-w1280.webp 1280w`,
-      `${import.meta.env.BASE_URL}mainhero/hbg.webp 1536w`,
-    ].join(', '),
-  },
-  card: {
-    avif: `${import.meta.env.BASE_URL}mainhero/card.avif`,
-    webp: `${import.meta.env.BASE_URL}mainhero/card.webp`,
-    png: `${import.meta.env.BASE_URL}mainhero/card.png`,
-    avifSrcSet: [
-      `${import.meta.env.BASE_URL}mainhero/card-w480.avif 480w`,
-      `${import.meta.env.BASE_URL}mainhero/card-w768.avif 768w`,
-      `${import.meta.env.BASE_URL}mainhero/card-w1024.avif 1024w`,
-      `${import.meta.env.BASE_URL}mainhero/card.avif 1280w`,
-    ].join(', '),
-    webpSrcSet: [
-      `${import.meta.env.BASE_URL}mainhero/card-w480.webp 480w`,
-      `${import.meta.env.BASE_URL}mainhero/card-w768.webp 768w`,
-      `${import.meta.env.BASE_URL}mainhero/card-w1024.webp 1024w`,
-      `${import.meta.env.BASE_URL}mainhero/card.webp 1280w`,
-    ].join(', '),
-  },
-  cardAlt: 'Клубная карта Ultra Pro',
-} as const;
 
 const HERO_TEXT = {
-  titleStart: 'ФИТНЕС-КЛУБ',
-  titleAccent: 'НОВОГО УРОВНЯ',
   description:
-    'Современное оборудование, профессиональные тренеры и программы для любого уровня подготовки',
-  cta: 'Первое занятие бесплатно',
-  galleryCta: 'Галерея клуба',
-  scrollHintAria: 'Прокрутить к разделам',
-  cardInfoTitle: 'КАРТА КЛУБА',
-  cardInfoDescription:
-    'Эта карта является вашим пропуском в фитнес-клуб Ultra Pro и подтверждает доступ к выбранному формату посещения. Пожалуйста, бережно храните карту и берите ее с собой при каждом визите.',
-  cardInfoDetails:
-    'Не теряйте карту: в случае утери или повреждения обратитесь к администратору на ресепшене для восстановления и повторной активации доступа.',
-  openCardInfoAria: 'Открыть информацию о клубной карте',
-  cardRestoreNote: '*стоимость восстановления карты после утери - 500 рублей',
+    'Тренажёрный зал, групповые занятия и единоборства в Волжском. Самостоятельные и персональные тренировки.',
+  cta: 'Записаться на пробное занятие',
+  galleryCta: 'Посмотреть клуб',
 } as const;
 
+const HERO_SLIDES = [
+  { src: `${import.meta.env.BASE_URL}sections/hero-gym.png`, mobileSrc: `${import.meta.env.BASE_URL}sections/hero-gym-mobile.png`, label: 'Тренажёрный зал', position: 'center' },
+  { src: `${import.meta.env.BASE_URL}sections/hero-cardio.png`, mobileSrc: `${import.meta.env.BASE_URL}sections/hero-cardio-mobile.png`, label: 'Кардиозона', position: 'center' },
+  { src: `${import.meta.env.BASE_URL}sections/hero-functional.png`, mobileSrc: `${import.meta.env.BASE_URL}sections/hero-functional-mobile.png`, label: 'Функциональная зона', position: 'center' },
+] as const;
+
+// Introduces the club over a controllable slideshow of its existing photos.
 export default function Hero({ onOpenModal }: HeroProps) {
-  const [isCardInfoOpen, setIsCardInfoOpen] = useState(false);
-  const [isTabletHeroScrollHintVisible, setIsTabletHeroScrollHintVisible] = useState(false);
-  const viewportTier = useViewportTier();
-  const isDesktopViewport = viewportTier === 'desktop';
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [loadedSlides, setLoadedSlides] = useState(() => HERO_SLIDES.map(() => false));
+  const [isPaused, setIsPaused] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
+  const [isPageVisible, setIsPageVisible] = useState(() =>
+    typeof document === 'undefined' || document.visibilityState !== 'hidden',
+  );
+  const [isHeroVisible, setIsHeroVisible] = useState(true);
+  const heroRef = useRef<HTMLElement>(null);
 
-  const handleScrollToGallery = () => {
-    document.getElementById('flors-anchor')?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
-  };
-
-  const handleScrollToSections = () => {
-    document.getElementById('home-previews')?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
-  };
-
+  // Stops automatic movement when the visitor enables reduced motion or hides the tab.
   useEffect(() => {
-    const syncTabletHeroScrollHintVisibility = () => {
-      const isTabletViewport = window.innerWidth >= 768 && window.innerWidth < 1024;
-      const nextVisibility = isTabletViewport && window.scrollY < 24;
-
-      setIsTabletHeroScrollHintVisible((prev) => (prev === nextVisibility ? prev : nextVisibility));
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    // Applies a newly enabled reduced-motion preference without overriding manual pause.
+    const handleMotionPreference = (event: MediaQueryListEvent) => {
+      if (event.matches) setIsPaused(true);
     };
+    // Avoids advancing slides while the document is in the background.
+    const handleVisibilityChange = () => setIsPageVisible(document.visibilityState !== 'hidden');
 
-    syncTabletHeroScrollHintVisibility();
-    window.addEventListener('scroll', syncTabletHeroScrollHintVisibility, { passive: true });
-    window.addEventListener('resize', syncTabletHeroScrollHintVisibility);
-
+    motionPreference.addEventListener('change', handleMotionPreference);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => {
-      window.removeEventListener('scroll', syncTabletHeroScrollHintVisibility);
-      window.removeEventListener('resize', syncTabletHeroScrollHintVisibility);
+      motionPreference.removeEventListener('change', handleMotionPreference);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 
+  // Suspends the slideshow after the first screen scrolls out of view.
   useEffect(() => {
-    if (!isCardInfoOpen) {
-      return;
-    }
+    if (!heroRef.current || !('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsHeroVisible(entry.isIntersecting);
+    });
+    observer.observe(heroRef.current);
+    return () => observer.disconnect();
+  }, []);
 
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setIsCardInfoOpen(false);
-      }
-    };
+  // Advances only to a loaded photo and gives every selected frame a full six seconds.
+  useEffect(() => {
+    if (isPaused || !isPageVisible || !isHeroVisible) return;
+    const nextSlide = (activeSlide + 1) % HERO_SLIDES.length;
+    if (!loadedSlides[nextSlide]) return;
 
-    document.addEventListener('keydown', onKeyDown);
-    document.body.style.overflow = 'hidden';
+    const timeoutId = window.setTimeout(() => setActiveSlide(nextSlide), 6000);
+    return () => window.clearTimeout(timeoutId);
+  }, [activeSlide, loadedSlides, isPaused, isPageVisible, isHeroVisible]);
 
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [isCardInfoOpen]);
+  // Keeps the current frame visible until a background photo has finished loading.
+  const markSlideLoaded = (index: number) => {
+    setLoadedSlides((previous) => previous[index]
+      ? previous
+      : previous.map((isLoaded, slideIndex) => slideIndex === index || isLoaded));
+  };
+
+  // Manual selection pauses autoplay so the chosen photo stays on screen.
+  const selectSlide = (index: number) => {
+    if (!loadedSlides[index]) return;
+    setActiveSlide(index);
+    setIsPaused(true);
+  };
+
+  // Moves visitors directly to the club photo gallery.
+  const handleScrollToGallery = () => {
+    document.getElementById('flors-anchor')?.scrollIntoView({
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+      block: 'start',
+    });
+  };
 
   return (
-    <>
-      <section className="relative flex min-h-[100svh] items-center overflow-hidden gradient-bg-radial">
-        <picture className="hero-media-layer absolute inset-0 z-0">
-          <source type="image/avif" srcSet={HERO_ASSETS.background.avifSrcSet} sizes="100vw" />
-          <source type="image/webp" srcSet={HERO_ASSETS.background.webpSrcSet} sizes="100vw" />
-          <img
-            src={HERO_ASSETS.background.png}
-            alt=""
-            aria-hidden="true"
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-            className={cn('h-full w-full object-cover', isDesktopViewport ? 'object-center' : 'object-right')}
-          />
-        </picture>
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-48 bg-[linear-gradient(180deg,transparent_0%,rgba(5,6,10,0.9)_100%)] sm:h-56 lg:h-64" />
-        <div className="hero-glow-layer">
-          <div className="hero-glow-top-right" />
-          <div className="hero-glow-bottom-left" />
-          <div className="hero-glow-center" />
-        </div>
-
-        <div className="relative z-30 mx-auto w-full max-w-7xl px-4 pt-24 pb-14 max-[360px]:pt-20 max-[360px]:pb-10 sm:px-6 md:max-lg:flex md:max-lg:min-h-[calc(100svh-13rem)] md:max-lg:flex-col md:max-lg:justify-between md:max-lg:px-10 md:max-lg:pt-32 md:max-lg:pb-20 lg:px-8 lg:pt-32 lg:pb-16">
-          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-24">
-            <div className="hero-copy-shadow space-y-8 max-md:w-full max-md:max-w-full max-md:space-y-7 md:max-lg:mx-auto md:max-lg:max-w-[min(94vw,860px)] md:max-lg:space-y-11 lg:max-w-[40rem]">
-              <BalancedHeading
-                as="h1"
-                className="section-title text-white max-md:max-w-full max-md:text-[clamp(2.35rem,9vw,3.2rem)] max-md:leading-[0.96] max-[360px]:text-[clamp(1.85rem,8.6vw,2.45rem)] max-[360px]:leading-[1.02] md:max-lg:max-w-full md:max-lg:text-[clamp(4.4rem,9.4vw,6.2rem)] md:max-lg:leading-[0.9] lg:text-[clamp(3.45rem,4.15vw,4.55rem)] lg:leading-[0.94]"
-              >
-                <span className="block whitespace-nowrap max-[360px]:whitespace-normal">{HERO_TEXT.titleStart}</span>
-                <HeadingAccent className="inline-block whitespace-nowrap max-[360px]:whitespace-normal">{HERO_TEXT.titleAccent}</HeadingAccent>
-              </BalancedHeading>
-
-              <p className="max-w-lg text-lg text-gray-400 leading-relaxed max-md:max-w-full max-md:text-[1.12rem] max-md:leading-[1.42] max-[360px]:text-[0.98rem] max-[360px]:leading-[1.34] md:text-xl md:max-lg:max-w-[48rem] md:max-lg:text-[1.6rem] md:max-lg:leading-[1.34]">
-                {HERO_TEXT.description}
-              </p>
-
-
-              <div className="flex flex-col gap-4 sm:flex-row md:max-lg:gap-4">
-                <button
-                  type="button"
-                  onClick={() => onOpenModal({ topic: 'free_trial' })}
-                  className="btn-white inline-flex items-center justify-center gap-2 group md:max-lg:px-10 md:max-lg:py-5 md:max-lg:text-lg"
-                >
-                  {HERO_TEXT.cta}
-                  <ArrowRight className="w-4 h-4 transition-transform md:max-lg:h-5 md:max-lg:w-5 lg:group-hover:translate-x-1" />
-                </button>
-                <button
-                  type="button"
-                  onClick={handleScrollToGallery}
-                  className="btn-primary inline-flex items-center justify-center gap-2 text-white group md:max-lg:px-10 md:max-lg:py-5 md:max-lg:text-lg"
-                >
-                  {HERO_TEXT.galleryCta}
-                  <Images className="w-4 h-4 transition-transform md:max-lg:h-5 md:max-lg:w-5 lg:group-hover:scale-110" />
-                </button>
-              </div>
-            </div>
-
-            {isDesktopViewport ? (
-              <div className="relative pb-10 lg:pb-14">
-                <div className="relative z-10 float-animation flex justify-end lg:pr-2">
-                  <button
-                    type="button"
-                    onClick={() => setIsCardInfoOpen(true)}
-                    aria-label={HERO_TEXT.openCardInfoAria}
-                    className="group relative inline-flex w-[116%] max-w-[42rem] justify-center rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800]"
-                  >
-                    <picture className="block w-full">
-                      <source
-                        type="image/avif"
-                        srcSet={HERO_ASSETS.card.avifSrcSet}
-                        sizes="(min-width: 1024px) 54vw, 100vw"
-                      />
-                      <source
-                        type="image/webp"
-                        srcSet={HERO_ASSETS.card.webpSrcSet}
-                        sizes="(min-width: 1024px) 54vw, 100vw"
-                      />
-                      <img
-                        src={HERO_ASSETS.card.png}
-                        alt={HERO_ASSETS.cardAlt}
-                        width={1280}
-                        height={853}
-                        loading="lazy"
-                        decoding="async"
-                        className="h-auto w-full object-contain drop-shadow-[0_18px_48px_rgba(0,0,0,0.55)]"
-                      />
-                    </picture>
-                  </button>
-                </div>
-              </div>
-            ) : null}
+    <section ref={heroRef} onFocusCapture={(event) => {
+      if (!(event.target instanceof HTMLElement && event.target.closest('[data-slide-autoplay]'))) {
+        setIsPaused(true);
+      }
+    }} aria-label="UltraPro: фотографии клуба" className="home-hero relative flex min-h-[100svh] items-center overflow-hidden bg-[#05060a]">
+      <div className="hero-media-layer pointer-events-none absolute inset-0" aria-hidden="true">
+        {HERO_SLIDES.map((slide, index) => (index === 0 || loadedSlides[index - 1]) && (
+          <div key={slide.src} className="hero-slide absolute inset-0" style={{ opacity: index === activeSlide ? 1 : 0 }}>
+            <PublicAssetImage src={slide.src} mobileSrc={slide.mobileSrc} alt="" loading="eager" fetchPriority={index === 0 ? 'high' : 'low'} sizes="(max-aspect-ratio: 1672/941) 178vh, 100vw" showPlaceholder={false} onLoad={() => markSlideLoaded(index)} pictureClassName="block h-full w-full" className="h-full w-full object-cover" style={{ objectPosition: slide.position }} />
           </div>
-
-          <div className="hidden min-h-[5.5rem] items-end justify-center md:max-lg:flex">
-            <button
-              type="button"
-              onClick={handleScrollToSections}
-              aria-label={HERO_TEXT.scrollHintAria}
-              className={cn(
-                'inline-flex items-center justify-center text-white transition-opacity duration-200',
-                isTabletHeroScrollHintVisible ? 'opacity-100' : 'pointer-events-none opacity-0'
-              )}
-            >
-              <ChevronDown className="h-11 w-11 text-white" strokeWidth={1.85} />
+        ))}
+      </div>
+      <div className="hero-overlay-layer pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,10,0.68)_0%,rgba(5,6,10,0.4)_45%,rgba(5,6,10,0.08)_100%)]" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#05060a] to-transparent" />
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-28 pb-40 sm:px-6 md:pt-36 lg:px-8 lg:pt-36 lg:pb-44">
+        <div className="max-w-5xl">
+          <BalancedHeading as="h1" className="text-[clamp(2.75rem,8.5vw,8rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-white">
+            Фитнес-клуб UltraPro
+          </BalancedHeading>
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 md:text-lg">{HERO_TEXT.description}</p>
+          <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-7">
+            <button type="button" onClick={() => onOpenModal({ topic: 'free_trial' })} className="home-action w-full gap-3 px-5 py-3.5 sm:w-auto">
+              {HERO_TEXT.cta}<ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+            </button>
+            <button type="button" onClick={handleScrollToGallery} className="home-secondary-action w-full gap-3 px-5 py-3.5 sm:w-auto">
+              {HERO_TEXT.galleryCta}<ArrowDown className="h-4 w-4" aria-hidden="true" />
+            </button>
+          </div>
+          <p className="mt-3 text-sm text-white/70">Бесплатно, по предварительной записи.</p>
+        </div>
+      </div>
+      <div className="absolute inset-x-0 bottom-24 z-20 sm:bottom-28 lg:bottom-8">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-end gap-x-4 gap-y-2 px-4 sm:px-6 lg:px-8">
+          <div role="group" aria-label="Управление слайд-шоу" className="flex items-center gap-1">
+            <button type="button" onClick={() => selectSlide((activeSlide - 1 + HERO_SLIDES.length) % HERO_SLIDES.length)} disabled={!loadedSlides[(activeSlide - 1 + HERO_SLIDES.length) % HERO_SLIDES.length]} aria-label="Предыдущее фото" className="hero-slide-control"><ChevronLeft className="h-5 w-5" aria-hidden="true" /></button>
+            <div className="hidden sm:flex">
+            {HERO_SLIDES.map((slide, index) => (
+              <button key={slide.src} type="button" onClick={() => selectSlide(index)} disabled={!loadedSlides[index]} aria-label={`Фото ${index + 1}: ${slide.label}`} aria-pressed={index === activeSlide} className="hero-slide-control">
+                <span className={index === activeSlide ? 'h-0.5 w-5 bg-[#F5B800]' : 'h-0.5 w-5 bg-white/40'} />
+              </button>
+            ))}
+            </div>
+            <button type="button" onClick={() => selectSlide((activeSlide + 1) % HERO_SLIDES.length)} disabled={!loadedSlides[(activeSlide + 1) % HERO_SLIDES.length]} aria-label="Следующее фото" className="hero-slide-control"><ChevronRight className="h-5 w-5" aria-hidden="true" /></button>
+            <button type="button" data-slide-autoplay onClick={() => setIsPaused((previous) => !previous)} aria-label={isPaused ? 'Включить автосмену фото' : 'Приостановить автосмену фото'} aria-pressed={!isPaused} className="hero-slide-control">
+              {isPaused ? <Play className="h-4 w-4" aria-hidden="true" /> : <Pause className="h-4 w-4" aria-hidden="true" />}
             </button>
           </div>
         </div>
-      </section>
-
-      {isCardInfoOpen && (
-        <div className="fixed inset-0 z-[105] flex items-center justify-center overflow-y-auto p-4 sm:p-6">
-          <div
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-            onClick={() => setIsCardInfoOpen(false)}
-          />
-
-          <div
-            className="modal-surface relative mx-auto my-auto max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto rounded-[1.75rem] border-white/20 p-6 sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] sm:p-7"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={() => setIsCardInfoOpen(false)}
-              className="absolute top-4 right-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-colors lg:hover:bg-white/20"
-              aria-label="Закрыть информацию о карте"
-            >
-              <X className="h-4 w-4 text-white" />
-            </button>
-
-            <BalancedHeading as="h3" className="pr-10 text-xl font-bold text-white">
-              {HERO_TEXT.cardInfoTitle}
-            </BalancedHeading>
-
-            <div className="mt-2 flex justify-center py-1">
-              <picture className="block w-full max-w-[260px] sm:max-w-[300px]">
-                <source
-                  type="image/avif"
-                  srcSet={HERO_ASSETS.card.avifSrcSet}
-                  sizes="(max-width: 639px) 70vw, 300px"
-                />
-                <source
-                  type="image/webp"
-                  srcSet={HERO_ASSETS.card.webpSrcSet}
-                  sizes="(max-width: 639px) 70vw, 300px"
-                />
-                <img
-                  src={HERO_ASSETS.card.png}
-                  alt={HERO_ASSETS.cardAlt}
-                  width={1280}
-                  height={853}
-                  loading="lazy"
-                  decoding="async"
-
-                  className="h-auto w-full object-contain"
-                />
-              </picture>
-            </div>
-            <p className="text-sm leading-relaxed text-gray-300">{HERO_TEXT.cardInfoDescription}</p>
-            <p className="mt-3 text-sm leading-relaxed text-gray-300">{HERO_TEXT.cardInfoDetails}</p>
-            <p className="mt-4 text-xs text-gray-500">{HERO_TEXT.cardRestoreNote}</p>
-          </div>
-        </div>
-      )}
-    </>
+      </div>
+    </section>
   );
 }

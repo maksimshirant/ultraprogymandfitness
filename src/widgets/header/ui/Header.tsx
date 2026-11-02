@@ -134,9 +134,9 @@ export default function Header({ onOpenModal }: HeaderProps) {
                 href={HEADER_TEXT.phoneHref}
                 aria-label={HEADER_TEXT.callAria}
                 title={HEADER_TEXT.phone}
-                className="btn-primary inline-flex h-9 w-9 items-center justify-center p-0 text-white sm:h-10 sm:w-10 md:max-lg:h-12 md:max-lg:w-12"
+                className="home-text-link inline-flex h-11 w-11 items-center justify-center md:max-lg:h-12 md:max-lg:w-12"
               >
-                <Phone className="h-4 w-4 md:max-lg:h-5 md:max-lg:w-5" />
+                <Phone className="h-5 w-5" strokeWidth={2.5} />
               </a>
               {isDesktopViewport ? (
                 <div>
@@ -144,7 +144,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
 
                     type="button"
                     onClick={() => onOpenModal()}
-                    className="btn-primary px-4 py-2 text-xs text-white xl:px-6 xl:py-3 xl:text-sm"
+                    className="home-text-link min-h-11 py-3 text-sm font-bold"
                   >
                     {HEADER_TEXT.cta}
                   </button>
