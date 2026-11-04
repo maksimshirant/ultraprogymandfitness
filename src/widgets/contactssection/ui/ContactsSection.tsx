@@ -90,7 +90,7 @@ export default function ContactsSection() {
   return (
     <div id="contacts" className="club-page relative overflow-x-clip">
       <header className="club-page-header mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <BalancedHeading as="h1" className="club-page-title max-w-5xl">{CONTACTS_TEXT.title}</BalancedHeading>
+        <BalancedHeading as="h1" className="club-page-title max-w-5xl"><span>{CONTACTS_TEXT.title}</span></BalancedHeading>
         <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/75 md:text-lg">{CONTACTS_TEXT.pageSubtitle}</p>
         <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
           <a href={CONTACTS_TEXT.phoneHref} className="home-action home-mobile-action gap-3 px-5 py-3.5">

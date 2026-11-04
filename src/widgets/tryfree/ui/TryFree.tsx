@@ -19,8 +19,8 @@ export default function TryFree({ onOpenModal }: TryFreeProps) {
     <section id="tryfree" className="deferred-section relative overflow-hidden pb-10 scroll-mt-24 md:pb-14">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid gap-8 border-y border-white/20 py-10 md:py-14 lg:grid-cols-[1.3fr_1fr] lg:items-center lg:gap-12">
-          <div>
-            <BalancedHeading as="h2" className="max-w-2xl text-3xl font-semibold tracking-tight text-white">{TRY_FREE_TEXT.title}</BalancedHeading>
+          <div className="min-w-0">
+            <BalancedHeading as="h2" className="max-w-2xl text-3xl font-semibold tracking-tight text-white"><span>{TRY_FREE_TEXT.title}</span></BalancedHeading>
             <p className="mt-5 max-w-lg text-base leading-relaxed text-white/60">{TRY_FREE_TEXT.subtitle}</p>
             <p className="mt-4 text-sm leading-relaxed text-white/60">Возьмите спортивную одежду, чистую сменную обувь, полотенце и воду.</p>
           </div>

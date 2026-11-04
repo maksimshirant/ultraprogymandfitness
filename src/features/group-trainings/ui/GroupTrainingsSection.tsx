@@ -62,7 +62,7 @@ export default function GroupTrainingsSection({ onOpenModal }: GroupTrainingsPro
         </div>
         <div className="club-page-hero-shade" aria-hidden="true" />
         <div className="club-page-header mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <BalancedHeading as="h1" className="club-page-title max-w-4xl">{GROUP_TRAININGS_TEXT.heroTitle}</BalancedHeading>
+          <BalancedHeading as="h1" className="club-page-title max-w-4xl"><span>{GROUP_TRAININGS_TEXT.heroTitle}</span></BalancedHeading>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/80 md:text-lg">{GROUP_TRAININGS_TEXT.heroSubtitle}</p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
             <button type="button" onClick={scrollToSchedule} className="home-action w-full gap-3 px-5 py-3.5 sm:w-auto">{GROUP_TRAININGS_TEXT.heroPrimaryCta}<ArrowRight className="h-4 w-4" aria-hidden="true" /></button>
@@ -80,7 +80,7 @@ export default function GroupTrainingsSection({ onOpenModal }: GroupTrainingsPro
 
       <section id="group-directions" className="scroll-mt-28 pb-16 md:pb-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <BalancedHeading as="h2" className="border-t border-white/15 pt-7 text-3xl font-semibold tracking-tight text-white md:text-4xl">Направления</BalancedHeading>
+          <BalancedHeading as="h2" className="border-t border-white/15 pt-7 text-3xl font-semibold tracking-tight text-white md:text-4xl"><span>Направления</span></BalancedHeading>
           <div className="mt-10 space-y-12 md:space-y-16">
             {groupDirectionCategories.map((category) => {
               const directions = groupDirections.filter((direction) => direction.category === category.key);
@@ -121,7 +121,7 @@ export default function GroupTrainingsSection({ onOpenModal }: GroupTrainingsPro
       <section className="pb-16 md:pb-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="border-t border-white/15 pt-7">
-            <BalancedHeading as="h2" className="max-w-3xl text-2xl font-semibold tracking-tight text-white md:text-3xl">{GROUP_TRAININGS_TEXT.finalTitle}</BalancedHeading>
+            <BalancedHeading as="h2" className="max-w-3xl text-2xl font-semibold tracking-tight text-white md:text-3xl"><span>{GROUP_TRAININGS_TEXT.finalTitle}</span></BalancedHeading>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/70">{GROUP_TRAININGS_TEXT.finalSubtitle}</p>
             <button type="button" onClick={() => onOpenModal({ topic: 'group', groupRecommendation: true })} className="home-action mt-6 w-full gap-3 px-5 py-3.5 sm:w-auto">{GROUP_TRAININGS_TEXT.finalCta}<ArrowRight className="h-4 w-4" aria-hidden="true" /></button>
           </div>

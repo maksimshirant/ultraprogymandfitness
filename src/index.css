@@ -24,6 +24,8 @@
     --input: 30 8% 15%;
     --ring: 45 100% 48%;
     --radius: 0.75rem;
+    /* Corner radius for the flat action controls across the site. */
+    --control-radius: 4px;
   }
 }
 
@@ -683,11 +685,11 @@
 }
 
 .booking-modal .modal-submit-button {
-  border-radius: 2px !important;
+  border-radius: var(--control-radius) !important;
 }
 
 .booking-modal .btn-primary {
-  border-radius: 2px;
+  border-radius: var(--control-radius);
   border-color: #f5b800;
   background: #f5b800;
   color: #111214 !important;
@@ -753,6 +755,33 @@
   text-transform: none;
 }
 
+/* Match page and section headings to the heavy, condensed hero lettering. */
+.home-editorial h2,
+#flors h2,
+.club-page .club-page-title,
+.club-page h2.heading-balanced,
+#group-schedule h2 {
+  max-width: 100%;
+  overflow: hidden;
+  color: #fff !important;
+  font-size: clamp(2.5rem, 7vw, 5.5rem);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.055em;
+  text-transform: uppercase;
+}
+
+.home-editorial h2 > span,
+#flors h2 > span,
+.club-page .club-page-title > span,
+.club-page h2.heading-balanced > span,
+#group-schedule h2 > span {
+  display: block;
+  width: 142.857%;
+  transform: scaleX(0.7);
+  transform-origin: left;
+}
+
 .home-action,
 .home-secondary-action {
   display: inline-flex;
@@ -760,7 +789,7 @@
   align-items: center;
   justify-content: center;
   border: 1px solid transparent;
-  border-radius: 2px;
+  border-radius: var(--control-radius);
   font-size: 0.75rem;
   font-weight: 800;
   line-height: 1.25;
@@ -833,7 +862,7 @@
     align-items: center;
     justify-content: center;
     gap: 12px;
-    border-radius: 2px;
+    border-radius: var(--control-radius);
     padding: 14px 20px;
     font-size: 0.875rem;
     font-weight: 600;
@@ -853,7 +882,7 @@
 }
 
 body:has(.home-hero) .btn-primary {
-  border-radius: 2px;
+  border-radius: var(--control-radius);
   border-color: #f5b800;
   background: #f5b800;
   color: #111214;
@@ -885,7 +914,7 @@ body:has(.home-hero) .btn-primary:hover {
   min-height: 44px;
   align-items: center;
   justify-content: center;
-  border-radius: 3px;
+  border-radius: var(--control-radius);
   color: white;
 }
 
@@ -963,12 +992,8 @@ body:has(.home-hero) .btn-primary:hover {
   }
 }
 
-.club-page-title {
-  font-size: clamp(2.75rem, 6.5vw, 6rem);
-  font-weight: 600;
-  line-height: 1.02;
-  letter-spacing: -0.04em;
-  color: #fff;
+.club-page .club-page-title {
+  font-size: clamp(3rem, 11vw, 9rem);
 }
 
 .club-page :is(button, summary):focus-visible,

@@ -108,8 +108,8 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,15,0.2),rgba(10,10,15,0.4)_65%,#0a0a0f)]" />
         </div>
         <div className="mx-auto grid max-w-7xl grid-cols-1 px-4 sm:px-6 md:grid-cols-[1fr_auto] md:items-end lg:px-8">
-          <div className="order-1 mb-10 md:mb-12">
-              <BalancedHeading as="h2" className="text-3xl font-semibold tracking-tight text-white md:text-4xl">Групповые тренировки</BalancedHeading>
+          <div className="order-1 mb-10 min-w-0 md:mb-12">
+              <BalancedHeading as="h2" className="text-3xl font-semibold tracking-tight text-white md:text-4xl"><span>Групповые тренировки</span></BalancedHeading>
               <p className="mt-4 max-w-lg text-base leading-relaxed text-white/80">Пилатес, сайкл, единоборства и другие направления.</p>
           </div>
           <div className="order-2 grid gap-8 md:order-3 md:col-span-2 md:grid-cols-2 md:gap-12">
@@ -129,8 +129,8 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
 
       <section id="home-memberships" className="home-editorial relative py-16 md:py-24">
         <div className="mx-auto grid max-w-7xl items-start gap-6 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-x-20 lg:gap-y-4 lg:px-8">
-            <div className="lg:col-start-1 lg:row-start-1">
-              <BalancedHeading as="h2" className="mb-6 text-3xl font-semibold tracking-tight text-white">Абонементы</BalancedHeading>
+            <div className="min-w-0 lg:col-start-1 lg:row-start-1">
+              <BalancedHeading as="h2" className="mb-6 text-3xl font-semibold tracking-tight text-white"><span>Абонементы</span></BalancedHeading>
               <p className="text-base leading-relaxed text-white/70">Доступ к тренажёрному залу, кардио, кроссфит-зоне и сауне.</p>
 
             </div>
@@ -179,7 +179,7 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
           <div className="border-t border-white/15 pt-7">
             <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
               <div>
-                <BalancedHeading as="h2" className="text-3xl font-semibold tracking-tight text-white">Тренеры</BalancedHeading>
+                <BalancedHeading as="h2" className="text-3xl font-semibold tracking-tight text-white"><span>Тренеры</span></BalancedHeading>
                 <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/70">Персональные тренировки с опытными специалистами по силовой подготовке, оздоровительному тренингу и фитнес-диетологии.</p>
               </div>
               <Link to="/trainers" className="home-text-link home-mobile-action inline-flex items-center gap-3 py-2 text-sm font-semibold text-white">Все тренеры<ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>

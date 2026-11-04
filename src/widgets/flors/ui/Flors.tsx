@@ -185,7 +185,7 @@ export default function Flors() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-10 border-t border-white/15 pt-7 md:mb-12">
           <BalancedHeading as="h2" className="text-3xl font-semibold tracking-tight text-white">
-            {FLORS_TEXT.titleAccent}
+            <span>{FLORS_TEXT.titleAccent}</span>
           </BalancedHeading>
           <p className="mt-4 text-sm text-white/60">Два этажа. Выберите зону и рассмотрите её ближе.</p>
         </div>

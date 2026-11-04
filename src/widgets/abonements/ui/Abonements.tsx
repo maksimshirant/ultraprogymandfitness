@@ -32,7 +32,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
     <div className="club-page relative overflow-x-clip">
       <header className="club-page-hero">
         <div className="club-page-header mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <BalancedHeading as="h1" className="club-page-title">{ABONEMENTS_TEXT.heroTitle}</BalancedHeading>
+          <BalancedHeading as="h1" className="club-page-title"><span>{ABONEMENTS_TEXT.heroTitle}</span></BalancedHeading>
         </div>
       </header>
 

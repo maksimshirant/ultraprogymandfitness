@@ -121,7 +121,7 @@ export default function Personal({ onOpenModal }: PersonalProps) {
     <div className="club-page relative overflow-x-clip">
       <header className="club-page-hero">
         <div className="club-page-header mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <BalancedHeading as="h1" className="club-page-title">{PERSONAL_TEXT.heroTitle}</BalancedHeading>
+          <BalancedHeading as="h1" className="club-page-title"><span>{PERSONAL_TEXT.heroTitle}</span></BalancedHeading>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/75 md:text-lg">{PERSONAL_TEXT.heroSubtitle}</p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
             <button type="button" onClick={() => onOpenModal({ topic: 'personal' })} className="home-action w-full gap-3 px-5 py-3.5 sm:w-auto">

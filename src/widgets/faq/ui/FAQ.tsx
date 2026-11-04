@@ -16,7 +16,7 @@ export default function FAQ() {
     <section id="faq" className="deferred-section relative overflow-hidden py-14 md:py-24">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <BalancedHeading as="h2" className="mb-8 text-3xl font-semibold tracking-tight text-white md:mb-12">
-          {FAQ_TEXT.title}
+          <span>{FAQ_TEXT.title}</span>
         </BalancedHeading>
         <AccordionPrimitive.Root
           type="single"

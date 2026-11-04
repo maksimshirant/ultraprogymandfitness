@@ -10,8 +10,11 @@ interface HeroProps {
 
 
 const HERO_TEXT = {
-  description:
-    'Тренажёрный зал, групповые занятия и единоборства в Волжском. Самостоятельные и персональные тренировки.',
+  area: '2 ЭТАЖА / 1800 М²',
+  amenities: [
+    'Кардиозона / Кроссфит / Единоборства',
+    'Сауна / Детская зона / Групповые тренировки',
+  ],
   cta: 'Записаться на пробное занятие',
   galleryCta: 'Посмотреть клуб',
 } as const;
@@ -110,24 +113,34 @@ export default function Hero({ onOpenModal }: HeroProps) {
       </div>
       <div className="hero-overlay-layer pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,10,0.68)_0%,rgba(5,6,10,0.4)_45%,rgba(5,6,10,0.08)_100%)]" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#05060a] to-transparent" />
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-28 pb-40 sm:px-6 md:pt-36 lg:px-8 lg:pt-36 lg:pb-44">
-        <div className="max-w-5xl">
-          <BalancedHeading as="h1" className="text-[clamp(2.75rem,8.5vw,8rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-white">
-            Фитнес-клуб UltraPro
+      <div className="relative z-10 mx-auto flex min-h-[100svh] w-full max-w-7xl flex-col px-4 pt-28 pb-36 sm:px-6 md:block md:min-h-0 md:pt-36 lg:px-8 lg:pt-36 lg:pb-40">
+        <div className="flex w-full flex-1 flex-col md:block">
+          <p className="mb-6 text-[clamp(1rem,4.5vw,1.5rem)] font-black leading-[1.08] tracking-[-0.055em] text-[#fff]">
+            <span className="block w-[142.857%] origin-left scale-x-[0.7] whitespace-nowrap uppercase">Фитнес-клуб UltraPro в Волжском</span>
+          </p>
+          <BalancedHeading as="h1" className="text-[min(14vw,12rem)] font-black leading-[1.08] tracking-[-0.055em] text-[#fff]">
+            <span className="block w-[142.857%] origin-left scale-x-[0.7] whitespace-nowrap uppercase">ТВОЕ ВРЕМЯ<br />СТАТЬ СИЛЬНЕЕ</span>
           </BalancedHeading>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 md:text-lg">{HERO_TEXT.description}</p>
-          <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-7">
+          <div className="mt-6 max-w-3xl text-[#fff]">
+            <p className="text-2xl font-black leading-tight tracking-tight sm:text-3xl">{HERO_TEXT.area}</p>
+            <div className="mt-2 text-sm leading-relaxed sm:text-base">
+              {HERO_TEXT.amenities.map((amenity) => (
+                <p key={amenity}>{amenity}</p>
+              ))}
+            </div>
+          </div>
+          <div className="mt-12 flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-7">
             <button type="button" onClick={() => onOpenModal({ topic: 'free_trial' })} className="home-action w-full gap-3 px-5 py-3.5 sm:w-auto">
-              {HERO_TEXT.cta}<ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+              {HERO_TEXT.cta} *<ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
             </button>
             <button type="button" onClick={handleScrollToGallery} className="home-secondary-action w-full gap-3 px-5 py-3.5 sm:w-auto">
               {HERO_TEXT.galleryCta}<ArrowDown className="h-4 w-4" aria-hidden="true" />
             </button>
           </div>
-          <p className="mt-3 text-sm text-white/70">Бесплатно, по предварительной записи.</p>
+          <p className="mt-3 text-sm text-white/70">*Бесплатно, по предварительной записи.</p>
         </div>
       </div>
-      <div className="absolute inset-x-0 bottom-24 z-20 sm:bottom-28 lg:bottom-8">
+      <div className="absolute inset-x-0 bottom-20 z-20 sm:bottom-24 lg:bottom-8">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-end gap-x-4 gap-y-2 px-4 sm:px-6 lg:px-8">
           <div role="group" aria-label="Управление слайд-шоу" className="flex items-center gap-1">
             <button type="button" onClick={() => selectSlide((activeSlide - 1 + HERO_SLIDES.length) % HERO_SLIDES.length)} disabled={!loadedSlides[(activeSlide - 1 + HERO_SLIDES.length) % HERO_SLIDES.length]} aria-label="Предыдущее фото" className="hero-slide-control"><ChevronLeft className="h-5 w-5" aria-hidden="true" /></button>

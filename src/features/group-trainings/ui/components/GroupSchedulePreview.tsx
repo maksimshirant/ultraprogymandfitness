@@ -12,7 +12,7 @@ export function GroupSchedulePreview({ expandedScheduleDays, toggleScheduleDay }
   return (
     <div className="relative">
       <div className="relative">
-        <h2 className="text-3xl font-semibold tracking-tight text-white md:text-4xl">Расписание занятий</h2>
+        <h2 className="text-3xl font-semibold tracking-tight text-white md:text-4xl"><span>Расписание занятий</span></h2>
         <p className="mt-3 text-sm text-white/65">Выберите день, чтобы посмотреть время занятий и тренеров.</p>
 
         <div className="mt-7 grid grid-cols-[3rem_minmax(0,1fr)] border-y border-white/15 py-3 text-xs font-medium text-white/60 sm:grid-cols-[5rem_minmax(0,1fr)]">
