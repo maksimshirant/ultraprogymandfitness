@@ -133,7 +133,7 @@ export default function Hero({ onOpenModal }: HeroProps) {
             <button type="button" onClick={() => onOpenModal({ topic: 'free_trial' })} className="home-secondary-action home-mobile-action w-full gap-3 px-5 py-3.5 md:w-auto">
               {HERO_TEXT.cta} *
             </button>
-            <button type="button" onClick={handleScrollToGallery} className="home-text-link home-mobile-action w-full gap-3 px-5 py-3.5 md:w-auto">
+            <button type="button" onClick={handleScrollToGallery} className="home-secondary-action home-mobile-action w-full gap-3 px-5 py-3.5 md:w-auto">
               {HERO_TEXT.galleryCta}<ArrowDown className="h-4 w-4" aria-hidden="true" />
             </button>
           </div>
