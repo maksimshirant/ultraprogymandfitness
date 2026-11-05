@@ -1,6 +1,6 @@
 
 import { useMemo, useState } from 'react';
-import { ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowDown, ChevronDown, ChevronUp } from 'lucide-react';
 import PublicAssetImage from '@/components/PublicAssetImage';
 import { trainerCategories, trainers, type TrainerCategory, type TrainerProfile } from '@/content/trainers';
 import { BalancedHeading } from '@/components/typography/BalancedHeading';
@@ -100,8 +100,8 @@ export default function Personal({ onOpenModal }: PersonalProps) {
             <h3 className="text-xl font-semibold leading-tight tracking-tight text-white sm:text-2xl">{trainer.name}</h3>
             <p className="mt-2 text-sm text-white/75">{trainer.experience}</p>
             <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
-              <button type="button" onClick={() => onOpenModal({ topic: 'personal', trainer: trainer.name })} className="home-action gap-2 px-3 py-3">
-                Записаться<ArrowRight className="h-4 w-4" aria-hidden="true" />
+              <button type="button" onClick={() => onOpenModal({ topic: 'personal', trainer: trainer.name })} className="home-secondary-action gap-2 px-3 py-3">
+                Запись
               </button>
               <button type="button" onClick={() => setExpandedTrainerId((prev) => prev === trainer.id ? null : trainer.id)}
                 aria-expanded={isExpanded} aria-controls={`trainer-details-${trainer.id}`}
@@ -124,11 +124,11 @@ export default function Personal({ onOpenModal }: PersonalProps) {
           <BalancedHeading as="h1" className="club-page-title"><span>{PERSONAL_TEXT.heroTitle}</span></BalancedHeading>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/75 md:text-lg">{PERSONAL_TEXT.heroSubtitle}</p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
-            <button type="button" onClick={() => onOpenModal({ topic: 'personal' })} className="home-action w-full gap-3 px-5 py-3.5 sm:w-auto">
-              Подобрать тренера<ArrowRight className="h-4 w-4" aria-hidden="true" />
+            <button type="button" onClick={() => onOpenModal({ topic: 'personal' })} className="home-secondary-action w-full gap-3 px-5 py-3.5 sm:w-auto">
+              Запись
             </button>
-            <button type="button" onClick={scrollToTrainers} className="home-secondary-action w-full gap-3 px-5 py-3.5 sm:w-auto">
-              {PERSONAL_TEXT.heroSecondaryCta}<ArrowRight className="h-4 w-4" aria-hidden="true" />
+            <button type="button" onClick={scrollToTrainers} className="home-text-link home-mobile-action w-full gap-3 px-5 py-3.5 sm:w-auto">
+              {PERSONAL_TEXT.heroSecondaryCta}<ArrowDown className="h-4 w-4" aria-hidden="true" />
             </button>
           </div>
           <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/60">* Запись на индивидуальную тренировку необходимо производить заранее. Индивидуальные тренировки оплачиваются отдельно.</p>

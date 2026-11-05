@@ -26,6 +26,13 @@
     --radius: 0.75rem;
     /* Corner radius for the flat action controls across the site. */
     --control-radius: 4px;
+    --control-height: 3rem;
+    --control-font-size: 0.875rem;
+    --control-font-weight: 600;
+    --control-line-height: 1.25;
+    --control-gap: 0.75rem;
+    --control-padding-x: 1.25rem;
+    --control-padding-y: 0.875rem;
   }
 }
 
@@ -58,53 +65,6 @@
   .gradient-text-accent {
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(135deg, #F5B800 0%, #D89B00 100%);
-  }
-  
-  .btn-primary {
-    @apply rounded-full border px-6 py-3 text-sm font-semibold duration-200;
-    border-color: rgba(245, 184, 0, 0.35);
-    background: linear-gradient(135deg, #FFD65A 0%, #F5B800 52%, #D79A00 100%);
-    box-shadow: 0 14px 30px rgba(245, 184, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.38);
-    transition-property: box-shadow, border-color, filter, opacity;
-    transition-timing-function: ease-out;
-  }
-
-  @media (min-width: 1024px) and (hover: hover) and (pointer: fine){
-  
-  .btn-primary:hover {
-    filter: brightness(1.05);
-    transform: none;
-    box-shadow: 0 18px 38px rgba(245, 184, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.42);
-  }
-  }
-
-  .btn-primary:active {
-    transform: scale(0.98);
-  }
-  
-  .btn-white {
-    @apply rounded-full border px-6 py-3 text-sm font-semibold text-white duration-200;
-    border-color: rgba(255, 255, 255, 0.12);
-    background: rgba(255, 255, 255, 0.055);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    transition-property: border-color, background-color, color, opacity;
-    transition-timing-function: ease-out;
-  }
-
-  @media (min-width: 1024px) and (hover: hover) and (pointer: fine){
-  
-  .btn-white:hover {
-    color: #F5B800;
-    transform: none;
-    border-color: rgba(245, 184, 0, 0.3);
-    background: rgba(255, 255, 255, 0.08);
-  }
-  }
-
-  .btn-white:active {
-    transform: scale(0.98);
   }
   
   .glass-card {
@@ -141,7 +101,7 @@
   }
 
   .modal-surface .modal-submit-button {
-    border-radius: 9999px !important;
+    border-radius: var(--control-radius) !important;
   }
 
   .deferred-section {
@@ -382,11 +342,6 @@
     max-width: 68rem;
   }
 
-  .btn-primary,
-  .btn-white {
-    font-size: 1rem;
-    padding: 0.95rem 2.2rem;
-  }
 }
 
 .document-modal-scroll {
@@ -652,7 +607,7 @@
 }
 
 .booking-modal .booking-option {
-  min-height: 52px;
+  min-height: var(--control-height);
   width: 100%;
   border: 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.14);
@@ -660,6 +615,18 @@
   background: transparent;
   color: #f3f4f6;
   box-shadow: none;
+  padding-block: var(--control-padding-y);
+  font-family: inherit;
+  font-size: var(--control-font-size);
+  font-weight: var(--control-font-weight);
+  line-height: var(--control-line-height);
+}
+
+.booking-modal .booking-option h3,
+.booking-modal .booking-option > p {
+  font-size: var(--control-font-size);
+  font-weight: var(--control-font-weight);
+  line-height: var(--control-line-height);
 }
 
 .booking-modal .booking-option-active {
@@ -682,17 +649,6 @@
 .booking-modal button:focus-visible {
   outline: 2px solid #f5b800;
   outline-offset: -2px;
-}
-
-.booking-modal .modal-submit-button {
-  border-radius: var(--control-radius) !important;
-}
-
-.booking-modal .btn-primary {
-  border-radius: var(--control-radius);
-  border-color: #f5b800;
-  background: #f5b800;
-  color: #111214 !important;
 }
 
 /* Keep mobile dialogs flush with the viewport and scroll only their content. */
@@ -782,38 +738,57 @@
   transform-origin: left;
 }
 
+/* All action variants share typography and dimensions on every page and viewport. */
 .home-action,
-.home-secondary-action {
+.home-secondary-action,
+.home-mobile-action,
+.btn-primary,
+.btn-white {
   display: inline-flex;
-  min-height: 44px;
+  min-height: var(--control-height);
+  max-width: 100%;
   align-items: center;
   justify-content: center;
+  gap: var(--control-gap);
   border: 1px solid transparent;
   border-radius: var(--control-radius);
-  font-size: 0.75rem;
-  font-weight: 800;
-  line-height: 1.25;
-  letter-spacing: 0.035em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  transition: background-color 180ms ease, border-color 180ms ease;
+  padding: var(--control-padding-y) var(--control-padding-x);
+  font-family: inherit;
+  font-size: var(--control-font-size);
+  font-weight: var(--control-font-weight);
+  line-height: var(--control-line-height);
+  letter-spacing: normal;
+  text-align: center;
+  text-transform: none;
+  text-decoration: none;
+  white-space: normal;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, opacity 180ms ease;
 }
 
-.home-action {
+.home-action,
+.btn-primary,
+.booking-modal .btn-primary {
   border-color: #f5b800;
   background: #f5b800;
-  color: #111214;
+  color: #111214 !important;
 }
 
-.home-secondary-action {
-  border-color: rgba(255, 255, 255, 0.5);
+.home-secondary-action,
+.btn-white,
+.home-mobile-action:not(.home-action):not(.btn-primary):not(.home-text-link) {
+  border-color: rgba(255, 255, 255, 0.4);
   background: rgba(5, 6, 10, 0.3);
-  color: #fff;
+  color: #f3f4f6 !important;
 }
 
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine){
 
-.home-secondary-action:hover {
+.home-secondary-action:hover,
+.btn-white:hover,
+.home-mobile-action:not(.home-action):not(.btn-primary):not(.home-text-link):hover {
   border-color: #fff;
   background: rgba(255, 255, 255, 0.1);
 }
@@ -821,19 +796,61 @@
 
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine){
 
-.home-action:hover {
+.home-action:hover,
+.btn-primary:hover {
   border-color: #ffd247;
   background: #ffd247;
 }
 }
 
-.home-action:active {
+.home-action:active,
+.btn-primary:active {
   background: #dfa900;
 }
 
 .home-text-link {
+  min-height: var(--control-height);
+  font-family: inherit;
+  font-weight: var(--control-font-weight);
+  line-height: var(--control-line-height);
+  letter-spacing: normal;
+  text-transform: none;
   text-underline-offset: 5px;
   transition: color 180ms ease;
+}
+
+/* Phone numbers keep their editorial size; action labels use the shared size. */
+.home-text-link:not([href^="tel:"]),
+nav .home-text-link[href^="tel:"] {
+  font-size: var(--control-font-size);
+}
+
+.home-text-link.home-mobile-action {
+  border: 0;
+  padding-inline: 0;
+  background: transparent;
+}
+
+.home-action svg,
+.home-secondary-action svg,
+.home-mobile-action svg,
+.home-text-link svg,
+.btn-primary svg,
+.btn-white svg {
+  flex-shrink: 0;
+}
+
+.home-action:disabled,
+.home-secondary-action:disabled,
+.home-text-link:disabled,
+.home-mobile-action:disabled,
+.btn-primary:disabled,
+.btn-white:disabled,
+.home-action[aria-disabled="true"],
+.home-secondary-action[aria-disabled="true"] {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.6;
 }
 
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine){
@@ -847,54 +864,20 @@
 .home-action:focus-visible,
 .home-secondary-action:focus-visible,
 .home-text-link:focus-visible,
+.btn-primary:focus-visible,
+.btn-white:focus-visible,
 .home-photo-link:focus-visible,
 #flors button:focus-visible {
   outline: 2px solid #f5b800;
   outline-offset: 5px;
 }
 
-/* Give the main mobile section actions the same touch target and visual weight. */
+/* Mobile actions fill their existing layout cell, including paired direction buttons. */
 @media (max-width: 767px) {
   .home-mobile-action {
     display: flex;
     width: 100%;
-    min-height: 48px;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    border-radius: var(--control-radius);
-    padding: 14px 20px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    line-height: 1.25;
-    text-align: center;
   }
-
-  .home-mobile-action:not(.home-action) {
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    background: rgba(5, 6, 10, 0.3);
-    color: #f3f4f6 !important;
-  }
-
-  .home-mobile-action svg {
-    flex-shrink: 0;
-  }
-}
-
-body:has(.home-hero) .btn-primary {
-  border-radius: var(--control-radius);
-  border-color: #f5b800;
-  background: #f5b800;
-  color: #111214;
-  box-shadow: none;
-}
-
-@media (min-width: 1024px) and (hover: hover) and (pointer: fine){
-
-body:has(.home-hero) .btn-primary:hover {
-  background: #ffd247;
-  box-shadow: none;
-}
 }
 
 #flors button {
@@ -910,12 +893,17 @@ body:has(.home-hero) .btn-primary:hover {
 
 .hero-slide-control {
   display: inline-flex;
-  min-width: 44px;
-  min-height: 44px;
+  width: var(--control-height);
+  height: var(--control-height);
+  min-width: var(--control-height);
+  min-height: var(--control-height);
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
+  border: 0;
   border-radius: var(--control-radius);
-  color: white;
+  background: transparent;
+  color: #f3f4f6;
 }
 
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine){
@@ -930,7 +918,11 @@ body:has(.home-hero) .btn-primary:hover {
   outline-offset: 2px;
 }
 
-.hero-slide-control:disabled {
+#flors .hero-slide-control {
+  background: rgba(5, 6, 10, 0.65);
+}
+
+.home-hero .hero-slide-control:disabled {
   opacity: 0.35;
   cursor: wait;
 }
@@ -938,6 +930,9 @@ body:has(.home-hero) .btn-primary:hover {
 @media (prefers-reduced-motion: reduce) {
   .home-action,
   .home-secondary-action,
+  .home-mobile-action,
+  .btn-primary,
+  .btn-white,
   .home-text-link,
   .hero-slide,
   .home-editorial img {

@@ -279,11 +279,11 @@ function App() {
           <div className="glass-card modal-surface mx-auto flex w-full max-w-5xl flex-col gap-3 rounded-[1.75rem] border-white/20 px-4 py-3.5 sm:px-6 sm:py-4 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
             <p className="max-w-3xl text-xs leading-relaxed text-gray-300 sm:text-sm">
              Cookie помогают сайту поддерживать хорошую форму и становиться удобнее для вас.{' '}
-                <span className="inline-block whitespace-nowrap">
+                <span className="inline-block">
                   <button
                     type="button"
                     onClick={() => setIsCookiePolicyOpen(true)}
-                    className="text-[#F5B800] underline decoration-[#F5B800]/45 underline-offset-4 transition-colors lg:hover:text-[#FFD65A]"
+                    className="home-text-link text-[#F5B800] underline decoration-[#F5B800]/45 underline-offset-4 lg:hover:text-[#FFD65A]"
                   >
                     Политика обработки персональных данных
                   </button>

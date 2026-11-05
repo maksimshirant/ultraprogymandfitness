@@ -134,7 +134,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
                 href={HEADER_TEXT.phoneHref}
                 aria-label={HEADER_TEXT.callAria}
                 title={HEADER_TEXT.phone}
-                className="home-text-link inline-flex h-11 w-11 items-center justify-center md:max-lg:h-12 md:max-lg:w-12"
+                className="hero-slide-control"
               >
                 <Phone className="h-5 w-5" strokeWidth={2.5} />
               </a>

@@ -210,7 +210,7 @@ export default function Flors() {
                         aria-label={FLORS_TEXT.chooseZoneAria + ' ' + zone.title}
                         aria-pressed={isActive}
                         className={cn(
-                          'min-h-11 border-b-2 px-3 py-3 text-left transition-colors duration-200',
+                          'home-text-link border-b-2 px-3 py-3 text-left transition-colors duration-200',
                           isActive
                             ? 'border-[#F5B800] text-white'
                             : 'border-transparent text-gray-400 hover:border-white/30 hover:text-white'
@@ -272,7 +272,7 @@ export default function Flors() {
                       setViewerSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
                     }}
                     disabled={totalSlides < 2}
-                    className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-[0.9rem] border border-white/15 bg-black/45 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,background-color,border-color,opacity] duration-200 ease-out hover:bg-black/62 active:scale-[0.96] disabled:pointer-events-none disabled:opacity-0 motion-reduce:transition-colors"
+                    className="hero-slide-control absolute left-3 top-1/2 -translate-y-1/2 disabled:pointer-events-none disabled:opacity-0"
                     aria-label={'Предыдущее фото зоны ' + activeZone.title}
                   >
                     <ChevronLeft className="h-5 w-5" />
@@ -285,7 +285,7 @@ export default function Flors() {
                       setViewerSlide((prev) => (prev + 1) % totalSlides);
                     }}
                     disabled={totalSlides < 2}
-                    className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-[0.9rem] border border-white/15 bg-black/45 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,background-color,border-color,opacity] duration-200 ease-out hover:bg-black/62 active:scale-[0.96] disabled:pointer-events-none disabled:opacity-0 motion-reduce:transition-colors"
+                    className="hero-slide-control absolute right-3 top-1/2 -translate-y-1/2 disabled:pointer-events-none disabled:opacity-0"
                     aria-label={'Следующее фото зоны ' + activeZone.title}
                   >
                     <ChevronRight className="h-5 w-5" />
@@ -343,7 +343,7 @@ export default function Flors() {
           <button
             type="button"
             onClick={() => setIsViewerOpen(false)}
-            className="absolute right-4 top-4 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-white/20 sm:right-6 sm:top-6"
+            className="hero-slide-control absolute right-4 top-4 z-20 sm:right-6 sm:top-6"
             aria-label={FLORS_TEXT.closeViewerAria}
           >
             <X className="h-6 w-6 text-white" />
@@ -370,7 +370,7 @@ export default function Flors() {
                 setViewerSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
               }}
               disabled={totalSlides < 2}
-              className="absolute left-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white transition hover:bg-black/80 disabled:cursor-not-allowed disabled:opacity-40 sm:left-3 sm:h-12 sm:w-12"
+              className="hero-slide-control absolute left-2 top-1/2 -translate-y-1/2 disabled:cursor-not-allowed disabled:opacity-40 sm:left-3"
               aria-label={`Предыдущее фото в просмотре зоны ${activeZone.title}`}
             >
               <ChevronLeft className="h-5 w-5" />
@@ -383,7 +383,7 @@ export default function Flors() {
                 setViewerSlide((prev) => (prev + 1) % totalSlides);
               }}
               disabled={totalSlides < 2}
-              className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white transition hover:bg-black/80 disabled:cursor-not-allowed disabled:opacity-40 sm:right-3 sm:h-12 sm:w-12"
+              className="hero-slide-control absolute right-2 top-1/2 -translate-y-1/2 disabled:cursor-not-allowed disabled:opacity-40 sm:right-3"
               aria-label={`Следующее фото в просмотре зоны ${activeZone.title}`}
             >
               <ChevronRight className="h-5 w-5" />

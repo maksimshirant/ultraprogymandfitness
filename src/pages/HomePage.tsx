@@ -29,7 +29,7 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
   const lowerSectionsAnchorRef = useRef<HTMLDivElement>(null);
 
 
-  const groupTrainingsBackground = `${import.meta.env.BASE_URL}sections/group-studio-background.png`;
+  const groupTrainingsBackground = `${import.meta.env.BASE_URL}sections/hero-group-studio-natural.png`;
   const clubCardImage = `${import.meta.env.BASE_URL}mainhero/card`;
   const featuredDirections = groupDirections.filter((direction) => ['pilates', 'cycle'].includes(direction.key));
   const featuredTrainers = trainers.filter((trainer) => trainer.id === 1 || trainer.id === 18);
@@ -104,7 +104,7 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
       <Hero onOpenModal={onOpenModal} />
       <section id="home-previews" className="home-editorial relative isolate overflow-hidden bg-[#101114] py-16 md:py-24">
         <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-full" aria-hidden="true">
-          <PublicAssetImage src={groupTrainingsBackground} mobileSrc={`${import.meta.env.BASE_URL}sections/group-studio-background-mobile.png`} alt="" loading="lazy" variantSuffix="preview" sizes="100vw" showPlaceholder={false} pictureClassName="block h-full w-full" className="h-full w-full object-cover object-center md:object-right opacity-75" />
+          <PublicAssetImage src={groupTrainingsBackground} alt="" loading="lazy" sizes="(max-width: 767px) 1200px, 100vw" showPlaceholder={false} pictureClassName="block h-full w-full" className="h-full w-full object-cover object-center opacity-75" />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,15,0.2),rgba(10,10,15,0.4)_65%,#0a0a0f)]" />
         </div>
         <div className="mx-auto grid max-w-7xl grid-cols-1 px-4 sm:px-6 md:grid-cols-[1fr_auto] md:items-end lg:px-8">
@@ -121,36 +121,19 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
               </article>
             ))}
           </div>
-          <Link to="/schedule#group-schedule" className="home-action home-mobile-action order-3 mt-8 gap-3 justify-self-start px-5 py-3.5 md:order-4 md:col-span-2">Расписание занятий<ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" /></Link>
+          <Link to="/schedule#group-schedule" className="home-secondary-action home-mobile-action order-3 mt-8 gap-3 justify-self-start px-5 py-3.5 md:order-4 md:col-span-2">Расписание занятий</Link>
           <Link to="/schedule#group-directions" className="home-text-link home-mobile-action order-4 mt-3 inline-flex min-h-11 items-center gap-3 justify-self-start text-sm font-semibold text-white md:order-2 md:mb-12 md:mt-0 md:justify-self-end">Все направления<ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
           <p className="order-5 mt-4 text-sm leading-relaxed text-white/60 md:col-span-2">* Групповые занятия оплачиваются отдельно.</p>
         </div>
       </section>
 
       <section id="home-memberships" className="home-editorial relative py-16 md:py-24">
-        <div className="mx-auto grid max-w-7xl items-start gap-6 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-x-20 lg:gap-y-4 lg:px-8">
-            <div className="min-w-0 lg:col-start-1 lg:row-start-1">
+        <div className="mx-auto grid max-w-7xl items-start gap-6 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-x-20 lg:px-8">
+            <div className="min-w-0">
               <BalancedHeading as="h2" className="mb-6 text-3xl font-semibold tracking-tight text-white"><span>Абонементы</span></BalancedHeading>
               <p className="text-base leading-relaxed text-white/70">Доступ к тренажёрному залу, кардио, кроссфит-зоне и сауне.</p>
 
-            </div>
-            <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
-              <table className="w-full text-left text-sm text-white">
-                <caption className="sr-only">Стоимость абонементов UltraPro</caption>
-                <thead><tr className="border-b border-white/20 text-white/60"><th scope="col" className="pb-3 pr-4 font-normal">Срок</th><th scope="col" className="pb-3 pr-4 font-normal">Стоимость</th><th scope="col"><span className="sr-only">Оформление</span></th></tr></thead>
-                <tbody>
-                  {previewMemberships.map((membership) => (
-                    <tr key={membership.id} className="border-b border-white/15">
-                      <th scope="row" className="py-4 pr-4 font-medium">{membership.title}</th>
-                      <td className="py-4 pr-4 whitespace-nowrap">{membership.price}</td>
-                      <td className="py-2 text-right"><button type="button" onClick={() => onOpenModal({ topic: membership.topicValue, membershipId: membership.id })} className="home-text-link min-h-11 font-semibold">Выбрать</button></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <Link to="/memberships" className="home-text-link home-mobile-action mt-5 inline-flex min-h-11 items-center gap-3 text-sm font-semibold text-white">Все абонементы и условия<ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
-            </div>
-              <AccordionPrimitive.Root type="single" collapsible className="text-sm leading-relaxed text-white/70 lg:col-start-1 lg:row-start-2">
+              <AccordionPrimitive.Root type="single" collapsible className="mt-4 text-sm leading-relaxed text-white/70">
                 <AccordionPrimitive.Item value="club-card">
                   <AccordionPrimitive.Header>
                     <AccordionPrimitive.Trigger className="home-text-link home-mobile-action group inline-flex min-h-11 items-center gap-3 py-2 text-left text-sm font-normal">
@@ -171,6 +154,23 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
                   </AccordionPrimitive.Content>
                 </AccordionPrimitive.Item>
               </AccordionPrimitive.Root>
+            </div>
+            <div>
+              <table className="w-full text-left text-sm text-white">
+                <caption className="sr-only">Стоимость абонементов UltraPro</caption>
+                <thead><tr className="border-b border-white/20 text-white/60"><th scope="col" className="pb-3 pr-4 font-normal">Срок</th><th scope="col" className="pb-3 pr-4 font-normal">Стоимость</th><th scope="col"><span className="sr-only">Оформление</span></th></tr></thead>
+                <tbody>
+                  {previewMemberships.map((membership) => (
+                    <tr key={membership.id} className="border-b border-white/15">
+                      <th scope="row" className="py-4 pr-4 font-medium">{membership.title}</th>
+                      <td className="py-4 pr-4 whitespace-nowrap">{membership.price}</td>
+                      <td className="py-2 text-right"><button type="button" onClick={() => onOpenModal({ topic: membership.topicValue, membershipId: membership.id })} className="home-text-link min-h-11 font-semibold">Приобрести</button></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <Link to="/memberships" className="home-text-link home-mobile-action mt-5 inline-flex min-h-11 items-center gap-3 text-sm font-semibold text-white">Все абонементы и условия<ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
+            </div>
         </div>
       </section>
 
@@ -197,7 +197,7 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
                     <p className="mt-2 text-sm text-white/70">{trainer.role ?? 'Персональный тренер'}</p>
                     <p className="mt-3 text-sm leading-relaxed text-white/70">{trainer.summary}</p>
                     <p className="mt-3 text-sm text-white/60">{trainer.experience}</p>
-                    <button type="button" onClick={() => onOpenModal({ topic: 'personal', trainer: trainer.name })} className="home-text-link mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white">Записаться<ArrowRight className="h-4 w-4" aria-hidden="true" /></button>
+                    <button type="button" onClick={() => onOpenModal({ topic: 'personal', trainer: trainer.name })} className="home-text-link mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white">Запись</button>
                   </div>
                 </article>
               ))}

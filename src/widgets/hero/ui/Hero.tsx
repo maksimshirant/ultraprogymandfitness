@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDown, ArrowRight, ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
+import { ArrowDown, ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import { BalancedHeading } from '@/components/typography/BalancedHeading';
 import PublicAssetImage from '@/components/PublicAssetImage';
 import type { OpenModalHandler } from '@/types/modal';
@@ -129,11 +129,11 @@ export default function Hero({ onOpenModal }: HeroProps) {
               ))}
             </div>
           </div>
-          <div className="mt-12 flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-7">
-            <button type="button" onClick={() => onOpenModal({ topic: 'free_trial' })} className="home-action w-full gap-3 px-5 py-3.5 sm:w-auto">
-              {HERO_TEXT.cta} *<ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+          <div className="mt-12 flex flex-col items-start gap-3 md:flex-row md:flex-wrap md:items-center md:gap-7">
+            <button type="button" onClick={() => onOpenModal({ topic: 'free_trial' })} className="home-secondary-action home-mobile-action w-full gap-3 px-5 py-3.5 md:w-auto">
+              {HERO_TEXT.cta} *
             </button>
-            <button type="button" onClick={handleScrollToGallery} className="home-secondary-action w-full gap-3 px-5 py-3.5 sm:w-auto">
+            <button type="button" onClick={handleScrollToGallery} className="home-text-link home-mobile-action w-full gap-3 px-5 py-3.5 md:w-auto">
               {HERO_TEXT.galleryCta}<ArrowDown className="h-4 w-4" aria-hidden="true" />
             </button>
           </div>

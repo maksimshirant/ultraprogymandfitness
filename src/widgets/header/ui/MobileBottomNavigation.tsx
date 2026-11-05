@@ -35,7 +35,7 @@ export function MobileBottomNavigation({ onHomeNavigation, isVisible = true }: M
             onClick={to === '/' ? onHomeNavigation : undefined}
             className={({ isActive }) =>
               cn(
-                'relative flex min-h-11 items-center justify-center rounded-[1.25rem] p-1 text-gray-300 transition-colors md:min-h-12',
+                'relative flex min-h-12 items-center justify-center rounded-[1.25rem] p-1 text-gray-300 transition-colors',
                 isActive
                   ? 'bg-white/[0.16] text-[#F5B800] shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]'
                   : 'text-gray-300'

@@ -1,4 +1,4 @@
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, Phone } from 'lucide-react';
 import { BalancedHeading } from '@/components/typography/BalancedHeading';
 
 const CONTACTS_TEXT = {
@@ -93,11 +93,11 @@ export default function ContactsSection() {
         <BalancedHeading as="h1" className="club-page-title max-w-5xl"><span>{CONTACTS_TEXT.title}</span></BalancedHeading>
         <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/75 md:text-lg">{CONTACTS_TEXT.pageSubtitle}</p>
         <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
-          <a href={CONTACTS_TEXT.phoneHref} className="home-action home-mobile-action gap-3 px-5 py-3.5">
-            Позвонить в клуб<ArrowRight className="h-4 w-4" aria-hidden="true" />
+          <a href={CONTACTS_TEXT.phoneHref} className="home-secondary-action home-mobile-action gap-3 px-5 py-3.5">
+            Позвонить в клуб<Phone className="h-4 w-4" aria-hidden="true" />
           </a>
           <a href="#club-reviews" className="home-secondary-action home-mobile-action gap-3 px-5 py-3.5">
-            Отзывы гостей<ArrowRight className="h-4 w-4" aria-hidden="true" />
+            Отзывы гостей<ArrowDown className="h-4 w-4" aria-hidden="true" />
           </a>
         </div>
       </header>

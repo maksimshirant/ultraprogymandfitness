@@ -107,14 +107,14 @@ export default function Footer() {
               <button
                 type="button"
                 onClick={() => setActiveDocument('privacy')}
-                className="text-sm text-gray-400 transition-colors lg:hover:text-white"
+                className="home-text-link text-gray-400 lg:hover:text-white"
               >
                 {FOOTER_TEXT.policyButton}
               </button>
               <button
                 type="button"
                 onClick={() => setActiveDocument('consent')}
-                className="text-sm text-gray-400 transition-colors lg:hover:text-white"
+                className="home-text-link text-gray-400 lg:hover:text-white"
               >
                 {FOOTER_TEXT.consentButton}
               </button>

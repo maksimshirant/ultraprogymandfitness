@@ -1,4 +1,4 @@
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { memberships } from '@/content/memberships';
 import { BalancedHeading } from '@/components/typography/BalancedHeading';
@@ -47,8 +47,8 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
                       <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/65">{abonement.note}</p>
                     </div>
                     <p className="whitespace-nowrap text-xl font-semibold tabular-nums tracking-tight text-white md:text-3xl">{abonement.price}</p>
-                    <button type="button" onClick={() => onOpenModal({ topic: abonement.topicValue, membershipId: abonement.id })} className="home-action home-mobile-action col-span-2 w-full gap-3 px-5 py-3 md:col-span-1 md:w-auto">
-                      Выбрать<ArrowRight className="h-4 w-4" aria-hidden="true" />
+                    <button type="button" onClick={() => onOpenModal({ topic: abonement.topicValue, membershipId: abonement.id })} className="home-secondary-action home-mobile-action col-span-2 w-full gap-3 px-5 py-3 md:col-span-1 md:w-auto">
+                      Приобрести
                     </button>
                   </div>
                   {abonement.modes.length > 0 ? (
@@ -65,8 +65,8 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
               ))}
           </div>
           <p className="mt-5 text-sm leading-relaxed text-white/65">* Студентам и людям серебряного возраста — скидка 15%.</p>
-          <button type="button" onClick={() => onOpenModal({ topic: 'membership' })} className="home-action mt-7 w-full gap-3 px-5 py-3.5 sm:w-auto">
-            Помочь с выбором<ArrowRight className="h-4 w-4" aria-hidden="true" />
+          <button type="button" onClick={() => onOpenModal({ topic: 'membership' })} className="home-secondary-action mt-7 w-full gap-3 px-5 py-3.5 sm:w-auto">
+            Помочь с выбором
           </button>
         </div>
       </section>
@@ -76,7 +76,7 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
           <AccordionPrimitive.Root type="single" collapsible>
             <AccordionPrimitive.Item value="club-card">
               <AccordionPrimitive.Header>
-                <AccordionPrimitive.Trigger className="home-text-link group flex min-h-16 w-full items-center justify-between gap-5 py-5 text-left text-lg font-semibold text-white md:text-2xl">
+                <AccordionPrimitive.Trigger className="home-text-link group flex min-h-16 w-full items-center justify-between gap-3 py-5 text-left text-lg font-semibold text-white md:justify-start md:text-2xl">
                   Информация о клубной карте
                   <ChevronDown className="h-5 w-5 shrink-0 transition-transform duration-300 group-data-[state=open]:rotate-180 motion-reduce:transition-none" aria-hidden="true" />
                 </AccordionPrimitive.Trigger>

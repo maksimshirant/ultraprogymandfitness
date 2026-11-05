@@ -56,7 +56,7 @@ export function ContactStep({
           <button
             type="button"
             onClick={onChangeSelection}
-            className="shrink-0 self-center text-sm font-medium text-[#F5B800] transition-colors lg:hover:text-[#FFD351]"
+            className="home-text-link shrink-0 self-center text-[#F5B800] lg:hover:text-[#FFD351]"
           >
             {MODAL_TEXT.changeSelection}
           </button>
@@ -133,11 +133,11 @@ export function ContactStep({
           />
           <span>
             {MODAL_TEXT.consentPrefix}{' '}
-            <button type="button" onClick={onOpenConsent} className="text-white underline underline-offset-4 transition-colors lg:hover:text-gray-200">
+            <button type="button" onClick={onOpenConsent} className="home-text-link text-white underline underline-offset-4 lg:hover:text-gray-200">
               {MODAL_TEXT.consentLink}
             </button>{' '}
             {MODAL_TEXT.consentMiddle}{' '}
-            <button type="button" onClick={onOpenPrivacy} className="text-white underline underline-offset-4 transition-colors lg:hover:text-gray-200">
+            <button type="button" onClick={onOpenPrivacy} className="home-text-link text-white underline underline-offset-4 lg:hover:text-gray-200">
               {MODAL_TEXT.privacyLink}
             </button>
             .
@@ -150,7 +150,7 @@ export function ContactStep({
           </p>
         ) : null}
 
-        <button type="submit" disabled={isSubmitting} aria-live="polite" className="modal-submit-button home-action w-full px-6 py-3.5 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">
+        <button type="submit" disabled={isSubmitting} aria-live="polite" className="modal-submit-button home-text-link inline-flex w-full items-center justify-center border-0 bg-transparent px-5 py-3.5 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">
           {isSubmitting ? (
             <span className="inline-flex items-center justify-center gap-2">
               {MODAL_TEXT.submitLoading}

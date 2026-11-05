@@ -1,4 +1,3 @@
-import { ArrowRight } from 'lucide-react';
 import { BalancedHeading } from '@/components/typography/BalancedHeading';
 import type { OpenModalHandler } from '@/types/modal';
 
@@ -27,9 +26,9 @@ export default function TryFree({ onOpenModal }: TryFreeProps) {
           <button
             type="button"
             onClick={() => onOpenModal({ topic: 'free_trial' })}
-            className="home-action w-full gap-3 px-5 py-3.5 sm:w-auto lg:justify-self-end"
+            className="home-secondary-action w-full gap-3 px-5 py-3.5 sm:w-auto lg:justify-self-end"
           >
-            {TRY_FREE_TEXT.cta}<ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+            {TRY_FREE_TEXT.cta}
           </button>
         </div>
       </div>

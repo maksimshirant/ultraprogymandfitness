@@ -55,7 +55,7 @@ export function DesktopScrollNavigation({
       <span className="mx-1 h-10 w-px bg-white/15" aria-hidden="true" />
       <a
         href="tel:+78443323323"
-        className="inline-flex h-11 items-center gap-2 rounded-[1.1rem] px-3 text-xs font-semibold text-white transition-colors hover:bg-white/[0.1] xl:px-4"
+        className="home-text-link inline-flex items-center gap-2 px-3 text-white xl:px-4"
       >
         <Phone className="h-4 w-4 text-[#F5B800]" />
         Позвонить
@@ -63,7 +63,7 @@ export function DesktopScrollNavigation({
       <button
         type="button"
         onClick={() => onOpenModal()}
-        className="inline-flex h-11 items-center gap-2 rounded-[1.1rem] px-3 text-xs font-semibold text-white transition-colors hover:bg-white/[0.1] xl:px-4"
+        className="home-text-link inline-flex items-center gap-2 px-3 text-white xl:px-4"
       >
         <CalendarPlus className="h-4 w-4 text-[#F5B800]" />
         Записаться

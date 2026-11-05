@@ -130,7 +130,7 @@ export default function Zones() {
             <div className="flex items-center justify-center gap-4 mt-4">
               <button
                 onClick={prevZone}
-                className="p-2 rounded-full bg-white/5 lg:hover:bg-white/10 transition-colors"
+                className="hero-slide-control"
               >
                 <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -152,7 +152,7 @@ export default function Zones() {
               </div>
               <button
                 onClick={nextZone}
-                className="p-2 rounded-full bg-white/5 lg:hover:bg-white/10 transition-colors"
+                className="hero-slide-control"
               >
                 <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
