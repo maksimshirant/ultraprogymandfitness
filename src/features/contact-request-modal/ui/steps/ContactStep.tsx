@@ -1,5 +1,6 @@
 import type { FormEvent } from 'react';
 import type { RefObject } from 'react';
+import { ChevronsRight } from 'lucide-react';
 import { FORM_FIELD_CLASS, MODAL_TEXT, RU_PHONE_MASK } from '@/features/contact-request-modal/model/constants';
 import { formatRussianPhone, syncTextareaHeight } from '@/features/contact-request-modal/model/helpers';
 import type { ContactFormData } from '@/features/contact-request-modal/model/types';
@@ -150,14 +151,10 @@ export function ContactStep({
           </p>
         ) : null}
 
-        <button type="submit" disabled={isSubmitting} aria-live="polite" className="modal-submit-button home-text-link inline-flex w-full items-center justify-center border-0 bg-transparent px-5 py-3.5 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">
-          {isSubmitting ? (
-            <span className="inline-flex items-center justify-center gap-2">
-              {MODAL_TEXT.submitLoading}
-            </span>
-          ) : (
-            MODAL_TEXT.submitDefault
-          )}
+        <button type="submit" disabled={isSubmitting} aria-live="polite" className="modal-submit-button hero-cta hero-cta-primary disabled:cursor-not-allowed disabled:opacity-60">
+          <svg className="hero-cta-shape" viewBox="0 0 240 48" preserveAspectRatio="none" aria-hidden="true"><polygon points="20,1 239,1 239,27 219,47 1,47 1,21" vectorEffect="non-scaling-stroke" /></svg>
+          <span className="hero-cta-label"><span>{isSubmitting ? MODAL_TEXT.submitLoading : MODAL_TEXT.submitDefault}</span></span>
+          <ChevronsRight aria-hidden="true" />
         </button>
       </form>
     </div>

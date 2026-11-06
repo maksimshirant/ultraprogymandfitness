@@ -886,6 +886,165 @@ nav .home-text-link[href^="tel:"] {
   box-shadow: none;
 }
 
+/* Hero actions follow the clipped silhouette and condensed labels of the reference. */
+.hero-cta {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  min-height: 56px;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  padding: 12px 20px 12px 30px;
+  background: transparent;
+  color: #fff;
+  font-size: clamp(1.0625rem, 4.8vw, 1.25rem);
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: -0.045em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.hero-cta-shape {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.hero-cta-primary {
+  color: #111214;
+}
+
+.hero-cta-primary .hero-cta-shape {
+  fill: #f5b800;
+}
+
+.hero-cta-secondary .hero-cta-shape {
+  fill: rgba(5, 6, 10, 0.3);
+  stroke: #fff;
+  stroke-width: 1.5px;
+  stroke-linejoin: round;
+}
+
+.hero-cta-label {
+  min-width: 0;
+  flex: 1;
+}
+
+.hero-cta-label > span {
+  display: block;
+  width: 133.333%;
+  transform: scaleX(0.75);
+  transform-origin: left;
+  white-space: nowrap;
+}
+
+.home-editorial .hero-cta-label > span,
+.club-page .hero-cta-label > span,
+.direction-details-modal .hero-cta-label > span,
+.booking-modal .hero-cta-label > span {
+  white-space: normal;
+}
+
+.direction-details-modal .hero-cta,
+.booking-modal .modal-submit-button {
+  width: 240px;
+  min-height: 48px;
+  gap: 8px;
+  padding: 10px 16px 10px 24px;
+  font-size: 16px;
+}
+
+.direction-details-modal .hero-cta > svg:not(.hero-cta-shape),
+.booking-modal .modal-submit-button > svg:not(.hero-cta-shape) {
+  width: 20px;
+  height: 20px;
+}
+
+/* Smaller card actions share a single row with the details control. */
+#group-directions .hero-cta,
+#subscriptions .membership-purchase-action,
+.trainer-photo-card .hero-cta {
+  width: 180px;
+  min-height: 44px;
+  flex-shrink: 0;
+  gap: 6px;
+  padding: 10px 12px 10px 18px;
+  font-size: 14px;
+}
+
+.trainer-photo-card .hero-cta-primary {
+  width: 132px;
+}
+
+/* Keep purchase and conditions together while the native details expand across the row. */
+@media (max-width: 767px) {
+  #subscriptions .membership-purchase-action {
+    width: 132px;
+  }
+
+  #subscriptions .membership-actions .membership-purchase-action {
+    position: absolute;
+    top: 2px;
+    left: 0;
+  }
+
+  #subscriptions .membership-actions summary {
+    margin-left: 148px;
+    font-size: 12px;
+  }
+}
+
+#group-directions .hero-cta-label > span,
+#subscriptions .membership-purchase-action .hero-cta-label > span,
+.trainer-photo-card .hero-cta-label > span {
+  white-space: nowrap;
+}
+
+#group-directions .hero-cta > svg:not(.hero-cta-shape),
+#subscriptions .membership-purchase-action > svg:not(.hero-cta-shape),
+.trainer-photo-card .hero-cta > svg:not(.hero-cta-shape) {
+  width: 18px;
+  height: 18px;
+}
+
+.hero-cta > svg:not(.hero-cta-shape) {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.hero-cta:focus-visible {
+  outline: 2px solid #f5b800;
+  outline-offset: 5px;
+}
+
+.hero-cta:active {
+  opacity: 0.8;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero-cta-primary:hover .hero-cta-shape {
+    fill: #ffd247;
+  }
+
+  .hero-cta-secondary:hover .hero-cta-shape {
+    fill: rgba(255, 255, 255, 0.1);
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-cta {
+    width: 340px;
+  }
+}
+
 /* Crossfade only the background; the hero copy stays still. */
 .hero-slide {
   transition: opacity 1100ms ease-in-out;

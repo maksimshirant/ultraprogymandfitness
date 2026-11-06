@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDown, ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronsRight, Pause, Play } from 'lucide-react';
 import { BalancedHeading } from '@/components/typography/BalancedHeading';
 import PublicAssetImage from '@/components/PublicAssetImage';
 import type { OpenModalHandler } from '@/types/modal';
@@ -15,7 +15,7 @@ const HERO_TEXT = {
     'Кардиозона / Кроссфит / Единоборства',
     'Сауна / Детская зона / Групповые тренировки',
   ],
-  cta: 'Записаться на пробное занятие',
+  cta: 'Записаться на тренировку',
   galleryCta: 'Посмотреть клуб',
 } as const;
 
@@ -130,11 +130,15 @@ export default function Hero({ onOpenModal }: HeroProps) {
             </div>
           </div>
           <div className="mt-12 flex flex-col items-start gap-3 md:flex-row md:flex-wrap md:items-center md:gap-7">
-            <button type="button" onClick={() => onOpenModal({ topic: 'free_trial' })} className="home-secondary-action home-mobile-action w-full gap-3 px-5 py-3.5 md:w-auto">
-              {HERO_TEXT.cta} *
+            <button type="button" onClick={() => onOpenModal({ topic: 'free_trial' })} className="hero-cta hero-cta-primary">
+              <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+              <span className="hero-cta-label"><span>{HERO_TEXT.cta} *</span></span>
+              <ChevronsRight aria-hidden="true" />
             </button>
-            <button type="button" onClick={handleScrollToGallery} className="home-secondary-action home-mobile-action w-full gap-3 px-5 py-3.5 md:w-auto">
-              {HERO_TEXT.galleryCta}<ArrowDown className="h-4 w-4" aria-hidden="true" />
+            <button type="button" onClick={handleScrollToGallery} className="hero-cta hero-cta-secondary">
+              <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+              <span className="hero-cta-label"><span>{HERO_TEXT.galleryCta}</span></span>
+              <ChevronsRight aria-hidden="true" />
             </button>
           </div>
           <p className="mt-3 text-sm text-white/70">*Бесплатно, по предварительной записи.</p>

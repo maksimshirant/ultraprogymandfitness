@@ -1,4 +1,4 @@
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ChevronsRight } from 'lucide-react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { memberships } from '@/content/memberships';
 import { BalancedHeading } from '@/components/typography/BalancedHeading';
@@ -40,20 +40,23 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div>
               {memberships.map((abonement) => (
-                <article key={abonement.id} className="py-6 md:py-8">
-                  <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-5 gap-y-4 md:grid-cols-[minmax(0,1fr)_auto_auto] md:gap-x-10">
+                <article key={abonement.id} className="grid gap-y-4 py-6 md:grid-cols-[minmax(0,1fr)_auto_auto] md:items-start md:gap-x-10 md:gap-y-0 md:py-8">
+                  <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-5 md:contents">
                     <div className="min-w-0">
                       <h2 className="text-xl font-semibold leading-tight text-white md:text-2xl">{abonement.title}</h2>
                       <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/65">{abonement.note}</p>
                     </div>
                     <p className="whitespace-nowrap text-xl font-semibold tabular-nums tracking-tight text-white md:text-3xl">{abonement.price}</p>
-                    <button type="button" onClick={() => onOpenModal({ topic: abonement.topicValue, membershipId: abonement.id })} className="home-secondary-action home-mobile-action col-span-2 w-full gap-3 px-5 py-3 md:col-span-1 md:w-auto">
-                      Приобрести
-                    </button>
                   </div>
+                  <div className={abonement.modes.length > 0 ? 'membership-actions relative md:contents' : 'md:contents'}>
+                    <button type="button" onClick={() => onOpenModal({ topic: abonement.topicValue, membershipId: abonement.id })} className="hero-cta hero-cta-primary membership-purchase-action">
+                      <svg className="hero-cta-shape" viewBox="0 0 180 44" preserveAspectRatio="none" aria-hidden="true"><polygon points="20,1 179,1 179,23 159,43 1,43 1,21" vectorEffect="non-scaling-stroke" /></svg>
+                      <span className="hero-cta-label"><span>Приобрести</span></span>
+                      <ChevronsRight aria-hidden="true" />
+                    </button>
                   {abonement.modes.length > 0 ? (
-                    <details className="mt-3">
-                      <summary className="home-text-link home-mobile-action flex min-h-11 w-fit cursor-pointer list-none items-center gap-2 text-sm text-white/80 [&::-webkit-details-marker]:hidden">
+                    <details className="md:col-span-3 md:mt-3">
+                      <summary className="home-text-link flex min-h-11 w-fit cursor-pointer list-none items-center gap-1.5 whitespace-nowrap text-sm text-white/80 [&::-webkit-details-marker]:hidden">
                         Условия абонемента<ChevronDown className="h-4 w-4" aria-hidden="true" />
                       </summary>
                       <ul className="grid list-disc gap-x-10 gap-y-2 pl-5 pt-3 text-sm leading-relaxed text-white/70 md:grid-cols-2">
@@ -61,12 +64,15 @@ export default function Abonements({ onOpenModal }: AbonementsProps) {
                       </ul>
                     </details>
                   ) : null}
+                  </div>
                 </article>
               ))}
           </div>
           <p className="mt-5 text-sm leading-relaxed text-white/65">* Студентам и людям серебряного возраста — скидка 15%.</p>
-          <button type="button" onClick={() => onOpenModal({ topic: 'membership' })} className="home-secondary-action mt-7 w-full gap-3 px-5 py-3.5 sm:w-auto">
-            Помочь с выбором
+          <button type="button" onClick={() => onOpenModal({ topic: 'membership' })} className="hero-cta hero-cta-primary mt-7">
+            <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+            <span className="hero-cta-label"><span>Помочь с выбором</span></span>
+            <ChevronsRight aria-hidden="true" />
           </button>
         </div>
       </section>

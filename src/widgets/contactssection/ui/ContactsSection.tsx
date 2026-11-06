@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUpRight, Phone } from 'lucide-react';
+import { ArrowUpRight, ChevronsRight } from 'lucide-react';
 import { BalancedHeading } from '@/components/typography/BalancedHeading';
 
 const CONTACTS_TEXT = {
@@ -93,11 +93,15 @@ export default function ContactsSection() {
         <BalancedHeading as="h1" className="club-page-title max-w-5xl"><span>{CONTACTS_TEXT.title}</span></BalancedHeading>
         <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/75 md:text-lg">{CONTACTS_TEXT.pageSubtitle}</p>
         <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
-          <a href={CONTACTS_TEXT.phoneHref} className="home-secondary-action home-mobile-action gap-3 px-5 py-3.5">
-            Позвонить в клуб<Phone className="h-4 w-4" aria-hidden="true" />
+          <a href={CONTACTS_TEXT.phoneHref} className="hero-cta hero-cta-secondary">
+            <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+            <span className="hero-cta-label"><span>Позвонить в клуб</span></span>
+            <ChevronsRight aria-hidden="true" />
           </a>
-          <a href="#club-reviews" className="home-secondary-action home-mobile-action gap-3 px-5 py-3.5">
-            Отзывы гостей<ArrowDown className="h-4 w-4" aria-hidden="true" />
+          <a href="#club-reviews" className="hero-cta hero-cta-secondary">
+            <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+            <span className="hero-cta-label"><span>Отзывы гостей</span></span>
+            <ChevronsRight aria-hidden="true" />
           </a>
         </div>
       </header>
@@ -176,8 +180,10 @@ export default function ContactsSection() {
                 </figure>
               ))}
             </div>
-            <a href={CONTACTS_SOCIALS.reviews} target="_blank" rel="noopener noreferrer" aria-label={CONTACTS_TEXT.reviewsAria} className="home-secondary-action home-mobile-action mt-8 gap-3 px-5 py-3.5 md:mt-10">
-              {CONTACTS_TEXT.reviewsCta}<ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            <a href={CONTACTS_SOCIALS.reviews} target="_blank" rel="noopener noreferrer" aria-label={CONTACTS_TEXT.reviewsAria} className="hero-cta hero-cta-secondary mt-8 md:mt-10">
+              <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+              <span className="hero-cta-label"><span>{CONTACTS_TEXT.reviewsCta}</span></span>
+              <ChevronsRight aria-hidden="true" />
             </a>
           </div>
         </div>

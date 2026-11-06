@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ArrowDown, ArrowRight } from 'lucide-react';
+import { ArrowRight, ChevronsRight } from 'lucide-react';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { BalancedHeading } from '@/components/typography/BalancedHeading';
 import { groupDirectionCategories, groupDirections, type GroupDirection } from '@/content/groupDirections';
@@ -65,8 +65,16 @@ export default function GroupTrainingsSection({ onOpenModal }: GroupTrainingsPro
           <BalancedHeading as="h1" className="club-page-title max-w-4xl"><span>{GROUP_TRAININGS_TEXT.heroTitle}</span></BalancedHeading>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/80 md:text-lg">{GROUP_TRAININGS_TEXT.heroSubtitle}</p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
-            <button type="button" onClick={scrollToSchedule} className="home-secondary-action w-full gap-3 px-5 py-3.5 sm:w-auto">{GROUP_TRAININGS_TEXT.heroPrimaryCta}<ArrowDown className="h-4 w-4" aria-hidden="true" /></button>
-            <button type="button" onClick={scrollToDirections} className="home-secondary-action w-full gap-3 px-5 py-3.5 sm:w-auto">{GROUP_TRAININGS_TEXT.heroSecondaryCta}<ArrowDown className="h-4 w-4" aria-hidden="true" /></button>
+            <button type="button" onClick={scrollToSchedule} className="hero-cta hero-cta-secondary">
+              <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+              <span className="hero-cta-label"><span>{GROUP_TRAININGS_TEXT.heroPrimaryCta}</span></span>
+              <ChevronsRight aria-hidden="true" />
+            </button>
+            <button type="button" onClick={scrollToDirections} className="hero-cta hero-cta-secondary">
+              <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+              <span className="hero-cta-label"><span>{GROUP_TRAININGS_TEXT.heroSecondaryCta}</span></span>
+              <ChevronsRight aria-hidden="true" />
+            </button>
           </div>
           <p className="mt-5 text-sm text-white/65">* Групповые занятия оплачиваются отдельно.</p>
         </div>
@@ -99,12 +107,14 @@ export default function GroupTrainingsSection({ onOpenModal }: GroupTrainingsPro
                           </div>
                         </div>
                         <p className="mb-5 mt-4 text-sm leading-relaxed text-white/75">{direction.shortDescription}</p>
-                        <div className="mt-auto grid grid-cols-2 items-center gap-3 md:flex md:flex-wrap md:gap-x-5 md:gap-y-2">
+                        <div className="mt-auto flex items-center gap-4 md:gap-x-5">
                           <button type="button" data-action={direction.action} data-booking-action={direction.bookingAction} data-confirm-booking-action={direction.confirmBookingAction} data-group-direction={direction.key}
-                            onClick={() => onOpenModal({ topic: 'group', groupDirection: direction.text })} className="home-secondary-action home-mobile-action w-full gap-3 px-4 py-3 md:w-auto">
-                            <span className="md:hidden">Запись</span><span className="hidden md:inline">Запись на занятие</span>
+                            onClick={() => onOpenModal({ topic: 'group', groupDirection: direction.text })} className="hero-cta hero-cta-primary">
+                            <svg className="hero-cta-shape" viewBox="0 0 180 44" preserveAspectRatio="none" aria-hidden="true"><polygon points="20,1 179,1 179,23 159,43 1,43 1,21" vectorEffect="non-scaling-stroke" /></svg>
+                            <span className="hero-cta-label"><span>Запись на занятия</span></span>
+                            <ChevronsRight aria-hidden="true" />
                           </button>
-                          <button type="button" onClick={() => openDirectionDetails(direction)} className="home-text-link home-mobile-action inline-flex min-h-11 items-center gap-2 text-sm text-white/80">
+                          <button type="button" onClick={() => openDirectionDetails(direction)} className="home-text-link inline-flex min-h-11 shrink-0 items-center gap-2 whitespace-nowrap text-sm text-white/80">
                             {GROUP_TRAININGS_TEXT.detailsCta}<ArrowRight className="hidden h-4 w-4 md:block" aria-hidden="true" />
                           </button>
                         </div>
@@ -123,7 +133,11 @@ export default function GroupTrainingsSection({ onOpenModal }: GroupTrainingsPro
           <div className="border-t border-white/15 pt-7">
             <BalancedHeading as="h2" className="max-w-3xl text-2xl font-semibold tracking-tight text-white md:text-3xl"><span>{GROUP_TRAININGS_TEXT.finalTitle}</span></BalancedHeading>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/70">{GROUP_TRAININGS_TEXT.finalSubtitle}</p>
-            <button type="button" onClick={() => onOpenModal({ topic: 'group', groupRecommendation: true })} className="home-secondary-action mt-6 w-full gap-3 px-5 py-3.5 sm:w-auto">{GROUP_TRAININGS_TEXT.finalCta}<ArrowRight className="h-4 w-4" aria-hidden="true" /></button>
+            <button type="button" onClick={() => onOpenModal({ topic: 'group', groupRecommendation: true })} className="hero-cta hero-cta-secondary mt-6">
+              <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+              <span className="hero-cta-label"><span>{GROUP_TRAININGS_TEXT.finalCta}</span></span>
+              <ChevronsRight aria-hidden="true" />
+            </button>
           </div>
         </div>
       </section>
@@ -153,8 +167,10 @@ export default function GroupTrainingsSection({ onOpenModal }: GroupTrainingsPro
             <div className="shrink-0 border-t border-white/15 px-5 py-4 sm:px-8 sm:py-5">
               <p className="mb-3 text-sm leading-relaxed text-white/60">* Групповые занятия оплачиваются отдельно.</p>
               <DialogClose asChild>
-                <button type="button" onClick={() => onOpenModal({ topic: 'group', groupDirection: selectedDirection.text })} className="home-secondary-action w-full gap-3 px-5 py-3.5">
-                  Записаться на занятие
+                <button type="button" onClick={() => onOpenModal({ topic: 'group', groupDirection: selectedDirection.text })} className="hero-cta hero-cta-primary">
+                  <svg className="hero-cta-shape" viewBox="0 0 240 48" preserveAspectRatio="none" aria-hidden="true"><polygon points="20,1 239,1 239,27 219,47 1,47 1,21" vectorEffect="non-scaling-stroke" /></svg>
+                  <span className="hero-cta-label"><span>Записаться на занятие</span></span>
+                  <ChevronsRight aria-hidden="true" />
                 </button>
               </DialogClose>
             </div>

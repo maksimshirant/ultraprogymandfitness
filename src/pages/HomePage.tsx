@@ -2,7 +2,7 @@ import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import Hero from '@/widgets/hero/ui/Hero';
 import { SectionFallback } from '@/components/SectionFallback';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowRight, ChevronDown, ChevronsRight } from 'lucide-react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import PublicAssetImage from '@/components/PublicAssetImage';
 import { BalancedHeading } from '@/components/typography/BalancedHeading';
@@ -121,19 +121,29 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
               </article>
             ))}
           </div>
-          <Link to="/schedule#group-schedule" className="home-secondary-action home-mobile-action order-3 mt-8 gap-3 justify-self-start px-5 py-3.5 md:order-4 md:col-span-2">Расписание занятий</Link>
-          <Link to="/schedule#group-directions" className="home-text-link home-mobile-action order-4 mt-3 inline-flex min-h-11 items-center gap-3 justify-self-start text-sm font-semibold text-white md:order-2 md:mb-12 md:mt-0 md:justify-self-end">Все направления<ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
+          <Link to="/schedule#group-schedule" className="hero-cta hero-cta-secondary order-3 mt-8 justify-self-start md:order-4 md:col-span-2">
+            <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+            <span className="hero-cta-label"><span>Расписание занятий</span></span>
+            <ChevronsRight aria-hidden="true" />
+          </Link>
+          <Link to="/schedule#group-directions" className="hero-cta hero-cta-secondary order-4 mt-3 justify-self-start md:order-2 md:mb-12 md:mt-0 md:justify-self-end">
+            <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+            <span className="hero-cta-label"><span>Все направления</span></span>
+            <ChevronsRight aria-hidden="true" />
+          </Link>
           <p className="order-5 mt-4 text-sm leading-relaxed text-white/60 md:col-span-2">* Групповые занятия оплачиваются отдельно.</p>
         </div>
       </section>
 
       <section id="home-memberships" className="home-editorial relative py-16 md:py-24">
         <div className="mx-auto grid max-w-7xl items-start gap-6 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-x-20 lg:px-8">
-            <div className="min-w-0">
+            <div className="contents md:block md:min-w-0">
+              <div className="order-1">
               <BalancedHeading as="h2" className="mb-6 text-3xl font-semibold tracking-tight text-white"><span>Абонементы</span></BalancedHeading>
               <p className="text-base leading-relaxed text-white/70">Доступ к тренажёрному залу, кардио, кроссфит-зоне и сауне.</p>
+              </div>
 
-              <AccordionPrimitive.Root type="single" collapsible className="mt-4 text-sm leading-relaxed text-white/70">
+              <AccordionPrimitive.Root type="single" collapsible className="order-3 text-sm leading-relaxed text-white/70 md:mt-4">
                 <AccordionPrimitive.Item value="club-card">
                   <AccordionPrimitive.Header>
                     <AccordionPrimitive.Trigger className="home-text-link home-mobile-action group inline-flex min-h-11 items-center gap-3 py-2 text-left text-sm font-normal">
@@ -155,7 +165,7 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
                 </AccordionPrimitive.Item>
               </AccordionPrimitive.Root>
             </div>
-            <div>
+            <div className="order-2 md:order-none">
               <table className="w-full text-left text-sm text-white">
                 <caption className="sr-only">Стоимость абонементов UltraPro</caption>
                 <thead><tr className="border-b border-white/20 text-white/60"><th scope="col" className="pb-3 pr-4 font-normal">Срок</th><th scope="col" className="pb-3 pr-4 font-normal">Стоимость</th><th scope="col"><span className="sr-only">Оформление</span></th></tr></thead>
@@ -176,15 +186,14 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
 
       <section id="home-trainers" className="home-editorial relative pb-16 md:pb-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="border-t border-white/15 pt-7">
-            <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
+          <div className="grid grid-cols-1 border-t border-white/15 pt-7 md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:gap-x-5">
+            <div className="order-1 mb-8">
               <div>
                 <BalancedHeading as="h2" className="text-3xl font-semibold tracking-tight text-white"><span>Тренеры</span></BalancedHeading>
                 <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/70">Персональные тренировки с опытными специалистами по силовой подготовке, оздоровительному тренингу и фитнес-диетологии.</p>
               </div>
-              <Link to="/trainers" className="home-text-link home-mobile-action inline-flex items-center gap-3 py-2 text-sm font-semibold text-white">Все тренеры<ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
             </div>
-            <div className="grid gap-8 md:grid-cols-2 md:gap-12">
+            <div className="order-2 grid gap-8 md:order-3 md:col-span-2 md:grid-cols-2 md:gap-12">
               {featuredTrainers.map((trainer) => (
                 <article key={trainer.id} className="grid grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] items-end gap-5 sm:gap-7">
                   {trainer.image ? (
@@ -202,7 +211,12 @@ export default function HomePage({ onOpenModal }: HomePageProps) {
                 </article>
               ))}
             </div>
-            <p className="mt-8 text-sm leading-relaxed text-white/60">* На индивидуальную тренировку необходимо записаться заранее. Занятия оплачиваются отдельно.</p>
+            <p className="order-3 mt-8 text-sm leading-relaxed text-white/60 md:order-4 md:col-span-2">* На индивидуальную тренировку необходимо записаться заранее. Занятия оплачиваются отдельно.</p>
+            <Link to="/trainers" className="hero-cta hero-cta-secondary order-4 mt-6 md:order-2 md:mb-8 md:mt-0 md:justify-self-end">
+              <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+              <span className="hero-cta-label"><span>Все тренеры</span></span>
+              <ChevronsRight aria-hidden="true" />
+            </Link>
           </div>
         </div>
       </section>

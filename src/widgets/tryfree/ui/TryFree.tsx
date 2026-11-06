@@ -1,4 +1,5 @@
 import { BalancedHeading } from '@/components/typography/BalancedHeading';
+import { ChevronsRight } from 'lucide-react';
 import type { OpenModalHandler } from '@/types/modal';
 
 interface TryFreeProps {
@@ -26,9 +27,11 @@ export default function TryFree({ onOpenModal }: TryFreeProps) {
           <button
             type="button"
             onClick={() => onOpenModal({ topic: 'free_trial' })}
-            className="home-secondary-action w-full gap-3 px-5 py-3.5 sm:w-auto lg:justify-self-end"
+            className="hero-cta hero-cta-primary lg:justify-self-end"
           >
-            {TRY_FREE_TEXT.cta}
+            <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+            <span className="hero-cta-label"><span>{TRY_FREE_TEXT.cta}</span></span>
+            <ChevronsRight aria-hidden="true" />
           </button>
         </div>
       </div>
