@@ -23,6 +23,8 @@ type VariantGroup = {
 
 export interface PublicAssetImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'src' | 'srcSet'> {
   src: string;
+  mobileSrc?: string;
+  mobileSizes?: string;
   pictureClassName?: string;
   variantSuffix?: Exclude<AssetVariantKey, 'default' | 'placeholder'>;
   deferUntilVisible?: boolean;
@@ -200,6 +202,8 @@ function getResolvedAssetPaths(src: string, variantSuffix?: Exclude<AssetVariant
 
 export default function PublicAssetImage({
   src,
+  mobileSrc,
+  mobileSizes = '100vw',
   alt,
   pictureClassName,
   className,
@@ -219,6 +223,10 @@ export default function PublicAssetImage({
   const resolvedAssetPaths = useMemo(
     () => getResolvedAssetPaths(src, variantSuffix),
     [src, variantSuffix],
+  );
+  const mobileAssetPaths = useMemo(
+    () => mobileSrc ? getResolvedAssetPaths(mobileSrc) : null,
+    [mobileSrc],
   );
   const activeLoadKey = resolvedAssetPaths?.fallbackSrc ?? src;
   const hasPlaceholder = showPlaceholder && Boolean(resolvedAssetPaths?.placeholderSrc);
@@ -278,9 +286,17 @@ export default function PublicAssetImage({
           )}
         />
       ) : null}
+      {mobileSrc ? (
+        <>
+          {useResponsiveSources ? mobileAssetPaths?.sources.map((source) => (
+            <source key={`mobile-${source.type}`} media="(max-width: 767px)" srcSet={source.srcSet} type={source.type} sizes={mobileSizes} />
+          )) : null}
+          <source media="(max-width: 767px)" srcSet={mobileAssetPaths?.fallbackSrc ?? mobileSrc} />
+        </>
+      ) : null}
       {useResponsiveSources
         ? resolvedAssetPaths?.sources.map((source) => (
-            <source key={source.type} srcSet={source.srcSet} type={source.type} sizes={sizes} />
+            <source key={source.type} media={mobileSrc ? '(min-width: 768px)' : undefined} srcSet={source.srcSet} type={source.type} sizes={sizes} />
           ))
         : null}
       <img

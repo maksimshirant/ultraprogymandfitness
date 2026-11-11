@@ -9,7 +9,7 @@ interface AnnouncementStepProps {
 export function AnnouncementStep({ announcement, onClose }: AnnouncementStepProps) {
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col items-center text-center">
-      <span className="mb-4 inline-flex rounded-full border border-[#F5B800]/30 bg-[#F5B800]/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-[#F5B800]">
+      <span className="mb-4 text-sm text-gray-400">
         {announcement.label}
       </span>
 

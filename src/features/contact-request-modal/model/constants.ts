@@ -39,7 +39,7 @@ export const MODAL_TEXT = {
   groupRecommendationCard: 'Помощь в подборе направления',
   contactTitle: 'Оставьте контакты',
   contactSubtitle: '',
-  rootTitle: 'Выберите сценарий записи',
+  rootTitle: 'Запись в UltraPro',
   rootSubtitle: '',
   membershipTitle: 'Выберите абонемент',
   membershipSubtitle: '',
@@ -73,4 +73,4 @@ export const ROOT_SECONDARY_OPTIONS = [
 ] as const;
 
 export const FORM_FIELD_CLASS =
-  'w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white placeholder-gray-500 transition-colors focus:outline-none focus:border-white/25';
+  'w-full min-h-12 rounded-[4px] border border-white/25 bg-[#0c0d0f] px-4 py-3 text-base text-[#f3f4f6] placeholder-gray-400 transition-colors focus:outline-none focus:border-[#F5B800] focus:ring-1 focus:ring-[#F5B800]';

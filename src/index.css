@@ -24,6 +24,15 @@
     --input: 30 8% 15%;
     --ring: 45 100% 48%;
     --radius: 0.75rem;
+    /* Corner radius for the flat action controls across the site. */
+    --control-radius: 4px;
+    --control-height: 3rem;
+    --control-font-size: 0.875rem;
+    --control-font-weight: 600;
+    --control-line-height: 1.25;
+    --control-gap: 0.75rem;
+    --control-padding-x: 1.25rem;
+    --control-padding-y: 0.875rem;
   }
 }
 
@@ -58,47 +67,6 @@
     background-image: linear-gradient(135deg, #F5B800 0%, #D89B00 100%);
   }
   
-  .btn-primary {
-    @apply rounded-full border px-6 py-3 text-sm font-semibold duration-200;
-    border-color: rgba(245, 184, 0, 0.35);
-    background: linear-gradient(135deg, #FFD65A 0%, #F5B800 52%, #D79A00 100%);
-    box-shadow: 0 14px 30px rgba(245, 184, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.38);
-    transition-property: box-shadow, border-color, filter, opacity;
-    transition-timing-function: ease-out;
-  }
-  
-  .btn-primary:hover {
-    filter: brightness(1.05);
-    transform: none;
-    box-shadow: 0 18px 38px rgba(245, 184, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.42);
-  }
-
-  .btn-primary:active {
-    transform: scale(0.98);
-  }
-  
-  .btn-white {
-    @apply rounded-full border px-6 py-3 text-sm font-semibold text-white duration-200;
-    border-color: rgba(255, 255, 255, 0.12);
-    background: rgba(255, 255, 255, 0.055);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    transition-property: border-color, background-color, color, opacity;
-    transition-timing-function: ease-out;
-  }
-  
-  .btn-white:hover {
-    color: #F5B800;
-    transform: none;
-    border-color: rgba(245, 184, 0, 0.3);
-    background: rgba(255, 255, 255, 0.08);
-  }
-
-  .btn-white:active {
-    transform: scale(0.98);
-  }
-  
   .glass-card {
     @apply rounded-[1.75rem] p-6;
     background: rgba(255, 255, 255, 0.03);
@@ -119,14 +87,21 @@
     -webkit-backdrop-filter: blur(24px);
   }
 
-  .modal-surface .btn-primary,
-  .modal-surface .btn-primary:hover {
+  .modal-surface .btn-primary {
     box-shadow: none !important;
     filter: none;
   }
 
+  @media (min-width: 1024px) and (hover: hover) and (pointer: fine){
+
+  .modal-surface .btn-primary:hover {
+    box-shadow: none !important;
+    filter: none;
+  }
+  }
+
   .modal-surface .modal-submit-button {
-    border-radius: 9999px !important;
+    border-radius: var(--control-radius) !important;
   }
 
   .deferred-section {
@@ -314,8 +289,11 @@
   border-radius: 4px;
 }
 
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine){
+
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
 }
 
 ::selection {
@@ -364,11 +342,6 @@
     max-width: 68rem;
   }
 
-  .btn-primary,
-  .btn-white {
-    font-size: 1rem;
-    padding: 0.95rem 2.2rem;
-  }
 }
 
 .document-modal-scroll {
@@ -472,7 +445,7 @@
 
   *,
   *::before,
-  *::after {
+  *:not(.hero-cta-sheen)::after {
     animation: none !important;
     transition: none !important;
   }
@@ -566,25 +539,6 @@
     transition-duration: 700ms !important;
     transition-timing-function: ease-out !important;
   }
-
-  /* Disable hover states on tablet/mobile outside subscriptions slider */
-  .btn-primary:hover {
-    filter: none !important;
-    transform: none !important;
-    box-shadow: 0 14px 30px rgba(245, 184, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.38) !important;
-  }
-
-  .btn-white:hover {
-    color: #fff !important;
-    background: rgba(255, 255, 255, 0.055) !important;
-    transform: none !important;
-  }
-
-  #subscriptions .btn-primary:hover {
-    filter: none !important;
-    transform: none !important;
-    box-shadow: 0 14px 30px rgba(245, 184, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.38) !important;
-  }
 }
 
 /* Respect reduced-motion without removing static desktop glow backgrounds */
@@ -629,7 +583,750 @@
   -webkit-backdrop-filter: none !important;
 }
 
+/* The booking form shares the home page's solid surfaces and restrained typography. */
+.booking-modal.modal-surface,
+.legal-document-modal.modal-surface,
+.direction-details-modal.modal-surface {
+  background: #111214 !important;
+  background-image: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  color: #f3f4f6;
+}
+
+.booking-modal :is(h2, h3),
+.legal-document-modal :is(h2, h3),
+.direction-details-modal :is(h2, h3) {
+  text-transform: none;
+}
+
+.booking-modal .text-white {
+  color: #f3f4f6 !important;
+}
+
+.booking-modal .booking-option {
+  min-height: var(--control-height);
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0;
+  background: transparent;
+  color: #f3f4f6;
+  box-shadow: none;
+  padding-block: var(--control-padding-y);
+  font-family: inherit;
+  font-size: var(--control-font-size);
+  font-weight: var(--control-font-weight);
+  line-height: var(--control-line-height);
+}
+
+.booking-modal .booking-option h3,
+.booking-modal .booking-option > p {
+  font-size: var(--control-font-size);
+  font-weight: var(--control-font-weight);
+  line-height: var(--control-line-height);
+}
+
+.booking-modal .booking-option-active {
+  border-bottom-color: #f5b800;
+  color: #f5b800;
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine){
+
+.booking-modal .booking-option:hover {
+  border-bottom-color: #f5b800;
+  color: #f5b800;
+}
+}
+
+.booking-modal .booking-option .text-white {
+  color: inherit !important;
+}
+
+.booking-modal button:focus-visible {
+  outline: 2px solid #f5b800;
+  outline-offset: -2px;
+}
+
+/* Keep mobile dialogs flush with the viewport and scroll only their content. */
+@media (max-width: 767px) {
+  .booking-modal[data-slot="dialog-content"] {
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100vh;
+    max-height: 100dvh;
+    transform: none !important;
+    border: 0 !important;
+    border-radius: 0;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+
+  .booking-modal > div {
+    height: 100%;
+  }
+
+  .booking-modal .modal-step-scroll {
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .booking-modal .modal-step-scroll-rail {
+    display: none;
+  }
+
+  .legal-modal-frame {
+    padding: 0;
+  }
+
+  .legal-document-modal.modal-surface {
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100vh;
+    max-height: 100dvh;
+    max-width: none;
+    margin: 0;
+    border: 0 !important;
+    border-radius: 0;
+    padding-top: calc(1rem + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    padding-left: calc(1.25rem + env(safe-area-inset-left, 0px));
+    padding-right: calc(1.25rem + env(safe-area-inset-right, 0px));
+  }
+}
+
+/* Keep the home page focused on photography with flat, high-contrast controls. */
+.home-hero :is(h1, h2, h3),
+.home-editorial :is(h1, h2, h3),
+#flors :is(h1, h2, h3) {
+  text-transform: none;
+}
+
+/* Match page and section headings to the heavy, condensed hero lettering. */
+.home-editorial h2,
+#flors h2,
+.club-page .club-page-title,
+.club-page h2.heading-balanced,
+#group-schedule h2 {
+  max-width: 100%;
+  overflow: hidden;
+  color: #fff !important;
+  font-size: clamp(2.5rem, 7vw, 5.5rem);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.055em;
+  text-transform: uppercase;
+}
+
+.home-editorial h2 > span,
+#flors h2 > span,
+.club-page .club-page-title > span,
+.club-page h2.heading-balanced > span,
+#group-schedule h2 > span {
+  display: block;
+  width: 142.857%;
+  transform: scaleX(0.7);
+  transform-origin: left;
+}
+
+/* All action variants share typography and dimensions on every page and viewport. */
+.home-action,
+.home-secondary-action,
+.home-mobile-action,
+.btn-primary,
+.btn-white {
+  display: inline-flex;
+  min-height: var(--control-height);
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: var(--control-gap);
+  border: 1px solid transparent;
+  border-radius: var(--control-radius);
+  padding: var(--control-padding-y) var(--control-padding-x);
+  font-family: inherit;
+  font-size: var(--control-font-size);
+  font-weight: var(--control-font-weight);
+  line-height: var(--control-line-height);
+  letter-spacing: normal;
+  text-align: center;
+  text-transform: none;
+  text-decoration: none;
+  white-space: normal;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, opacity 180ms ease;
+}
+
+.home-action,
+.btn-primary,
+.booking-modal .btn-primary {
+  border-color: #f5b800;
+  background: #f5b800;
+  color: #111214 !important;
+}
+
+/* Preserve the increased desktop sizing; mobile uses the original angled controls. */
+@media (min-width: 1024px) {
+  .home-hero .hero-cta,
+  #tryfree .hero-cta {
+    width: 340px;
+    min-height: 56px;
+    padding: 14px 28px;
+    font-size: 16px;
+  }
+}
+
+.hero-cta-sheen {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  clip-path: polygon(8.24% 1.79%, 99.7% 1.79%, 99.7% 55.36%, 92.65% 98.21%, 0.3% 98.21%, 0.3% 51.79%);
+  pointer-events: none;
+}
+
+/* Repeat the booking sheen on every screen while respecting reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  :is(.home-hero, #tryfree) .hero-cta-primary {
+    transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, opacity 180ms ease, transform 160ms ease-out;
+  }
+
+  .hero-cta-sheen::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 40%;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    opacity: 0;
+    transform: translateX(-150%) skewX(-18deg);
+    pointer-events: none;
+  }
+
+  .home-hero .hero-cta-sheen::after {
+    animation: home-booking-sheen 3s ease-in-out 1400ms infinite both;
+  }
+
+  #tryfree .hero-cta-primary[data-cta-visible="true"] .hero-cta-sheen::after {
+    animation: home-booking-sheen 3s ease-in-out 500ms infinite both;
+  }
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :is(.home-hero, #tryfree) .hero-cta-primary:hover {
+    transform: translateY(-2px);
+  }
+
+  :is(.home-hero, #tryfree) .hero-cta-primary:active {
+    transform: translateY(0);
+    transition-duration: 80ms;
+  }
+
+  :is(.home-hero, #tryfree) .hero-cta-primary:is(:hover, :focus-visible) .hero-cta-sheen::after {
+    animation-play-state: paused;
+    visibility: hidden;
+  }
+}
+
+@keyframes home-booking-sheen {
+  0% {
+    opacity: 0;
+    transform: translateX(-150%) skewX(-18deg);
+  }
+  7%, 26% {
+    opacity: 1;
+  }
+  37%, 100% {
+    opacity: 0;
+    transform: translateX(350%) skewX(-18deg);
+  }
+}
+
+.home-secondary-action,
+.btn-white,
+.home-mobile-action:not(.home-action):not(.btn-primary):not(.home-text-link) {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(5, 6, 10, 0.3);
+  color: #f3f4f6 !important;
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine){
+
+.home-secondary-action:hover,
+.btn-white:hover,
+.home-mobile-action:not(.home-action):not(.btn-primary):not(.home-text-link):hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine){
+
+.home-action:hover,
+.btn-primary:hover {
+  border-color: #ffd247;
+  background: #ffd247;
+}
+}
+
+.home-action:active,
+.btn-primary:active {
+  background: #dfa900;
+}
+
+.home-text-link {
+  min-height: var(--control-height);
+  font-family: inherit;
+  font-weight: var(--control-font-weight);
+  line-height: var(--control-line-height);
+  letter-spacing: normal;
+  text-transform: none;
+  text-underline-offset: 5px;
+  transition: color 180ms ease;
+}
+
+/* Phone numbers keep their editorial size; action labels use the shared size. */
+.home-text-link:not([href^="tel:"]),
+nav .home-text-link[href^="tel:"] {
+  font-size: var(--control-font-size);
+}
+
+.home-text-link.home-mobile-action {
+  border: 0;
+  padding-inline: 0;
+  background: transparent;
+}
+
+.home-action svg,
+.home-secondary-action svg,
+.home-mobile-action svg,
+.home-text-link svg,
+.btn-primary svg,
+.btn-white svg {
+  flex-shrink: 0;
+}
+
+.home-action:disabled,
+.home-secondary-action:disabled,
+.home-text-link:disabled,
+.home-mobile-action:disabled,
+.btn-primary:disabled,
+.btn-white:disabled,
+.home-action[aria-disabled="true"],
+.home-secondary-action[aria-disabled="true"] {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine){
+
+.home-text-link:hover {
+  color: #f5b800;
+  text-decoration: underline;
+}
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #home-previews a.home-text-link:hover,
+  #home-trainers button.home-text-link:hover {
+    color: #f5b800 !important;
+  }
+}
+
+.home-action:focus-visible,
+.home-secondary-action:focus-visible,
+.home-text-link:focus-visible,
+.btn-primary:focus-visible,
+.btn-white:focus-visible,
+.home-photo-link:focus-visible,
+#flors button:focus-visible {
+  outline: 2px solid #f5b800;
+  outline-offset: 5px;
+}
+
+/* Mobile actions fill their existing layout cell, including paired direction buttons. */
+@media (max-width: 767px) {
+  .home-mobile-action {
+    display: flex;
+    width: 100%;
+  }
+}
+
+#flors .home-text-link {
+  text-decoration: none;
+}
+
+#flors button {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+
+/* Hero actions follow the clipped silhouette and condensed labels of the reference. */
+.hero-cta {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  min-height: 56px;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  padding: 12px 20px 12px 30px;
+  background: transparent;
+  color: #fff;
+  font-size: clamp(1.0625rem, 4.8vw, 1.25rem);
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: -0.045em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.hero-cta-shape {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.hero-cta-primary {
+  color: #111214;
+}
+
+.hero-cta-primary .hero-cta-shape {
+  fill: #f5b800;
+}
+
+.hero-cta-secondary .hero-cta-shape {
+  fill: rgba(5, 6, 10, 0.3);
+  stroke: #fff;
+  stroke-width: 1.5px;
+  stroke-linejoin: round;
+}
+
+.hero-cta-label {
+  min-width: 0;
+  flex: 1;
+}
+
+.hero-cta-label > span {
+  display: block;
+  width: 133.333%;
+  transform: scaleX(0.75);
+  transform-origin: left;
+  white-space: nowrap;
+}
+
+.home-editorial .hero-cta-label > span,
+.club-page .hero-cta-label > span,
+.direction-details-modal .hero-cta-label > span,
+.booking-modal .hero-cta-label > span {
+  white-space: normal;
+}
+
+.direction-details-modal .hero-cta,
+.booking-modal .modal-submit-button {
+  width: 240px;
+  min-height: 48px;
+  gap: 8px;
+  padding: 10px 16px 10px 24px;
+  font-size: 16px;
+}
+
+.direction-details-modal .hero-cta > svg:not(.hero-cta-shape),
+.booking-modal .modal-submit-button > svg:not(.hero-cta-shape) {
+  width: 20px;
+  height: 20px;
+}
+
+/* Smaller card actions share a single row with the details control. */
+#group-directions .hero-cta,
+#subscriptions .membership-purchase-action,
+.trainer-photo-card .hero-cta {
+  width: 180px;
+  min-height: 44px;
+  flex-shrink: 0;
+  gap: 6px;
+  padding: 10px 12px 10px 18px;
+  font-size: 14px;
+}
+
+.trainer-photo-card .hero-cta-primary {
+  width: 132px;
+}
+
+/* Keep purchase and conditions together while the native details expand across the row. */
+@media (max-width: 767px) {
+  #subscriptions .membership-purchase-action {
+    width: 132px;
+  }
+
+  #subscriptions .membership-actions .membership-purchase-action {
+    position: absolute;
+    top: 2px;
+    left: 0;
+  }
+
+  #subscriptions .membership-actions summary {
+    margin-left: 148px;
+    font-size: 12px;
+  }
+}
+
+#group-directions .hero-cta-label > span,
+#subscriptions .membership-purchase-action .hero-cta-label > span,
+.trainer-photo-card .hero-cta-label > span {
+  white-space: nowrap;
+}
+
+#group-directions .hero-cta > svg:not(.hero-cta-shape),
+#subscriptions .membership-purchase-action > svg:not(.hero-cta-shape),
+.trainer-photo-card .hero-cta > svg:not(.hero-cta-shape) {
+  width: 18px;
+  height: 18px;
+}
+
+.hero-cta > svg:not(.hero-cta-shape) {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.hero-cta:focus-visible {
+  outline: 2px solid #f5b800;
+  outline-offset: 5px;
+}
+
+.hero-cta:active {
+  opacity: 0.8;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero-cta-primary:hover .hero-cta-shape {
+    fill: #ffd247;
+  }
+
+  .hero-cta-secondary:hover .hero-cta-shape {
+    fill: rgba(255, 255, 255, 0.1);
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-cta {
+    width: 340px;
+  }
+}
+
+/* Crossfade only the background; the hero copy stays still. */
+.hero-slide {
+  transition: opacity 1100ms ease-in-out;
+}
+
+.hero-slide-control {
+  display: inline-flex;
+  width: var(--control-height);
+  height: var(--control-height);
+  min-width: var(--control-height);
+  min-height: var(--control-height);
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--control-radius);
+  background: transparent;
+  color: #f3f4f6;
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine){
+
+.hero-slide-control:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+}
+
+.hero-slide-control:focus-visible {
+  outline: 2px solid #f5b800;
+  outline-offset: 2px;
+}
+
+#flors .hero-slide-control {
+  background: rgba(5, 6, 10, 0.65);
+}
+
+.home-hero .hero-slide-control:disabled {
+  opacity: 0.35;
+  cursor: wait;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-action,
+  .home-secondary-action,
+  .home-mobile-action,
+  .btn-primary,
+  .btn-white,
+  .home-text-link,
+  .hero-slide,
+  .home-editorial img {
+    transition: none;
+  }
+}
+
+/* Internal pages reuse the flat typography and spacing from the updated home page. */
+.club-page {
+  color: #f3f4f6;
+}
+
+.club-page :is(h1, h2, h3, h4) {
+  text-transform: none;
+}
+
+.club-page-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.club-page-hero-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(16, 17, 20, 0.78) 0%, rgba(16, 17, 20, 0.52) 50%, rgba(16, 17, 20, 0.12) 100%);
+}
+
+.club-page-hero > .hero-media-layer,
+.club-page-hero-shade {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 80px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 80px), transparent 100%);
+}
+
+.club-page-header {
+  position: relative;
+  z-index: 1;
+  padding-top: calc(4rem + clamp(3rem, 6vw, 5rem));
+  padding-bottom: clamp(4rem, 7vw, 6rem);
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .club-page-header {
+    padding-top: calc(6rem + clamp(3rem, 6vw, 5rem));
+  }
+}
+
+@media (min-width: 1024px) {
+  .club-page-header {
+    padding-top: calc(5rem + clamp(3rem, 6vw, 5rem));
+  }
+}
+
+.club-page .club-page-title {
+  font-size: clamp(3rem, 11vw, 9rem);
+}
+
+.club-page :is(button, summary):focus-visible,
+.direction-details-modal button:focus-visible,
+.direction-details-body:focus-visible {
+  outline: 2px solid #f5b800;
+  outline-offset: 4px;
+}
+
+.club-page details[open] > summary svg {
+  transform: rotate(180deg);
+}
+
+/* Reveal details inside the photo without moving the trainer name or actions. */
+.trainer-photo-card .trainer-photo-details {
+  flex: 1 1 0%;
+  min-height: 0;
+  margin-bottom: 20px;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 260ms ease, transform 260ms ease, visibility 0s 260ms !important;
+}
+
+.trainer-photo-card .trainer-photo-details-shade {
+  opacity: 0;
+  transition: opacity 260ms ease !important;
+}
+
+.trainer-photo-card[data-expanded="true"] .trainer-photo-details {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition-delay: 0s !important;
+}
+
+.trainer-photo-card[data-expanded="true"] .trainer-photo-details-shade {
+  opacity: 1;
+}
+
+.trainer-photo-details-scroll:focus-visible {
+  outline: 2px solid #f5b800;
+  outline-offset: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trainer-photo-card .trainer-photo-details,
+  .trainer-photo-card .trainer-photo-details-shade {
+    transition: none !important;
+    transform: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .direction-details-modal[data-slot="dialog-content"] {
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
+    transform: none;
+    border: 0 !important;
+    border-radius: 0;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+}
+
 /* Keep fixed header compositing stable to avoid tablet scroll jitter */
+#site-header .home-text-link {
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine){
+
+#site-header .home-text-link:hover {
+  color: #f5b800;
+}
+}
+
+#site-header .home-text-link svg {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.95));
+}
+
 #site-header.site-header {
   transform: translateZ(0);
   -webkit-transform: translateZ(0);

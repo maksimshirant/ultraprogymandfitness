@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface LegalDocumentModalProps {
@@ -24,28 +23,28 @@ export function LegalDocumentModal({
   }
 
   return (
-    <div className={cn('fixed inset-0 flex items-center justify-center overflow-hidden p-4 sm:p-6', zIndexClassName)}>
-      <div className="document-modal-overlay absolute inset-0 bg-[#05070c]/82 backdrop-blur-md" onClick={onClose} />
+    <div className={cn('legal-modal-frame fixed inset-0 flex items-center justify-center overflow-hidden p-4 sm:p-6', zIndexClassName)}>
+      <div className="document-modal-overlay absolute inset-0 bg-black/75" onClick={onClose} />
 
       <div
         className={cn(
-          'glass-card modal-surface relative mx-auto my-auto flex w-full flex-col overflow-hidden rounded-[1.75rem] border-white/20 p-6 max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] sm:p-8',
+          'legal-document-modal modal-surface relative mx-auto my-auto flex min-h-0 w-full flex-col overflow-hidden rounded-[6px] p-5 max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100vh-3rem)] sm:max-h-[calc(100dvh-3rem)] sm:p-8',
           maxWidthClassName
         )}
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="mb-2 flex justify-end">
+        <div className="mb-5 flex shrink-0 justify-end">
           <button
             type="button"
             onClick={onClose}
-            className="z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-gray-300 transition-colors lg:hover:bg-white/10 lg:hover:text-white"
+            className="home-text-link z-10 inline-flex min-h-11 items-center text-sm text-gray-300"
             aria-label={closeAriaLabel}
           >
-            <X className="h-5 w-5" />
+            Закрыть
           </button>
         </div>
 
-        <div className="document-modal-scroll min-h-0 flex-1 overflow-y-auto lg:overflow-y-scroll pr-2 sm:pr-3">
+        <div className="document-modal-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain pr-2 sm:pr-3">
           {children}
         </div>
       </div>

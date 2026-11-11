@@ -1,110 +1,127 @@
-﻿import { useState } from 'react';
-import { ArrowRight, ChevronDown } from 'lucide-react';
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
-import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
+﻿import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { ArrowRight, ChevronsRight } from 'lucide-react';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
+import { BalancedHeading } from '@/components/typography/BalancedHeading';
 import { groupDirectionCategories, groupDirections, type GroupDirection } from '@/content/groupDirections';
 import type { OpenModalHandler } from '@/types/modal';
 import { GROUP_TRAININGS_TEXT } from '@/features/group-trainings/model/constants';
 import { DirectionDetails, TrainerAvatar } from '@/features/group-trainings/ui/components/DirectionCardParts';
 import { GroupSchedulePreview } from '@/features/group-trainings/ui/components/GroupSchedulePreview';
-import { cn } from '@/lib/utils';
+import PublicAssetImage from '@/components/PublicAssetImage';
 
 interface GroupTrainingsProps {
   onOpenModal: OpenModalHandler;
 }
 
+// Presents the weekly schedule and direction catalog in the same visual language as the home page.
 export default function GroupTrainingsSection({ onOpenModal }: GroupTrainingsProps) {
+  const { hash } = useLocation();
   const [expandedScheduleDays, setExpandedScheduleDays] = useState<string[]>([]);
   const [selectedDirection, setSelectedDirection] = useState<GroupDirection | null>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
+  // Reveals the linked direction and immediately opens its existing description.
+  useEffect(() => {
+    if (!hash) return;
+    const frameId = requestAnimationFrame(() => {
+      document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'instant', block: 'start' });
+      const direction = groupDirections.find((item) => item.key === hash.slice(1));
+      if (direction) {
+        setSelectedDirection(direction);
+        setIsDetailsModalOpen(true);
+      }
+    });
+    return () => cancelAnimationFrame(frameId);
+  }, [hash]);
+
+  // Toggles only the selected day without closing other expanded schedule days.
   const toggleScheduleDay = (dayId: string) => {
     setExpandedScheduleDays((prev) => (prev.includes(dayId) ? prev.filter((id) => id !== dayId) : [...prev, dayId]));
   };
 
+  // Opens the existing direction details without changing the booking payload.
   const openDirectionDetails = (direction: GroupDirection) => {
     setSelectedDirection(direction);
     setIsDetailsModalOpen(true);
   };
 
+  // Moves to the catalog while respecting reduced-motion preferences.
   const scrollToDirections = () => {
-    document.getElementById('group-directions')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('group-directions')?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
   };
 
+  // Moves to the weekly schedule while respecting reduced-motion preferences.
   const scrollToSchedule = () => {
-    document.getElementById('group-schedule')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('group-schedule')?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
   };
 
   return (
-    <div className="relative overflow-hidden">
-      <section className="relative flex min-h-[100svh] items-center overflow-hidden">
-        <div className="hero-glow-layer"><div className="hero-glow-top-right" /><div className="hero-glow-bottom-left" /><div className="hero-glow-center" /></div>
-        <div className="relative z-30 mx-auto w-full max-w-7xl px-4 pt-0 pb-20 sm:px-6 sm:pt-24 sm:pb-14 md:max-lg:flex md:max-lg:min-h-[calc(100svh-13rem)] md:max-lg:flex-col md:max-lg:justify-between md:max-lg:px-10 md:max-lg:pt-32 md:max-lg:pb-20 lg:px-8 lg:pt-32 lg:pb-16">
-          <div className="space-y-8 max-md:w-full max-md:max-w-full max-md:space-y-7 md:max-lg:mx-auto md:max-lg:max-w-[min(94vw,860px)] md:max-lg:space-y-11">
-            <BalancedHeading as="h1" className="section-title text-white max-md:text-[clamp(2.8rem,10vw,4rem)] max-md:leading-[1.04] md:max-lg:max-w-full md:max-lg:text-[clamp(4rem,8.6vw,5.8rem)] md:max-lg:leading-[0.98] lg:text-[clamp(4.4rem,6vw,6.4rem)] lg:leading-[0.98]">
-              {GROUP_TRAININGS_TEXT.heroTitle}
-            </BalancedHeading>
-            <p className="max-w-2xl text-base leading-relaxed text-gray-200 sm:text-lg md:max-lg:max-w-[48rem] md:max-lg:text-[1.45rem] md:max-lg:leading-[1.34] lg:text-xl">{GROUP_TRAININGS_TEXT.heroSubtitle}</p>
-            <div className="flex flex-col gap-3 sm:flex-row md:max-lg:gap-4">
-              <button type="button" onClick={scrollToSchedule} className="btn-primary inline-flex items-center justify-center gap-2 px-7 py-4 text-white md:max-lg:px-10 md:max-lg:py-5 md:max-lg:text-lg">{GROUP_TRAININGS_TEXT.heroPrimaryCta}<ArrowRight className="h-4 w-4" /></button>
-              <button type="button" onClick={scrollToDirections} className="inline-flex items-center justify-center rounded-full border border-white/12 bg-white/[0.055] px-7 py-4 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] md:max-lg:px-10 md:max-lg:py-5 md:max-lg:text-lg motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-[#F5B800]">{GROUP_TRAININGS_TEXT.heroSecondaryCta}</button>
-            </div>
-          </div>
-
-          <div className="hidden min-h-[5.5rem] items-end justify-center md:max-lg:flex">
-            <button
-              type="button"
-              onClick={scrollToSchedule}
-              aria-label="Прокрутить к расписанию"
-              className="inline-flex items-center justify-center text-white"
-            >
-              <ChevronDown className="h-11 w-11 text-white" strokeWidth={1.85} />
+    <div className="club-page relative overflow-x-clip">
+      <header className="club-page-hero">
+        <div className="hero-media-layer pointer-events-none absolute inset-0" aria-hidden="true">
+          <PublicAssetImage src={`${import.meta.env.BASE_URL}sections/hero-group-studio-natural.png`}
+            alt="" loading="eager"
+            sizes="(max-width: 767px) 1200px, 100vw" showPlaceholder={false} pictureClassName="block h-full w-full"
+            className="h-full w-full object-cover object-center" />
+        </div>
+        <div className="club-page-hero-shade" aria-hidden="true" />
+        <div className="club-page-header mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <BalancedHeading as="h1" className="club-page-title max-w-4xl"><span>{GROUP_TRAININGS_TEXT.heroTitle}</span></BalancedHeading>
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/80 md:text-lg">{GROUP_TRAININGS_TEXT.heroSubtitle}</p>
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+            <button type="button" onClick={scrollToSchedule} className="hero-cta hero-cta-secondary">
+              <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+              <span className="hero-cta-label"><span>{GROUP_TRAININGS_TEXT.heroPrimaryCta}</span></span>
+              <ChevronsRight aria-hidden="true" />
+            </button>
+            <button type="button" onClick={scrollToDirections} className="hero-cta hero-cta-secondary">
+              <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+              <span className="hero-cta-label"><span>{GROUP_TRAININGS_TEXT.heroSecondaryCta}</span></span>
+              <ChevronsRight aria-hidden="true" />
             </button>
           </div>
+          <p className="mt-5 text-sm text-white/65">* Групповые занятия оплачиваются отдельно.</p>
         </div>
-      </section>
+      </header>
 
-      <section id="group-schedule" className="relative overflow-hidden scroll-mt-24 pt-2 pb-8 sm:pt-4 sm:pb-10 lg:pt-6 lg:pb-12">
-        <div className="hero-glow-layer"><div className="hero-glow-top-right" /><div className="hero-glow-bottom-left" /><div className="hero-glow-center" /></div>
-        <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section id="group-schedule" className="scroll-mt-28 py-12 md:py-16">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <GroupSchedulePreview expandedScheduleDays={expandedScheduleDays} toggleScheduleDay={toggleScheduleDay} />
         </div>
       </section>
 
-      <section id="group-directions" className="relative scroll-mt-24 py-10 sm:py-12 lg:py-14">
-        <div className="hero-glow-layer"><div className="hero-glow-top-right" /><div className="hero-glow-bottom-left" /><div className="hero-glow-center" /></div>
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center"><BalancedHeading as="h2" className="section-title text-white">{GROUP_TRAININGS_TEXT.sectionTitle} <HeadingAccent>{GROUP_TRAININGS_TEXT.sectionTitleAccent}</HeadingAccent></BalancedHeading></div>
-          <div className="mt-10 space-y-12 lg:space-y-14">
+      <section id="group-directions" className="scroll-mt-28 pb-16 md:pb-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <BalancedHeading as="h2" className="border-t border-white/15 pt-7 text-3xl font-semibold tracking-tight text-white md:text-4xl"><span>Направления</span></BalancedHeading>
+          <div className="mt-10 space-y-12 md:space-y-16">
             {groupDirectionCategories.map((category) => {
               const directions = groupDirections.filter((direction) => direction.category === category.key);
               return (
-                <section key={category.key} className="space-y-6">
-                  <div><h2 className="text-2xl font-bold leading-tight text-white sm:text-3xl lg:text-[2.2rem]">{category.title}</h2></div>
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 2xl:grid-cols-3">
-                    {directions.map((direction, directionIndex) => (
-                      <article
-                        key={direction.key}
-                        id={direction.key}
-                        className={cn(
-                          "relative scroll-mt-28 rounded-[1.75rem] px-4 py-4 after:absolute after:inset-x-4 after:bottom-0 after:h-px after:bg-white/10 sm:px-5 sm:py-5 sm:after:inset-x-5 lg:px-6 lg:py-6 lg:after:inset-x-6",
-                          directionIndex % 2 === 0 &&
-                            "md:max-2xl:before:absolute md:max-2xl:before:inset-y-4 md:max-2xl:before:-right-3 md:max-2xl:before:w-px md:max-2xl:before:bg-white/10",
-                          directionIndex % 3 !== 2 &&
-                            "2xl:before:absolute 2xl:before:inset-y-4 2xl:before:-right-3 2xl:before:w-px 2xl:before:bg-white/10",
-                        )}
-                      >
-                        <div className="grid grid-cols-[4rem_minmax(0,1fr)] items-start gap-5 sm:grid-cols-[4.75rem_minmax(0,1fr)]">
-                          <div className="ml-2 flex justify-center"><TrainerAvatar direction={direction} /></div>
-                          <div className="min-w-0 self-center text-left">
-                            <h3 className="text-[0.95rem] font-bold leading-tight text-white [overflow-wrap:anywhere] sm:text-lg lg:text-xl">{direction.text}</h3>
-                            <p className="mt-1 text-[0.82rem] leading-snug text-gray-200 [overflow-wrap:anywhere] sm:text-sm lg:text-base"><span className="text-[#F5B800]">Тренер:</span> {direction.trainer}</p>
+                <section key={category.key}>
+                  <h3 className="text-xl font-semibold text-white md:text-2xl">{category.title}</h3>
+                  <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/65 md:text-base">{category.description}</p>
+                  <div className="mt-6 grid grid-cols-1 gap-x-12 md:grid-cols-2">
+                    {directions.map((direction) => (
+                      <article key={direction.key} id={direction.key} className="flex min-w-0 scroll-mt-28 flex-col border-t border-white/15 py-6 md:py-8">
+                        <div className="flex items-center gap-4">
+                          <TrainerAvatar direction={direction} />
+                          <div className="min-w-0">
+                            <h4 className="text-lg font-semibold leading-tight text-white md:text-xl">{direction.text}</h4>
+                            <p className="mt-2 text-sm text-white/65">Тренер: {direction.trainer}</p>
                           </div>
                         </div>
-
-                        <div className="mt-3 flex flex-col items-stretch gap-2 min-[390px]:flex-row min-[390px]:items-center min-[390px]:justify-between sm:mt-4">
-                          <button type="button" data-action={direction.action} data-booking-action={direction.bookingAction} data-confirm-booking-action={direction.confirmBookingAction} data-group-direction={direction.key} onClick={() => onOpenModal({ topic: 'group', groupDirection: direction.text })} className="btn-primary inline-flex min-h-10 flex-1 items-center justify-center whitespace-nowrap px-4 py-2 text-[0.82rem] text-white">Запись на занятие</button>
-                          <button type="button" onClick={() => openDirectionDetails(direction)} className="inline-flex min-h-10 items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-white/12 bg-white/[0.055] px-3.5 py-2 text-[0.82rem] font-semibold text-[#F5B800] shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08]"><span>{GROUP_TRAININGS_TEXT.detailsCta}</span><ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 ease-out" /></button>
+                        <p className="mb-5 mt-4 text-sm leading-relaxed text-white/75">{direction.shortDescription}</p>
+                        <div className="mt-auto flex items-center gap-4 md:gap-x-5">
+                          <button type="button" data-action={direction.action} data-booking-action={direction.bookingAction} data-confirm-booking-action={direction.confirmBookingAction} data-group-direction={direction.key}
+                            onClick={() => onOpenModal({ topic: 'group', groupDirection: direction.text })} className="hero-cta hero-cta-primary">
+                            <svg className="hero-cta-shape" viewBox="0 0 180 44" preserveAspectRatio="none" aria-hidden="true"><polygon points="20,1 179,1 179,23 159,43 1,43 1,21" vectorEffect="non-scaling-stroke" /></svg>
+                            <span className="hero-cta-label"><span>Запись на занятия</span></span>
+                            <ChevronsRight aria-hidden="true" />
+                          </button>
+                          <button type="button" onClick={() => openDirectionDetails(direction)} className="home-text-link inline-flex min-h-11 shrink-0 items-center gap-2 whitespace-nowrap text-sm text-white/80">
+                            {GROUP_TRAININGS_TEXT.detailsCta}<ArrowRight className="hidden h-4 w-4 md:block" aria-hidden="true" />
+                          </button>
                         </div>
                       </article>
                     ))}
@@ -116,30 +133,51 @@ export default function GroupTrainingsSection({ onOpenModal }: GroupTrainingsPro
         </div>
       </section>
 
-      <section className="pb-12 sm:pb-14 lg:pb-16">
+      <section className="pb-16 md:pb-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="p-6 text-center sm:p-8 lg:p-10">
-            <BalancedHeading as="h2" className="section-title text-white">{GROUP_TRAININGS_TEXT.finalTitle}</BalancedHeading>
-            <p className="mx-auto mt-4 max-w-3xl text-base text-gray-200 sm:text-lg">{GROUP_TRAININGS_TEXT.finalSubtitle}</p>
-            <button type="button" onClick={() => onOpenModal({ topic: 'group', groupRecommendation: true })} className="btn-primary mt-6 w-full px-8 py-4 text-white sm:w-auto sm:min-w-[22rem]">{GROUP_TRAININGS_TEXT.finalCta}</button>
+          <div className="border-t border-white/15 pt-7">
+            <BalancedHeading as="h2" className="max-w-3xl text-2xl font-semibold tracking-tight text-white md:text-3xl"><span>{GROUP_TRAININGS_TEXT.finalTitle}</span></BalancedHeading>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/70">{GROUP_TRAININGS_TEXT.finalSubtitle}</p>
+            <button type="button" onClick={() => onOpenModal({ topic: 'group', groupRecommendation: true })} className="hero-cta hero-cta-secondary mt-6">
+              <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+              <span className="hero-cta-label"><span>{GROUP_TRAININGS_TEXT.finalCta}</span></span>
+              <ChevronsRight aria-hidden="true" />
+            </button>
           </div>
         </div>
       </section>
 
       <Dialog open={isDetailsModalOpen} onOpenChange={setIsDetailsModalOpen}>
-        <DialogContent showCloseButton className="modal-surface w-[calc(100vw-1rem)] max-h-[calc(100dvh-1.5rem)] max-w-[calc(100vw-1rem)] overflow-y-auto rounded-[1.75rem] border-white/20 p-4 sm:max-w-3xl sm:p-6">
-          <div className="px-3 text-center lg:px-0">
-            <DialogTitle className="text-lg font-semibold leading-tight text-white sm:text-2xl">{selectedDirection?.text ?? GROUP_TRAININGS_TEXT.detailsCta}</DialogTitle>
+        <DialogContent showCloseButton={false} className="direction-details-modal flex max-h-[calc(100dvh-3rem)] w-[calc(100vw-2rem)] flex-col gap-0 overflow-hidden rounded-[6px] p-0 sm:max-w-2xl">
+          <div className="flex shrink-0 items-start justify-between gap-4 px-5 py-5 sm:px-8 sm:py-6">
+            <DialogTitle className="min-w-0 pt-1 text-[1.65rem] font-semibold leading-[1.15] tracking-tight text-white sm:text-3xl">{selectedDirection?.text ?? GROUP_TRAININGS_TEXT.detailsCta}</DialogTitle>
+            <DialogClose className="home-text-link inline-flex min-h-11 shrink-0 items-center text-sm text-white/65" aria-label="Закрыть описание направления">Закрыть</DialogClose>
           </div>
-          <DialogDescription className="sr-only">Подробная информация о выбранном групповом направлении.</DialogDescription>
-          {selectedDirection ? (
-            <div className="mt-2 sm:mt-3">
-              <div className="px-3 text-center lg:px-0">
-                <p className="text-sm text-gray-200 sm:text-base"><span className="text-[#F5B800]">Тренер:</span> {selectedDirection.trainer}</p>
-              </div>
-              <div className="mt-4 sm:mt-5">
+          <DialogDescription className="sr-only">{selectedDirection?.shortDescription ?? 'Подробная информация о выбранном групповом направлении.'}</DialogDescription>
+          <div className="direction-details-body min-h-0 overflow-y-auto overscroll-contain px-5 pb-6 sm:px-8 sm:pb-8" tabIndex={0} role="region" aria-label="Описание тренировки">
+            {selectedDirection ? (
+              <>
                 <DirectionDetails direction={selectedDirection} unwrapped />
-              </div>
+                <div className="mt-7 flex items-center gap-3 border-t border-white/15 pt-5">
+                  <TrainerAvatar direction={selectedDirection} />
+                  <div>
+                    <p className="text-sm text-white/55">Тренер направления</p>
+                    <p className="mt-1 text-base font-medium text-white">{selectedDirection.trainer}</p>
+                  </div>
+                </div>
+              </>
+            ) : null}
+          </div>
+          {selectedDirection ? (
+            <div className="shrink-0 border-t border-white/15 px-5 py-4 sm:px-8 sm:py-5">
+              <p className="mb-3 text-sm leading-relaxed text-white/60">* Групповые занятия оплачиваются отдельно.</p>
+              <DialogClose asChild>
+                <button type="button" onClick={() => onOpenModal({ topic: 'group', groupDirection: selectedDirection.text })} className="hero-cta hero-cta-primary">
+                  <svg className="hero-cta-shape" viewBox="0 0 240 48" preserveAspectRatio="none" aria-hidden="true"><polygon points="20,1 239,1 239,27 219,47 1,47 1,21" vectorEffect="non-scaling-stroke" /></svg>
+                  <span className="hero-cta-label"><span>Записаться на занятие</span></span>
+                  <ChevronsRight aria-hidden="true" />
+                </button>
+              </DialogClose>
             </div>
           ) : null}
         </DialogContent>

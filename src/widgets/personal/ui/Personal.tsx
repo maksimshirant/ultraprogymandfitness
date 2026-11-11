@@ -1,10 +1,9 @@
 
-import { useEffect, useMemo, useState } from 'react';
-import { ArrowRight, Check, ChevronDown, ChevronUp } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { ChevronDown, ChevronUp, ChevronsRight } from 'lucide-react';
 import PublicAssetImage from '@/components/PublicAssetImage';
 import { trainerCategories, trainers, type TrainerCategory, type TrainerProfile } from '@/content/trainers';
-import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
-import { useViewportTier } from '@/hooks/useViewportTier';
+import { BalancedHeading } from '@/components/typography/BalancedHeading';
 import { cn } from '@/lib/utils';
 import type { OpenModalHandler } from '@/types/modal';
 
@@ -34,165 +33,84 @@ const PERSONAL_TEXT = {
 
 const CLUB_LOGO_SRC = `${import.meta.env.BASE_URL}logo.webp`;
 
+// Formats existing qualifications as plain text, retaining specialization labels.
 function renderAchievement(achievement: string, index: number) {
   const trimmedAchievement = achievement.trim();
-  const isSpecializationLine = trimmedAchievement.startsWith('-');
-  const isLabelLine = trimmedAchievement.endsWith(':');
-
-  if (isSpecializationLine) {
-    return (
-      <li key={index} className="pl-6 text-[11px] leading-relaxed text-gray-300 sm:pl-7 sm:text-xs md:pl-8 md:text-sm">
-        {achievement}
-      </li>
-    );
-  }
-
-  if (isLabelLine) {
-    return (
-      <li key={index} className="pt-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#F5B800] sm:text-xs md:text-sm">
-        {achievement}
-      </li>
-    );
-  }
-
   return (
-    <li key={index} className="flex items-start gap-3">
-      <div className="mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#F5B800] to-[#D89B00] sm:h-4.5 sm:w-4.5 md:h-5 md:w-5">
-        <Check className="h-2.5 w-2.5 text-white md:h-3 md:w-3" />
-      </div>
-      <span className="text-[11px] leading-relaxed text-gray-300 sm:text-xs md:text-sm">{achievement}</span>
-    </li>
+    <li key={index} className={cn(
+      'text-sm leading-relaxed text-white/70',
+      trimmedAchievement.startsWith('-') && 'pl-4',
+      trimmedAchievement.endsWith(':') && 'pt-2 font-semibold text-white',
+    )}>{achievement}</li>
   );
 }
 
+// Keeps the team photos, booking actions and expandable qualifications in a readable catalog.
 export default function Personal({ onOpenModal }: PersonalProps) {
   const [activeCategory, setActiveCategory] = useState<TrainerCategory>('personal');
   const [expandedTrainerId, setExpandedTrainerId] = useState<number | null>(null);
-  const [isTabletHeroScrollHintVisible, setIsTabletHeroScrollHintVisible] = useState(false);
-
-  const viewportTier = useViewportTier();
-  const isMobileViewport = viewportTier === 'mobile';
-
   const filteredTrainers = useMemo(
     () => trainers.filter((trainer) => trainer.category === activeCategory),
     [activeCategory]
   );
 
-  useEffect(() => {
-    const syncTabletHeroScrollHintVisibility = () => {
-      const isTabletViewportMatch = window.innerWidth >= 768 && window.innerWidth < 1024;
-      const nextVisibility = isTabletViewportMatch && window.scrollY < 24;
-
-      setIsTabletHeroScrollHintVisible((prev) => (prev === nextVisibility ? prev : nextVisibility));
-    };
-
-    syncTabletHeroScrollHintVisibility();
-    window.addEventListener('scroll', syncTabletHeroScrollHintVisibility, { passive: true });
-    window.addEventListener('resize', syncTabletHeroScrollHintVisibility);
-
-    return () => {
-      window.removeEventListener('scroll', syncTabletHeroScrollHintVisibility);
-      window.removeEventListener('resize', syncTabletHeroScrollHintVisibility);
-    };
-  }, []);
-
+  // Resets the open biography when switching between the existing trainer categories.
   const selectCategory = (category: TrainerCategory) => {
     setExpandedTrainerId(null);
     setActiveCategory(category);
   };
 
+  // Moves directly to the team while respecting reduced-motion preferences.
   const scrollToTrainers = () => {
     document.getElementById('trainers')?.scrollIntoView({
-      behavior: 'smooth',
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
       block: 'start',
     });
   };
 
+  // Keeps the name and actions on the photo while details fade into its upper area.
   const renderTrainerCard = (trainer: TrainerProfile) => {
     const isExpanded = expandedTrainerId === trainer.id;
-    const [experienceLabel, ...experienceValueParts] = trainer.experience.split(':');
-    const experienceValue = experienceValueParts.join(':').trim();
-    const hasExperienceSeparator = trainer.experience.includes(':');
-
     return (
-      <article key={trainer.id} className="glass-card flex flex-col overflow-hidden border border-white/10 p-0">
-        <div className="relative aspect-[4/5] overflow-hidden bg-black/40">
-          {trainer.image ? (
-            <PublicAssetImage
-              src={trainer.image}
-              alt={trainer.name}
-              loading="lazy"
-              fetchPriority="low"
-              sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
-              variantSuffix="preview"
-              deferUntilVisible
-              pictureClassName="absolute inset-0 block h-full w-full"
-              className={cn('h-full w-full object-cover object-center', trainer.imageClassName)}
-            />
-          ) : (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#1A1A27] via-[#111117] to-[#0A0A0F]">
-              <img
-                src={CLUB_LOGO_SRC}
-                alt="Логотип Ultra Pro Gym & Fitness"
-                loading="lazy"
-                decoding="async"
-                className="h-28 w-28 object-contain brightness-0 invert opacity-85 md:h-32 md:w-32"
-              />
-            </div>
-          )}
-          <div
-            className={cn(
-              'absolute inset-x-0 bottom-0 p-4 pt-20 sm:p-5 sm:pt-24',
-              isExpanded
-                ? 'bg-gradient-to-t from-black via-black/95 to-transparent'
-                : 'bg-gradient-to-t from-black via-black/85 to-transparent'
-            )}
-          >
-            {!isExpanded ? (
-              <>
-                <div>
-                  {trainer.role ? (
-                    <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#F5B800] sm:text-[11px]">
-                      {trainer.role}
-                    </p>
-                  ) : null}
-                  <h3 className="truncate whitespace-nowrap text-xl font-bold leading-tight text-white sm:text-2xl">
-                    {trainer.name}
-                  </h3>
-                </div>
-                <p className="mt-2 text-xs sm:text-sm">
-                  {hasExperienceSeparator ? (
-                    <>
-                      <span className="font-medium text-[#F5B800]">{experienceLabel}:</span>{' '}
-                      <span className="text-white">{experienceValue}</span>
-                    </>
-                  ) : (
-                    <span className="text-white">{trainer.experience}</span>
-                  )}
-                </p>
-              </>
-            ) : (
-              <ul className="max-h-[48%] space-y-2 overflow-auto pr-1">
-                {trainer.achievements.map((achievement, achievementIndex) =>
-                  renderAchievement(achievement, achievementIndex)
-                )}
+      <article key={trainer.id} data-expanded={isExpanded} className="trainer-photo-card relative aspect-[3/4] min-w-0 self-start overflow-hidden rounded-sm bg-[#101114]">
+        {trainer.image ? (
+          <PublicAssetImage src={trainer.image} alt={trainer.name} loading="lazy" fetchPriority="low"
+            sizes="(max-width: 639px) 100vw, (max-width: 1279px) 50vw, 33vw" variantSuffix="preview" deferUntilVisible
+            pictureClassName="absolute inset-0 block h-full w-full"
+            className={cn('h-full w-full object-cover object-top', trainer.imageClassName)} />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center p-10">
+            <img src={CLUB_LOGO_SRC} alt="Логотип Ultra Pro Gym & Fitness" loading="lazy" decoding="async" className="h-auto w-full max-w-48 object-contain brightness-0 invert opacity-70" />
+          </div>
+        )}
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_25%,rgba(0,0,0,0.65)_62%,rgba(0,0,0,0.95)_100%)]" aria-hidden="true" />
+        <div className="trainer-photo-details-shade pointer-events-none absolute inset-0 bg-[#08090c]/95" aria-hidden="true" />
+        <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-5">
+          <div id={`trainer-details-${trainer.id}`} className="trainer-photo-details" aria-hidden={!isExpanded} inert={!isExpanded}>
+            <div className="trainer-photo-details-scroll h-full min-h-0 overflow-y-auto overscroll-contain pr-2" tabIndex={isExpanded ? 0 : -1} role="region" aria-label={`О тренере ${trainer.name}`}>
+              <p className="text-sm leading-relaxed text-white/85">{trainer.summary}</p>
+              <h4 className="mb-3 mt-5 text-sm font-semibold text-white">Образование и квалификация</h4>
+              <ul className="space-y-3">
+                {trainer.achievements.map((achievement, index) => renderAchievement(achievement, index))}
               </ul>
-            )}
-            <div className="mt-3 flex items-center justify-between gap-3">
-              <button
-                type="button"
-                onClick={() => onOpenModal({ topic: 'personal', trainer: trainer.name })}
-                className="btn-primary min-h-[2.25rem] px-3 py-1.5 text-xs text-white sm:min-h-[2.5rem] sm:px-4 sm:py-2 sm:text-sm"
-              >
-                Запись на тренировку
+            </div>
+          </div>
+          <div className="relative shrink-0">
+            {trainer.role ? <p className="mb-2 text-xs font-medium text-white/80">{trainer.role}</p> : null}
+            <h3 className="text-xl font-semibold leading-tight tracking-tight text-white sm:text-2xl">{trainer.name}</h3>
+            <p className="mt-2 text-sm text-white/75">{trainer.experience}</p>
+            <div className="mt-4 flex items-center gap-3">
+              <button type="button" onClick={() => onOpenModal({ topic: 'personal', trainer: trainer.name })} className="hero-cta hero-cta-primary">
+                <svg className="hero-cta-shape" viewBox="0 0 132 44" preserveAspectRatio="none" aria-hidden="true"><polygon points="20,1 131,1 131,23 111,43 1,43 1,21" vectorEffect="non-scaling-stroke" /></svg>
+                <span className="hero-cta-label"><span>Записаться</span></span>
+                <ChevronsRight aria-hidden="true" />
               </button>
-              <button
-                type="button"
-                onClick={() => setExpandedTrainerId((prev) => (prev === trainer.id ? null : trainer.id))}
-                className="inline-flex min-h-[2.5rem] items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-white/12 bg-white/[0.055] px-3.5 py-2 text-xs font-semibold text-[#F5B800] shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] motion-reduce:transition-colors sm:text-sm lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08]"
-              >
-                <span>{isExpanded ? PERSONAL_TEXT.showLess : 'Подробнее'}</span>
-                {isExpanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+              <button type="button" onClick={() => setExpandedTrainerId((prev) => prev === trainer.id ? null : trainer.id)}
+                aria-expanded={isExpanded} aria-controls={`trainer-details-${trainer.id}`}
+                aria-label={`${isExpanded ? 'Скрыть информацию о тренере' : PERSONAL_TEXT.showMore} ${trainer.name}`}
+                className="home-text-link inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-white">
+                {isExpanded ? PERSONAL_TEXT.showLess : 'Подробнее'}
+                {isExpanded ? <ChevronUp className="h-4 w-4" aria-hidden="true" /> : <ChevronDown className="h-4 w-4" aria-hidden="true" />}
               </button>
             </div>
           </div>
@@ -202,117 +120,44 @@ export default function Personal({ onOpenModal }: PersonalProps) {
   };
 
   return (
-    <div className="relative overflow-hidden">
-      <section className="relative flex min-h-[100svh] items-center overflow-hidden">
-        <div className="hero-glow-layer">
-          <div className="hero-glow-top-right" />
-          <div className="hero-glow-bottom-left" />
-          <div className="hero-glow-center" />
-        </div>
-
-
-        <div className="relative z-30 mx-auto w-full max-w-7xl px-4 pt-0 pb-20 sm:px-6 sm:pt-24 sm:pb-14 md:max-lg:flex md:max-lg:min-h-[calc(100svh-13rem)] md:max-lg:flex-col md:max-lg:justify-between md:max-lg:px-10 md:max-lg:pt-32 md:max-lg:pb-20 lg:px-8 lg:pt-32 lg:pb-16">
-          <div className="space-y-8 max-md:w-full max-md:max-w-full max-md:space-y-7 md:max-lg:mx-auto md:max-lg:max-w-[min(94vw,860px)] md:max-lg:space-y-11">
-            <BalancedHeading
-              as="h1"
-              className="section-title text-white max-md:text-[clamp(3.25rem,11.5vw,4.5rem)] max-md:leading-[0.94] md:max-lg:max-w-full md:max-lg:text-[clamp(4.4rem,9.4vw,6.2rem)] md:max-lg:leading-[0.9] lg:text-[clamp(4.6rem,6.6vw,6.8rem)] lg:leading-[0.9]"
-            >
-              {PERSONAL_TEXT.heroTitle} <HeadingAccent className="bg-none p-0">{PERSONAL_TEXT.heroAccent}</HeadingAccent>
-            </BalancedHeading>
-            <p className="max-w-2xl text-base leading-relaxed text-gray-200 sm:text-lg md:max-lg:max-w-[48rem] md:max-lg:text-[1.6rem] md:max-lg:leading-[1.34] lg:text-xl">
-              {PERSONAL_TEXT.heroSubtitle}
-            </p>
-
-            <div className="flex flex-col gap-3 sm:flex-row md:max-lg:gap-4">
-              <button
-                type="button"
-                onClick={() => onOpenModal({ topic: 'personal' })}
-                className="btn-primary inline-flex items-center justify-center gap-2 px-7 py-4 text-white md:max-lg:px-10 md:max-lg:py-5 md:max-lg:text-lg"
-              >
-                {PERSONAL_TEXT.heroPrimaryCta}
-                <ArrowRight className="h-4 w-4 md:max-lg:h-5 md:max-lg:w-5" />
-              </button>
-              <button
-                type="button"
-                onClick={scrollToTrainers}
-                className="inline-flex items-center justify-center rounded-full border border-white/12 bg-white/[0.055] px-7 py-4 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] md:max-lg:px-10 md:max-lg:py-5 md:max-lg:text-lg motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-[#F5B800]"
-              >
-                {PERSONAL_TEXT.heroSecondaryCta}
-              </button>
-            </div>
-          </div>
-
-          <div className="hidden min-h-[5.5rem] items-end justify-center md:max-lg:flex">
-            <button
-              type="button"
-              onClick={scrollToTrainers}
-              aria-label={PERSONAL_TEXT.heroScrollHintAria}
-              className={cn(
-                'inline-flex items-center justify-center text-white transition-opacity duration-200',
-                isTabletHeroScrollHintVisible ? 'opacity-100' : 'pointer-events-none opacity-0'
-              )}
-            >
-              <ChevronDown className="h-11 w-11 text-white" strokeWidth={1.85} />
+    <div className="club-page relative overflow-x-clip">
+      <header className="club-page-hero">
+        <div className="club-page-header mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <BalancedHeading as="h1" className="club-page-title"><span>{PERSONAL_TEXT.heroTitle}</span></BalancedHeading>
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/75 md:text-lg">{PERSONAL_TEXT.heroSubtitle}</p>
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+            <button type="button" onClick={() => onOpenModal({ topic: 'personal' })} className="hero-cta hero-cta-primary">
+              <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+              <span className="hero-cta-label"><span>{PERSONAL_TEXT.cta}</span></span>
+              <ChevronsRight aria-hidden="true" />
+            </button>
+            <button type="button" onClick={scrollToTrainers} className="hero-cta hero-cta-secondary">
+              <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+              <span className="hero-cta-label"><span>{PERSONAL_TEXT.heroSecondaryCta}</span></span>
+              <ChevronsRight aria-hidden="true" />
             </button>
           </div>
+          <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/60">* Запись на индивидуальную тренировку необходимо производить заранее. Индивидуальные тренировки оплачиваются отдельно.</p>
         </div>
-      </section>
+      </header>
 
-      <section id="trainers" className="relative overflow-hidden scroll-mt-24 py-14">
-        <div className="hero-glow-layer">
-          <div className="hero-glow-top-right" />
-          <div className="hero-glow-bottom-left" />
-          <div className="hero-glow-center" />
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-12 text-center">
-            <BalancedHeading as="h2" className="section-title text-white">
-              {PERSONAL_TEXT.sectionTitle} <HeadingAccent>{PERSONAL_TEXT.sectionTitleAccent}</HeadingAccent>
-            </BalancedHeading>
-            <p className="section-subtitle mx-auto">{PERSONAL_TEXT.sectionSubtitle}</p>
+      <section id="trainers" className="scroll-mt-28 pb-16 md:pb-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 border-b border-white/15" role="group" aria-label="Категории тренеров">
+            {trainerCategories.map((category) => (
+              <button key={category.id} type="button" onClick={() => selectCategory(category.id)} aria-pressed={category.id === activeCategory} aria-label={category.label}
+                className={cn('home-text-link min-h-12 border-b-2 py-3 text-left text-sm font-medium md:text-base',
+                  category.id === activeCategory ? 'border-[#F5B800] text-white' : 'border-transparent text-white/60')}>
+                <span className="sm:hidden">{category.id === 'personal' ? 'Персональные' : 'Групповые'}</span>
+                <span className="hidden sm:inline">{category.label}</span>
+              </button>
+            ))}
           </div>
-
-          <div className="flex flex-wrap justify-center gap-2.5 md:gap-3">
-            {trainerCategories.map((category) => {
-              const isActive = category.id === activeCategory;
-
-              return (
-                <button
-                  key={category.id}
-                  type="button"
-                  onClick={() => selectCategory(category.id)}
-                  aria-label={`${PERSONAL_TEXT.selectCategoryAria} ${category.label}`}
-                  aria-pressed={isActive}
-                  className={cn(
-                    'rounded-full border px-4 py-2 text-xs transition-[background-color,border-color,color] md:px-4.5 md:py-2.5 md:text-sm',
-                    isActive
-                      ? 'border-white/25 bg-white/10 text-white'
-                      : 'border-white/8 bg-transparent text-gray-400 hover:border-white/18 hover:text-white'
-                  )}
-                >
-                  <span className="block font-medium">
-                    {isMobileViewport
-                      ? category.id === 'personal'
-                        ? 'Персональные'
-                        : 'Групповые'
-                      : category.label}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="mx-auto mt-6 h-px w-20 bg-white/10" />
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3 xl:gap-6">
+          <div className="mt-8 grid grid-cols-1 gap-x-7 gap-y-12 sm:grid-cols-2 xl:grid-cols-3 xl:gap-x-10">
             {filteredTrainers.map((trainer) => renderTrainerCard(trainer))}
           </div>
         </div>
       </section>
-
     </div>
   );
 }
-
-

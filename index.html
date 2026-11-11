@@ -10,10 +10,21 @@
     <link
       rel="preload"
       as="image"
-      href="/mainhero/hbg.avif"
+      media="(min-width: 768px)"
+      href="/sections/hero-gym-gray-desktop-w1600.avif"
+      type="image/avif"
+      imagesizes="(max-aspect-ratio: 1672/941) 178vh, 100vw"
+      imagesrcset="/sections/hero-gym-gray-desktop-w480.avif 480w, /sections/hero-gym-gray-desktop-w768.avif 768w, /sections/hero-gym-gray-desktop-w1024.avif 1024w, /sections/hero-gym-gray-desktop-w1280.avif 1280w, /sections/hero-gym-gray-desktop-w1600.avif 1600w, /sections/hero-gym-gray-desktop-w1672.avif 1672w"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      media="(max-width: 767px)"
+      href="/sections/hero-gym-gray-mobile-w941.avif"
       type="image/avif"
       imagesizes="100vw"
-      imagesrcset="/mainhero/hbg-w480.avif 480w, /mainhero/hbg-w768.avif 768w, /mainhero/hbg-w1024.avif 1024w, /mainhero/hbg-w1280.avif 1280w, /mainhero/hbg.avif 1606w"
+      imagesrcset="/sections/hero-gym-gray-mobile-w480.avif 480w, /sections/hero-gym-gray-mobile-w768.avif 768w, /sections/hero-gym-gray-mobile-w941.avif 941w"
       fetchpriority="high"
     />
     <style>
@@ -88,6 +99,10 @@
       }
 
       @media (min-width: 1024px) {
+        .initial-shell__media img { object-position: center; }
+      }
+
+      @media (max-width: 767px) {
         .initial-shell__media img { object-position: center; }
       }
 
@@ -301,20 +316,34 @@
       <div class="initial-shell" role="status" aria-label="&#1047;&#1072;&#1075;&#1088;&#1091;&#1079;&#1082;&#1072; &#1089;&#1072;&#1081;&#1090;&#1072;">
         <picture class="initial-shell__media">
           <source
+            media="(max-width: 767px)"
             type="image/avif"
-            srcset="/mainhero/hbg-w480.avif 480w, /mainhero/hbg-w768.avif 768w, /mainhero/hbg-w1024.avif 1024w, /mainhero/hbg-w1280.avif 1280w, /mainhero/hbg.avif 1606w"
+            srcset="/sections/hero-gym-gray-mobile-w480.avif 480w, /sections/hero-gym-gray-mobile-w768.avif 768w, /sections/hero-gym-gray-mobile-w941.avif 941w"
             sizes="100vw"
           />
           <source
+            media="(max-width: 767px)"
             type="image/webp"
-            srcset="/mainhero/hbg-w480.webp 480w, /mainhero/hbg-w768.webp 768w, /mainhero/hbg-w1024.webp 1024w, /mainhero/hbg-w1280.webp 1280w, /mainhero/hbg.webp 1606w"
+            srcset="/sections/hero-gym-gray-mobile-w480.webp 480w, /sections/hero-gym-gray-mobile-w768.webp 768w, /sections/hero-gym-gray-mobile-w941.webp 941w"
             sizes="100vw"
           />
+          <source
+            media="(min-width: 768px)"
+            type="image/avif"
+            srcset="/sections/hero-gym-gray-desktop-w480.avif 480w, /sections/hero-gym-gray-desktop-w768.avif 768w, /sections/hero-gym-gray-desktop-w1024.avif 1024w, /sections/hero-gym-gray-desktop-w1280.avif 1280w, /sections/hero-gym-gray-desktop-w1600.avif 1600w, /sections/hero-gym-gray-desktop-w1672.avif 1672w"
+            sizes="(max-aspect-ratio: 1672/941) 178vh, 100vw"
+          />
+          <source
+            media="(min-width: 768px)"
+            type="image/webp"
+            srcset="/sections/hero-gym-gray-desktop-w480.webp 480w, /sections/hero-gym-gray-desktop-w768.webp 768w, /sections/hero-gym-gray-desktop-w1024.webp 1024w, /sections/hero-gym-gray-desktop-w1280.webp 1280w, /sections/hero-gym-gray-desktop-w1600.webp 1600w, /sections/hero-gym-gray-desktop-w1672.webp 1672w"
+            sizes="(max-aspect-ratio: 1672/941) 178vh, 100vw"
+          />
           <img
-            src="/mainhero/hbg.png"
+            src="/sections/hero-gym-gray-desktop.png"
             alt=""
-            width="1606"
-            height="979"
+            width="1672"
+            height="941"
             fetchpriority="high"
             decoding="async"
           />

@@ -45,8 +45,8 @@ export function FrostBackground({
           style={{ opacity: initialOpacity }}
         >
           <picture className="block h-full w-full">
-            <source type="image/avif" srcSet={FROST_BACKGROUND.avifSrcSet} sizes="100vw" />
-            <source type="image/webp" srcSet={FROST_BACKGROUND.webpSrcSet} sizes="100vw" />
+            <source type="image/avif" srcSet={FROST_BACKGROUND.avifSrcSet} sizes="(max-aspect-ratio: 1881/836) 225vh, 100vw" />
+            <source type="image/webp" srcSet={FROST_BACKGROUND.webpSrcSet} sizes="(max-aspect-ratio: 1881/836) 225vh, 100vw" />
             <img
               src={FROST_BACKGROUND.png}
               alt=""

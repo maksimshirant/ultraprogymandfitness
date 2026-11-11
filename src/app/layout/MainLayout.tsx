@@ -12,7 +12,7 @@ interface MainLayoutProps {
 
 export default function MainLayout({ onOpenModal }: MainLayoutProps) {
   const { pathname } = useLocation();
-  const isHomePage = pathname === '/';
+  const hasFullBleedHero = ['/', '/schedule', '/memberships', '/trainers', '/contacts'].includes(pathname);
   const [shouldRenderFooter, setShouldRenderFooter] = useState(false);
   const footerAnchorRef = useRef<HTMLDivElement>(null);
 
@@ -52,7 +52,7 @@ export default function MainLayout({ onOpenModal }: MainLayoutProps) {
     <>
       <ScrollToTop />
       <Header onOpenModal={onOpenModal} />
-      <main className={isHomePage ? '' : 'pt-16 lg:pt-20'}>
+      <main className={hasFullBleedHero ? '' : 'pt-16 lg:pt-20'}>
         <Outlet />
       </main>
       <div ref={footerAnchorRef} className="min-h-32">

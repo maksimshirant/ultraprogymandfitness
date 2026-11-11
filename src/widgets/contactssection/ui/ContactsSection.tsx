@@ -1,11 +1,5 @@
-import { Clock, MessageCircle, Phone, Star } from 'lucide-react';
-import { SiVk, SiTelegram } from 'react-icons/si';
-import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
-import { useViewportTier } from '@/hooks/useViewportTier';
-
-const CONTACTS_ASSETS = {
-  maxIcon: 'https://logo-teka.com/wp-content/uploads/2025/07/max-messenger-sign-logo.svg',
-} as const;
+import { ArrowUpRight, ChevronsRight } from 'lucide-react';
+import { BalancedHeading } from '@/components/typography/BalancedHeading';
 
 const CONTACTS_TEXT = {
   title: 'Отзывы и контакты',
@@ -89,195 +83,111 @@ const CONTACTS_MAP_SRC = `https://yandex.ru/map-widget/v1/?mode=search&text=${en
   CONTACTS_MAP_QUERY
 )}&z=17`;
 
+const CONTACTS_MAP_LINK = CONTACTS_SOCIALS.reviews.replace('/reviews/', '/');
+
+// Makes visit information easy to find and presents the existing reviews without decorative ratings.
 export default function ContactsSection() {
-  const viewportTier = useViewportTier();
-  const isMobileViewport = viewportTier === 'mobile';
-  const visibleReviewsCount = viewportTier === 'desktop' ? 6 : viewportTier === 'tablet' ? 4 : 2;
-  const visibleReviews = CONTACTS_REVIEWS.slice(0, visibleReviewsCount);
-
   return (
-    <section id="contacts" className="deferred-section relative overflow-hidden pt-14 pb-6 md:pt-16 md:pb-8">
-      <div className="hero-glow-layer">
-        <div className="hero-glow-top-right" />
-        <div className="hero-glow-bottom-left" />
-        <div className="hero-glow-center" />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="mb-10 text-center md:mb-12">
-          <BalancedHeading as="h1" className="section-title text-white">
-            <HeadingAccent>{CONTACTS_TEXT.title}</HeadingAccent>
-          </BalancedHeading>
-          <p className="section-subtitle mx-auto">{CONTACTS_TEXT.pageSubtitle}</p>
+    <div id="contacts" className="club-page relative overflow-x-clip">
+      <header className="club-page-header mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <BalancedHeading as="h1" className="club-page-title max-w-5xl"><span>{CONTACTS_TEXT.title}</span></BalancedHeading>
+        <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/75 md:text-lg">{CONTACTS_TEXT.pageSubtitle}</p>
+        <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+          <a href={CONTACTS_TEXT.phoneHref} className="hero-cta hero-cta-secondary">
+            <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+            <span className="hero-cta-label"><span>Позвонить в клуб</span></span>
+            <ChevronsRight aria-hidden="true" />
+          </a>
+          <a href="#club-reviews" className="hero-cta hero-cta-secondary">
+            <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+            <span className="hero-cta-label"><span>Отзывы гостей</span></span>
+            <ChevronsRight aria-hidden="true" />
+          </a>
         </div>
+      </header>
 
-        <div className="border-t border-white/10 pt-8 md:pt-10">
-          <div className="p-6 md:p-8">
-          <div className="flex flex-col gap-4 pb-6 md:flex-row md:items-center md:justify-between">
-            <div className="min-w-0">
-              <BalancedHeading as="h2" className="text-4xl font-bold text-white md:text-5xl">
-                <HeadingAccent>{CONTACTS_TEXT.reviewsTitle}</HeadingAccent>
-              </BalancedHeading>
-            </div>
-
-            {!isMobileViewport ? (
-              <a
-                href={CONTACTS_SOCIALS.reviews}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex h-12 items-center justify-center rounded-full border border-white/12 bg-white/[0.055] px-5 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98] motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-[#F5B800]"
-                aria-label={CONTACTS_TEXT.reviewsAria}
-              >
-                {CONTACTS_TEXT.reviewsCta}
-              </a>
-            ) : null}
-          </div>
-
-          <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {visibleReviews.map((review) => (
-              <article
-                key={`${review.author}-${review.date}`}
-                className="modal-surface rounded-[1.75rem] p-6"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="text-xl font-semibold text-white">{review.author}</h3>
-                    <p className="mt-1 text-sm text-gray-500">{review.meta}</p>
+      <section aria-labelledby="club-contacts-title" className="pb-16 md:pb-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="border-t border-white/15 pt-7">
+            <BalancedHeading as="h2" className="text-3xl font-semibold tracking-tight text-white md:text-4xl">
+              <span id="club-contacts-title">Адрес и связь</span>
+            </BalancedHeading>
+            <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
+              <div className="space-y-7 md:space-y-8">
+                <div>
+                  <h3 className="text-sm font-medium text-white/60">Адрес</h3>
+                  <address className="mt-3 max-w-md text-xl font-medium not-italic leading-relaxed text-white md:text-2xl">{CONTACTS_TEXT.address}</address>
+                  <a href={CONTACTS_MAP_LINK} target="_blank" rel="noopener noreferrer" className="home-text-link mt-2 inline-flex min-h-11 items-center gap-2 text-sm text-white/80">
+                    Открыть в Яндекс Картах<ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                  </a>
+                </div>
+                <div>
+                  <h3 className="text-sm font-medium text-white/60">Телефон</h3>
+                  <a href={CONTACTS_TEXT.phoneHref} className="home-text-link mt-2 inline-flex min-h-11 items-center text-2xl font-semibold tracking-tight text-white md:text-3xl">{CONTACTS_TEXT.phone}</a>
+                </div>
+                <div>
+                  <h3 className="text-sm font-medium text-white/60">График работы</h3>
+                  <dl className="mt-3 max-w-md space-y-3 text-sm md:text-base">
+                    {CONTACTS_TEXT.schedule.map((slot) => (
+                      <div key={slot.day} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                        <dt className="text-white/75">{slot.day}</dt>
+                        <dd className="whitespace-nowrap tabular-nums text-white">{slot.time}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+                <div>
+                  <h3 className="text-sm font-medium text-white/60">Мы на связи</h3>
+                  <div className="mt-1 flex flex-wrap gap-x-6 gap-y-1">
+                    <a href={CONTACTS_SOCIALS.vk} target="_blank" rel="noopener noreferrer" aria-label={CONTACTS_TEXT.vkAria} className="home-text-link inline-flex min-h-11 items-center gap-2 text-sm font-medium text-white">
+                      {CONTACTS_TEXT.vkLabel}<ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </a>
+                    <a href={CONTACTS_SOCIALS.telegram} target="_blank" rel="noopener noreferrer" aria-label={CONTACTS_TEXT.telegramAria} className="home-text-link inline-flex min-h-11 items-center gap-2 text-sm font-medium text-white">
+                      {CONTACTS_TEXT.telegramLabel}<ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </a>
+                    <a href={CONTACTS_SOCIALS.max} target="_blank" rel="noopener noreferrer" aria-label={CONTACTS_TEXT.maxAria} className="home-text-link inline-flex min-h-11 items-center gap-2 text-sm font-medium text-white">
+                      {CONTACTS_TEXT.maxLabel}<ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </a>
                   </div>
-                  <div className="shrink-0 text-right">
-                    <div className="flex items-center justify-end gap-1">
-                      {Array.from({ length: 5 }).map((_, index) => (
-                        <Star key={index} className="h-3.5 w-3.5 fill-[#F5B800] text-[#F5B800] md:h-4 md:w-4" />
-                      ))}
-                    </div>
-                    <p className="mt-2 text-[10px] uppercase tracking-[0.14em] text-gray-500 md:text-xs md:tracking-[0.16em]">
-                      {review.date}
-                    </p>
-                  </div>
                 </div>
-
-                <p className="mt-6 text-sm leading-8 text-gray-300 md:text-base">{review.text}</p>
-              </article>
-            ))}
-          </div>
-
-          {isMobileViewport ? (
-            <div className="mt-6 flex justify-center">
-              <a
-                href={CONTACTS_SOCIALS.reviews}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex h-12 items-center justify-center rounded-full border border-white/12 bg-white/[0.055] px-5 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,border-color,background-color,color] duration-200 ease-out active:scale-[0.98]"
-                aria-label={CONTACTS_TEXT.reviewsAria}
-              >
-                {CONTACTS_TEXT.reviewsCta}
-              </a>
-            </div>
-          ) : null}
-          </div>
-        </div>
-
-        <div className="mt-8 border-t border-white/10 pt-8 md:mt-10 md:pt-10">
-          <div className="p-0 md:p-2">
-            <div className="text-center">
-              <BalancedHeading as="h2" className="text-4xl font-bold text-white md:text-5xl">
-                <HeadingAccent>{CONTACTS_TEXT.contactsTitle}</HeadingAccent>
-              </BalancedHeading>
-            </div>
-
-            <div className="mt-8 grid gap-4 md:grid-cols-3 lg:gap-5">
-              <article className="modal-surface rounded-xl p-5 transition-[border-color,background-color] duration-200 ease-out motion-reduce:transition-colors lg:p-6 lg:hover:border-[#F5B800]/20">
-                <div className="flex items-center gap-3 text-[#F5B800]">
-                  <Phone className="h-5 w-5" aria-hidden="true" />
-                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Телефон</p>
-                </div>
-                <a
-                  href={CONTACTS_TEXT.phoneHref}
-                  className="mt-4 block text-2xl font-semibold leading-tight text-white transition-colors lg:hover:text-[#F5B800]"
-                >
-                  {CONTACTS_TEXT.phone}
-                </a>
-                <p className="mt-2 text-sm text-gray-500">Звонки и консультации</p>
-              </article>
-
-              <article className="modal-surface rounded-xl p-5 transition-[border-color,background-color] duration-200 ease-out motion-reduce:transition-colors lg:p-6 lg:hover:border-[#F5B800]/20">
-                <div className="flex items-center gap-3 text-[#F5B800]">
-                  <Clock className="h-5 w-5" aria-hidden="true" />
-                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">График</p>
-                </div>
-                <div className="mt-4 space-y-2 text-base text-white md:text-lg">
-                  {CONTACTS_TEXT.schedule.map((slot) => (
-                    <p key={slot.day} className="leading-snug">
-                      <span className="text-gray-400">{slot.day}</span> <span>{slot.time}</span>
-                    </p>
-                  ))}
-                </div>
-              </article>
-
-              <article className="modal-surface rounded-xl p-5 transition-[border-color,background-color] duration-200 ease-out motion-reduce:transition-colors lg:p-6 lg:hover:border-[#F5B800]/20">
-                <div className="flex items-center gap-3 text-[#F5B800]">
-                  <MessageCircle className="h-5 w-5" aria-hidden="true" />
-                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Мессенджеры</p>
-                </div>
-                <div className="mt-5 grid grid-cols-4 gap-2">
-                  <a
-                    href={CONTACTS_SOCIALS.vk}
-                    className="flex h-12 min-w-0 items-center justify-center rounded-xl border border-white/12 bg-white/[0.055] text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition-[border-color,background-color,color] duration-200 ease-out motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
-                    aria-label={CONTACTS_TEXT.vkAria}
-                  >
-                    <SiVk className="h-5 w-5 shrink-0 text-[#0077FF]" />
-                  </a>
-                  <a
-                    href={CONTACTS_SOCIALS.telegram}
-                    className="flex h-12 min-w-0 items-center justify-center rounded-xl border border-white/12 bg-white/[0.055] text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition-[border-color,background-color,color] duration-200 ease-out motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
-                    aria-label={CONTACTS_TEXT.telegramAria}
-                  >
-                    <SiTelegram className="h-5 w-5 shrink-0 text-[#26A5E4]" />
-                  </a>
-                  <a
-                    href={CONTACTS_SOCIALS.max}
-                    className="flex h-12 min-w-0 items-center justify-center rounded-xl border border-white/12 bg-white/[0.055] text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition-[border-color,background-color,color] duration-200 ease-out motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
-                    aria-label={CONTACTS_TEXT.maxAria}
-                  >
-                    <img
-                      src={CONTACTS_ASSETS.maxIcon}
-                      alt=""
-                      aria-hidden="true"
-                      loading="lazy"
-                      decoding="async"
-                      className="h-5 w-5 shrink-0 object-contain"
-                    />
-                  </a>
-                  <a
-                    href={CONTACTS_SOCIALS.reviews}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex h-12 min-w-0 items-center justify-center rounded-xl border border-white/12 bg-white/[0.055] text-gray-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition-[border-color,background-color,color] duration-200 ease-out motion-reduce:transition-colors lg:hover:border-[#F5B800]/30 lg:hover:bg-white/[0.08] lg:hover:text-white"
-                    aria-label={CONTACTS_TEXT.reviewsAria}
-                  >
-                    <Star className="h-5 w-5 shrink-0 text-[#F5B800] transition-colors" />
-                  </a>
-                </div>
-              </article>
-            </div>
-
-            <div className="mt-5 space-y-3">
-              <div className="relative min-h-[360px] overflow-hidden rounded-xl border border-white/10 bg-black/40 shadow-[0_24px_70px_rgba(0,0,0,0.42)] sm:min-h-[430px] lg:min-h-[520px]">
-                <iframe
-                  title={CONTACTS_TEXT.mapFrameTitle}
-                  src={CONTACTS_MAP_SRC}
-                  width="100%"
-                  height="100%"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="h-full min-h-[360px] w-full sm:min-h-[430px] lg:min-h-[520px]"
-                />
+              </div>
+              <div className="min-h-[360px] overflow-hidden rounded-sm border border-white/15 bg-black/20 sm:min-h-[440px]">
+                <iframe title={CONTACTS_TEXT.mapFrameTitle} src={CONTACTS_MAP_SRC} width="100%" height="100%" loading="lazy" referrerPolicy="no-referrer-when-downgrade"
+                  className="h-[360px] w-full border-0 sm:h-[440px] lg:h-full lg:min-h-[440px]" />
               </div>
             </div>
+          </div>
         </div>
-      </div>
-      </div>
+      </section>
 
-    </section>
+      <section id="club-reviews" aria-labelledby="club-reviews-title" className="scroll-mt-28 pb-16 md:pb-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="border-t border-white/15 pt-7">
+            <BalancedHeading as="h2" className="text-3xl font-semibold tracking-tight text-white md:text-4xl">
+              <span id="club-reviews-title">Отзывы гостей</span>
+            </BalancedHeading>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/70">О тренировках, тренерах и атмосфере клуба.</p>
+            <div className="mt-8 grid gap-x-12 gap-y-8 md:grid-cols-2 md:gap-y-10">
+              {CONTACTS_REVIEWS.map((review, index) => (
+                <figure key={`${review.author}-${review.date}`} className={`flex flex-col border-t border-white/15 pt-5 ${index >= 4 ? 'hidden lg:flex' : index >= 2 ? 'hidden md:flex' : ''}`}>
+                  <blockquote className="text-base leading-[1.8] text-white/85">
+                    <p>{review.text}</p>
+                  </blockquote>
+                  <figcaption className="mt-auto flex flex-wrap items-baseline justify-between gap-x-5 gap-y-1 pt-5 text-sm">
+                    <span className="font-semibold text-white">{review.author}</span>
+                    <span className="text-white/55">{review.date}</span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+            <a href={CONTACTS_SOCIALS.reviews} target="_blank" rel="noopener noreferrer" aria-label={CONTACTS_TEXT.reviewsAria} className="hero-cta hero-cta-secondary mt-8 md:mt-10">
+              <svg className="hero-cta-shape" viewBox="0 0 340 56" preserveAspectRatio="none" aria-hidden="true"><polygon points="28,1 339,1 339,31 315,55 1,55 1,29" vectorEffect="non-scaling-stroke" /></svg>
+              <span className="hero-cta-label"><span>{CONTACTS_TEXT.reviewsCta}</span></span>
+              <ChevronsRight aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

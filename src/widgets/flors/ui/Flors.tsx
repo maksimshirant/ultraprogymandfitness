@@ -2,9 +2,8 @@ import { useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import PublicAssetImage from '@/components/PublicAssetImage';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { BalancedHeading, HeadingAccent } from '@/components/typography/BalancedHeading';
+import { BalancedHeading } from '@/components/typography/BalancedHeading';
 import { useSwipeNavigation } from '@/hooks/useSwipeNavigation';
-import { useViewportTier } from '@/hooks/useViewportTier';
 import { cn } from '@/lib/utils';
 
 type FloorId = 'floor1' | 'floor2';
@@ -136,17 +135,17 @@ const floorConfigs: readonly FloorConfig[] = [
 
 const defaultFloor = floorConfigs[0];
 
+// Chooses the first available photo zone on a floor.
 function getDefaultZoneId(floor: FloorConfig) {
   return floor.zones[0]?.id ?? '';
 }
 
+// Presents real club photos with a large preview and a full-screen viewer.
 export default function Flors() {
   const [activeFloorId, setActiveFloorId] = useState<FloorId>(defaultFloor.id);
   const [activeZoneId, setActiveZoneId] = useState(getDefaultZoneId(defaultFloor));
   const [viewerSlide, setViewerSlide] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
-  const viewportTier = useViewportTier();
-  const isMobileViewport = viewportTier === 'mobile';
 
   const activeFloor = useMemo(
     () => floorConfigs.find((floor) => floor.id === activeFloorId) ?? defaultFloor,
@@ -173,6 +172,7 @@ export default function Flors() {
     disabled: totalSlides < 2,
   });
 
+  // Resets photo navigation when the visitor switches zones.
   const selectZone = (floorId: FloorId, zoneId: string) => {
     setActiveFloorId(floorId);
     setActiveZoneId(zoneId);
@@ -183,10 +183,11 @@ export default function Flors() {
   return (
     <section id="flors" className="deferred-section relative py-16 md:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10 md:mb-12">
-          <BalancedHeading as="h2" className="section-title text-white">
-            <HeadingAccent>{FLORS_TEXT.titleAccent}</HeadingAccent> {FLORS_TEXT.titleSuffix}
+        <div className="mb-10 border-t border-white/15 pt-7 md:mb-12">
+          <BalancedHeading as="h2" className="text-3xl font-semibold tracking-tight text-white">
+            <span>{FLORS_TEXT.titleAccent}</span>
           </BalancedHeading>
+          <p className="mt-4 text-sm text-white/60">Два этажа. Выберите зону и рассмотрите её ближе.</p>
         </div>
 
         <div className="mt-8 space-y-4 md:space-y-5">
@@ -209,10 +210,10 @@ export default function Flors() {
                         aria-label={FLORS_TEXT.chooseZoneAria + ' ' + zone.title}
                         aria-pressed={isActive}
                         className={cn(
-                          'min-h-[3.5rem] w-[10.75rem] rounded-[1rem] border px-4 py-3 text-left transition-[transform,background-color,border-color,color,box-shadow] duration-200 ease-out active:scale-[0.98] motion-reduce:transition-colors sm:w-[12rem] lg:w-[13rem]',
+                          'home-text-link border-b-2 px-3 py-3 text-left transition-colors duration-200',
                           isActive
-                            ? 'border-[#F5B800]/42 bg-[#F5B800]/12 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]'
-                            : 'border-white/8 bg-white/[0.025] text-gray-400 hover:border-white/18 hover:bg-white/[0.055] hover:text-white'
+                            ? 'border-[#F5B800] text-white'
+                            : 'border-transparent text-gray-400 hover:border-white/30 hover:text-white'
                         )}
                       >
                         <span className="block text-sm font-semibold leading-tight">{zone.title}</span>
@@ -226,35 +227,34 @@ export default function Flors() {
 
           {totalSlides > 0 ? (
             <>
-              <div className="lg:hidden">
-                <div className="relative overflow-hidden rounded-[1.5rem] bg-black/40 shadow-[0_24px_70px_rgba(0,0,0,0.36)]">
+              <div>
+                <div className="relative overflow-hidden rounded-sm bg-black/40">
                   <button
                     type="button"
                     onClick={() => setIsViewerOpen(true)}
                     className="block w-full text-left"
                     aria-label={'Открыть фото ' + (currentViewerSlide + 1) + ' зоны ' + activeZone.title}
                   >
-                    <div className="aspect-[4/3] sm:aspect-[16/11]">
+                    <div className="aspect-[4/3] sm:aspect-[16/10] lg:aspect-[16/9]">
                       <PublicAssetImage
                         key={activeZone.id + '-preview-' + currentViewerSlide}
                         src={activeZone.slides[currentViewerSlide]}
                         alt={activeZone.title + ' - фото ' + (currentViewerSlide + 1)}
                         loading="lazy"
                         fetchPriority="low"
-                        sizes="(max-width: 767px) 100vw, (max-width: 1023px) 92vw"
-                        variantSuffix={isMobileViewport ? 'thumb' : 'preview'}
+                        sizes="(min-width: 1280px) 1216px, 100vw"
+                        variantSuffix="preview"
                         deferUntilVisible
                         observerRootMargin="120px 0px"
                         pictureClassName="block h-full w-full"
-                        className="h-full w-full object-cover object-center"
+                        className="h-full w-full object-contain object-center"
                       />
                     </div>
 
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/82 via-black/42 to-transparent px-4 pb-4 pt-14 sm:px-5 sm:pb-5">
                       <div className="flex items-end justify-between gap-4">
                         <div>
-                          <span className="block text-xs font-medium uppercase text-[#F5B800]">Фото</span>
-                          <span className="mt-1 block text-lg font-semibold leading-tight text-white md:text-xl">
+                          <span className="block text-lg font-semibold leading-tight text-white md:text-xl">
                             {activeZone.title}
                           </span>
                         </div>
@@ -272,7 +272,7 @@ export default function Flors() {
                       setViewerSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
                     }}
                     disabled={totalSlides < 2}
-                    className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-[0.9rem] border border-white/15 bg-black/45 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,background-color,border-color,opacity] duration-200 ease-out hover:bg-black/62 active:scale-[0.96] disabled:pointer-events-none disabled:opacity-0 motion-reduce:transition-colors"
+                    className="hero-slide-control absolute left-3 top-1/2 -translate-y-1/2 disabled:pointer-events-none disabled:opacity-0"
                     aria-label={'Предыдущее фото зоны ' + activeZone.title}
                   >
                     <ChevronLeft className="h-5 w-5" />
@@ -285,7 +285,7 @@ export default function Flors() {
                       setViewerSlide((prev) => (prev + 1) % totalSlides);
                     }}
                     disabled={totalSlides < 2}
-                    className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-[0.9rem] border border-white/15 bg-black/45 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[transform,background-color,border-color,opacity] duration-200 ease-out hover:bg-black/62 active:scale-[0.96] disabled:pointer-events-none disabled:opacity-0 motion-reduce:transition-colors"
+                    className="hero-slide-control absolute right-3 top-1/2 -translate-y-1/2 disabled:pointer-events-none disabled:opacity-0"
                     aria-label={'Следующее фото зоны ' + activeZone.title}
                   >
                     <ChevronRight className="h-5 w-5" />
@@ -293,27 +293,27 @@ export default function Flors() {
                 </div>
               </div>
 
-              <div className="hidden rounded-[30px] bg-[#0a0c11]/92 p-4 lg:block xl:p-5">
-                <div className="grid grid-cols-3 gap-3 xl:grid-cols-4">
+              <div className="overflow-x-auto pb-3">
+                <div className="flex w-max gap-3">
                   {activeZone.slides.map((slide, index) => (
                     <button
                       key={activeZone.id + '-' + index}
                       type="button"
                       onClick={() => {
                         setViewerSlide(index);
-                        setIsViewerOpen(true);
                       }}
-                      className="overflow-hidden rounded-xl border border-white/10 bg-black/30 text-left transition-colors hover:border-white/20"
-                      aria-label={'Открыть фото ' + (index + 1) + ' зоны ' + activeZone.title}
+                      className={cn('w-28 shrink-0 overflow-hidden rounded-sm border-2 bg-black/30 text-left transition-colors sm:w-36', index === currentViewerSlide ? 'border-[#F5B800]' : 'border-transparent hover:border-white/40')}
+                      aria-label={'Показать фото ' + (index + 1) + ' зоны ' + activeZone.title}
+                      aria-pressed={index === currentViewerSlide}
                     >
-                      <div className="aspect-square">
+                      <div className="aspect-[3/2]">
                         <PublicAssetImage
                           src={slide}
                           alt={activeZone.title + ' - фото ' + (index + 1)}
                           loading="lazy"
                           fetchPriority="low"
-                          sizes="(max-width: 1279px) 30vw, 22vw"
-                          variantSuffix="preview"
+                          sizes="144px"
+                          variantSuffix="thumb"
                           deferUntilVisible
                           observerRootMargin="120px 0px"
                           pictureClassName="block h-full w-full"
@@ -343,7 +343,7 @@ export default function Flors() {
           <button
             type="button"
             onClick={() => setIsViewerOpen(false)}
-            className="absolute right-4 top-4 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-white/20 sm:right-6 sm:top-6"
+            className="hero-slide-control absolute right-4 top-4 z-20 sm:right-6 sm:top-6"
             aria-label={FLORS_TEXT.closeViewerAria}
           >
             <X className="h-6 w-6 text-white" />
@@ -370,7 +370,7 @@ export default function Flors() {
                 setViewerSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
               }}
               disabled={totalSlides < 2}
-              className="absolute left-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white transition hover:bg-black/80 disabled:cursor-not-allowed disabled:opacity-40 sm:left-3 sm:h-12 sm:w-12"
+              className="hero-slide-control absolute left-2 top-1/2 -translate-y-1/2 disabled:cursor-not-allowed disabled:opacity-40 sm:left-3"
               aria-label={`Предыдущее фото в просмотре зоны ${activeZone.title}`}
             >
               <ChevronLeft className="h-5 w-5" />
@@ -383,7 +383,7 @@ export default function Flors() {
                 setViewerSlide((prev) => (prev + 1) % totalSlides);
               }}
               disabled={totalSlides < 2}
-              className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white transition hover:bg-black/80 disabled:cursor-not-allowed disabled:opacity-40 sm:right-3 sm:h-12 sm:w-12"
+              className="hero-slide-control absolute right-2 top-1/2 -translate-y-1/2 disabled:cursor-not-allowed disabled:opacity-40 sm:right-3"
               aria-label={`Следующее фото в просмотре зоны ${activeZone.title}`}
             >
               <ChevronRight className="h-5 w-5" />

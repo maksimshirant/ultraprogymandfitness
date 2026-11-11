@@ -116,8 +116,10 @@ async function testFallbackSourceDirectory() {
 async function testPortraitWidthCandidatesMatchTheirDescriptors() {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'ultrapro-images-'));
   const contentFile = path.join(tempDir, 'content', 'trainers', 'portrait.jpg');
+  const mobileFile = path.join(tempDir, 'content', 'sections', 'group-studio-background-mobile.jpg');
 
   await ensureFile(contentFile, { width: 900, height: 1600 });
+  await ensureFile(mobileFile, { width: 941, height: 1672 });
   await runGenerator(tempDir, 'portrait-width');
 
   const metadata = await sharp(
@@ -125,6 +127,18 @@ async function testPortraitWidthCandidatesMatchTheirDescriptors() {
   ).metadata();
 
   assert.equal(metadata.width, 480);
+
+  for (const width of [480, 768, 941]) {
+    for (const format of ['avif', 'webp']) {
+      const mobileMetadata = await sharp(
+        path.join(tempDir, 'public', 'sections', `group-studio-background-mobile-w${width}.${format}`)
+      ).metadata();
+      assert.equal(mobileMetadata.width, width);
+    }
+  }
+  await assert.rejects(() => fs.access(
+    path.join(tempDir, 'public', 'sections', 'group-studio-background-mobile-w1024.avif')
+  ));
 }
 
 async function main() {

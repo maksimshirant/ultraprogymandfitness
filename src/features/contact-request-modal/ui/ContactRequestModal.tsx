@@ -10,10 +10,6 @@ import {
   type FormEvent,
   type SetStateAction,
 } from 'react';
-import {
-  ArrowLeft,
-  X,
-} from 'lucide-react';
 import { sendForm } from '@/api/forms';
 import { LegalDocumentModal } from '@/components/LegalDocumentModal';
 import { groupDirections } from '@/content/groupDirections';
@@ -660,62 +656,48 @@ export default function Modal({
 
     return (
       <>
-        <div className={cn('border-b border-white/10', isMobile ? 'px-3 py-2.5' : 'px-4 py-3 sm:px-5 sm:py-4')}>
-          <div className="relative">
+        <div className="px-5 pt-4 sm:px-8 sm:pt-5">
+          <div className="mb-5 flex min-h-11 items-center justify-between gap-6">
             {canGoBack ? (
               <button
                 type="button"
                 onClick={handleBack}
-                className="absolute left-0 top-0 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white transition-colors lg:hover:border-white/20 lg:hover:bg-white/[0.08]"
+                className="home-text-link inline-flex min-h-11 items-center text-sm text-gray-300"
                 aria-label="Назад"
               >
-                <ArrowLeft className="h-5 w-5" />
+                Назад
               </button>
             ) : null}
 
             <button
               type="button"
               onClick={handleModalClose}
-              className="absolute right-0 top-0 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-gray-300 transition-colors lg:hover:border-white/20 lg:hover:text-white"
+              className="home-text-link ml-auto inline-flex min-h-11 shrink-0 items-center text-sm text-gray-300"
               aria-label={MODAL_TEXT.closeModalAria}
             >
-              <X className="h-5 w-5" />
+              Закрыть
             </button>
-
-            <div className={cn('text-center', isMobile ? 'px-11' : 'px-10')}>
-              <div className={cn('inline-flex', isMobile ? 'px-1 py-0.5' : 'px-2 py-1')}>
-                <img
-                  src={MODAL_ASSETS.logo}
-                  alt="Логотип Ultra Pro Gym & Fitness"
-                  loading="lazy"
-                  decoding="async"
-                  className={cn('w-auto object-contain brightness-0 invert', isMobile ? 'h-5' : 'h-6 sm:h-7')}
-                />
-              </div>
+          </div>
 
               <BalancedHeading
                 as="h2"
-                className={cn(
-                  'font-bold text-white',
-                  isMobile
-                    ? currentStep === 'membership'
-                      ? 'mt-1 text-sm leading-none whitespace-nowrap'
-                      : 'mt-1 text-base'
-                    : 'mt-2 text-lg sm:text-xl'
-                )}
+                className="text-[1.65rem] font-medium leading-tight tracking-[-0.025em] text-[#f3f4f6] sm:text-3xl"
               >
-                {headerTitle}
+                {currentStep === 'root' ? (
+                  <span className="inline-flex flex-wrap items-center gap-3">
+                    Запись в
+                    <img src={MODAL_ASSETS.logo} alt="UltraPro" width={226} height={37} className="h-[0.85em] w-auto object-contain brightness-0 invert" />
+                  </span>
+                ) : headerTitle}
               </BalancedHeading>
               {headerSubtitle ? (
-                <p className={cn('max-w-2xl leading-relaxed text-gray-300', isMobile ? 'mt-1 text-xs' : 'mt-2 text-sm sm:text-base')}>
+                <p className="mt-3 max-w-lg text-sm leading-relaxed text-gray-400">
                   {headerSubtitle}
                 </p>
               ) : null}
-            </div>
-          </div>
         </div>
 
-        <div className={cn('min-h-0 flex-1 overflow-y-auto overscroll-contain', isMobile ? 'px-3 py-2.5' : 'px-4 py-3 sm:px-5 sm:py-4')}>
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pb-6 pt-6 sm:px-8 sm:pb-8">
           {currentStep === 'root'
             ? renderRootStep()
             : currentStep === 'membership'
@@ -733,7 +715,7 @@ export default function Modal({
   const content = (
     <div
       className={cn(
-        'glass-card modal-surface flex min-h-0 max-h-full flex-col overflow-hidden rounded-[1.75rem] border border-white/20',
+        'flex min-h-0 max-h-full flex-col overflow-hidden',
         isAnnouncementMode ? 'justify-center p-6 sm:p-8' : ''
       )}
     >
@@ -754,11 +736,9 @@ export default function Modal({
         <DialogContent
           showCloseButton={false}
           className={cn(
-            'flex max-h-[calc(100dvh-1.5rem)] min-h-0 flex-col overflow-hidden border-none bg-transparent p-0 shadow-none',
+            'booking-modal flex max-h-[calc(100dvh-1.5rem)] min-h-0 flex-col gap-0 overflow-hidden rounded-[6px] p-0 duration-150',
             isMobile && 'w-[calc(100vw-1rem)] max-w-[calc(100vw-1rem)]',
-            !isMobile && 'max-lg:w-[calc(100vw-2rem)] max-lg:max-w-[calc(100vw-2rem)]',
-            !isMobile &&
-              (isAnnouncementMode ? 'sm:max-w-2xl' : currentStep === 'contact' ? 'sm:max-w-xl' : 'sm:max-w-4xl')
+            !isMobile && 'w-[calc(100vw-2rem)] sm:max-w-[640px]'
           )}
         >
           <DialogTitle className="sr-only">{shellTitle}</DialogTitle>
@@ -776,10 +756,7 @@ export default function Modal({
           maxWidthClassName="max-w-2xl"
         >
           <Suspense fallback={<p className="text-sm text-gray-300">{DOCUMENT_FALLBACK_TEXT}</p>}>
-            <PrivacyPolicyContent
-              titleClassName="mb-4 pr-10 text-xl font-semibold text-white"
-              textClassName="text-sm text-gray-300"
-            />
+            <PrivacyPolicyContent />
           </Suspense>
         </LegalDocumentModal>
       ) : null}
@@ -793,10 +770,7 @@ export default function Modal({
           maxWidthClassName="max-w-2xl"
         >
           <Suspense fallback={<p className="text-sm text-gray-300">{DOCUMENT_FALLBACK_TEXT}</p>}>
-            <PersonalDataConsentContent
-              titleClassName="mb-4 pr-10 text-xl font-semibold text-white"
-              textClassName="text-sm text-gray-300"
-            />
+            <PersonalDataConsentContent />
           </Suspense>
         </LegalDocumentModal>
       ) : null}

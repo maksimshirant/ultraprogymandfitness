@@ -294,8 +294,12 @@ function buildManagedOutputSpecs({
     });
   }
 
-  for (const widthCandidate of profile.defaultWidthCandidates) {
-    if (!originalWidth || widthCandidate >= originalWidth) {
+  const responsiveWidths = profile.defaultWidthCandidates.length > 0
+    ? [...new Set([...profile.defaultWidthCandidates, originalWidth])]
+    : [];
+
+  for (const widthCandidate of responsiveWidths) {
+    if (!originalWidth || widthCandidate > originalWidth) {
       continue;
     }
 
@@ -469,7 +473,10 @@ async function collectManagedInputs() {
         return files.map((inputPath) => ({
           inputPath,
           outputPath: path.join(outputDir, path.relative(inputDir, inputPath)),
-          profile: STANDARD_ASSET_PROFILE,
+          profile: path.basename(inputDir) === 'sections' &&
+            (path.basename(inputPath).startsWith('hero-') || path.parse(inputPath).name.endsWith('-mobile'))
+            ? { defaultWidthCandidates: [480, 768, 1024, 1280, 1600, 1920], variants: [] }
+            : STANDARD_ASSET_PROFILE,
         }));
       })
     )
@@ -486,7 +493,13 @@ async function collectManagedInputs() {
 }
 
 export async function runImageVariantGeneration() {
-  const relativeInputPaths = await collectManagedInputs();
+  const requestedPaths = process.argv.slice(2).map((filePath) => filePath.split(path.sep).join('/'));
+  const relativeInputPaths = (await collectManagedInputs()).filter(({ inputPath }) =>
+    requestedPaths.length === 0 || requestedPaths.includes(inputPath.split(path.sep).join('/'))
+  );
+  if (requestedPaths.length > 0 && relativeInputPaths.length !== new Set(requestedPaths).size) {
+    throw new Error('Some requested image sources were not found in the managed source directories.');
+  }
   const generatedFiles = [];
   const removedFiles = [];
 

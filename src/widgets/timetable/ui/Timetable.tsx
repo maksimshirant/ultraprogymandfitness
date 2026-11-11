@@ -100,7 +100,7 @@ export default function Timetable() {
           <button
             type="button"
             onClick={() => setIsPreviewOpen(false)}
-            className="absolute top-4 right-4 sm:top-6 sm:right-6 w-11 h-11 rounded-full bg-white/10 lg:hover:bg-white/20 transition-colors flex items-center justify-center"
+            className="hero-slide-control absolute right-4 top-4 sm:right-6 sm:top-6"
             aria-label={TIMETABLE_TEXT.closePreviewAria}
           >
             <X className="w-6 h-6 text-white" />
